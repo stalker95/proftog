@@ -43,7 +43,7 @@
 						</div>
 					</div>
 					<div class="product_price">
-						<p><?= $product->price ?> грн</p>
+						<p><span class="translate_price"><?= $product->price ?></span> грн</p>
 					</div>
 					<div class="product_description">
 						<p><?= $product->description ?></p>
@@ -70,16 +70,22 @@
 						</button>
 					</div>
 					<div class="product_paramth">
+						<?php foreach ($option_group as $key => $value):?>
 						<div class="product_paramth_item">
 							<div class="product_paramth_title">
-								Довжина, мм
+								<?= $key; ?>
 							</div>
 							<div class="product_paramth_select">
-								<select name="" id="">
-									<option value="	">600</option>
+								
+								<select name="" id="" class="change_price">
+									<option value="">Виберіть опцію</option>
+									<?php foreach ($value as $key => $item): ?>
+										<option value="<?= $item['name'] ?>"><?= $item['name'] ?></option>
+									<?php endforeach; ?>
 								</select>
 							</div>
 						</div>
+					<?php endforeach; ?>
 					</div>
 
 				</div>
@@ -371,8 +377,92 @@
 
 <script>
     <?php echo $this->Html->scriptStart(['block' => true]); ?>
+$(document).ready(function() {
+
+var flickerAPI = "https://api.privatbank.ua/p24api/pubinfo?json&exchange&coursid=5";
+  $.getJSON( flickerAPI, {
+    tags: "mount rainier",
+    tagmode: "any",
+    format: "json"
+  })
+  .done(function(data) {
+    global_curs = data[0]['buy'];
+  });
 
     var id_product = <?= $product->id ?>;
+    var products_options = <?= $option_group_json ?>;
+    var start_price = <?= $product->price ?> * global_curs;
+     start_price = start_price * global_curs;
+     alert(global_curs);
+    var count_id_bascket = 1;
+
+	var total_options = new Map();
+	var total_options_name = new Map();
+	var array_options_name = new Map();
+
+$(".change_price").change(function() {
+  /* var index = $(this).parent().parent().find('.product_paramth_title').text();
+   var str = index.toString();
+   str = str.replace(' ', '').trim();
+
+    //console.log(products_options[str]);
+    for (i = 0; i < products_options[str].length; i++) {
+    	 //console.log(products_options[str][i]['name']);
+    	if (products_options[str][i]['name'] == $(this).val()) {
+          console.log(products_options[str][i]['products_options'][0]['value']);
+    	}
+    } */
+    change_price();
+});
+
+function change_price() {
+	 total_options = [];
+	 array_options_name = [];
+	 total_options_name = [];
+
+	var new_price = 0;
+	 $(".change_price").each(function() {
+	 	  var index = $(this).parent().parent().find('.product_paramth_title').text();
+   var str = index.toString();
+   str = str.replace(' ', '').trim();
+
+  //  console.log(products_options[str]);
+    for (i = 0; i < products_options[str].length; i++) {
+    	 //console.log(products_options[str][i]['name']);
+    	if (products_options[str][i]['name'] == $(this).val()) {
+         array_options_name.push(str);
+         // console.log(products_options[str][i]['products_options'][0]['value']);
+         console.log(products_options[str][i]['name']);
+         var key = products_options[str][i]['name'].toString();
+         if ( products_options[str][i]['products_options'][0]['value']) {
+         	total_options_name.push(products_options[str][i]['name'].toString());
+          total_options.push(products_options[str][i]['products_options'][0]['value']);
+         }
+          new_price = new_price + products_options[str][i]['products_options'][0]['value'];
+    	}
+    }
+	 });
+	     console.log(array_options_name);
+    console.log(total_options_name);
+    console.log(total_options);
+	 new_price = start_price + new_price;
+	 $(".product_price p ").text(new_price);
+}
+
+$(".product_shop_counter_right").click(function() {
+   count_id_bascket++;
+   $(".product_shop_counter_center").text(count_id_bascket);
+});
+
+$(".product_shop_counter_left").click(function() {
+   count_id_bascket--;
+   if (count_id_bascket <=1) {
+   	count_id_bascket = 1;
+   }
+   $(".product_shop_counter_center").text(count_id_bascket);
+});
+
+
 	$('.slider_inialize').slick({
   infinite: true,
   slidesToShow: 1,
@@ -415,10 +505,10 @@ $(".slider_arrow_right").click(function() {
 $(document).ready(function() {
   
   $(".product_shop_buy").click(function() {
-     
     $.ajax({
-  		url: option_url,
-  		data: { "id_option": product_id },
+        url: '<?= $this->Url->build(['controller' => 'carts', 'action' => 'add', '_full' => true]) ?>',
+        method: 'POST',
+  		data: { "product_id": id_product, "total_options":total_options, "array_options_name":array_options_name, "total_options_name":total_options_name, "count_id_bascket":count_id_bascket  },
   		success: function(data){ 
     		alert("Додано");
         }
@@ -426,6 +516,7 @@ $(document).ready(function() {
 
   });
 
+});
 });
 	<?php echo $this->Html->scriptEnd(); ?>
 </script>

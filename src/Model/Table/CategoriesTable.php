@@ -46,6 +46,11 @@ class CategoriesTable extends Table
             'className' => 'Categories',
             'foreignKey' => 'parent_id'
         ]);
+
+        $this->HasMany('Products', [
+            'className' => 'Products',
+            'foreignKey' => 'category_id'
+        ]);
     
     }
 

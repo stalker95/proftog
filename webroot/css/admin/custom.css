@@ -779,7 +779,7 @@ button.cancel_button {
 } 
 .input-file-container-item {
     position: relative;
-    width: 33%;
+    width: 100%;
 }
 .input-file-container-item .thumbnail {
     position: absolute;
@@ -788,7 +788,7 @@ button.cancel_button {
 }
 .js .input-file-trigger {
   display: block;
-  padding: 100px 100px;
+  padding: 77px 75px;
   border: 2px dotted red;
   text-align: center;
   
@@ -1197,5 +1197,39 @@ button.cancel_button {
 }
 .attributes_list_item_list {
     padding-left: 15px;
+}
+.products_add_table {
+    width: 100%;
+}
+.products_add_table td {
+    border: 1px solid #333;
+}
+.products_add_table_padding {
+    padding: 0px 10px;
+    text-align: center;
+}
+.delete_row {
+    border-radius: 2px;
+    border: none;
+    padding: 8px 12px;
+    color: #fff;
+    text-align: right;
+    font-size: 15px;
+    text-align: center;
+}
+.products_add_table {
+    text-align: center;
+}
+.products_add_table th {
+    text-align: center;
+}
+.add_row_for_gallery {
+        border-radius: 2px;
+    border: none;
+    padding: 8px 12px;
+    text-align: right;
+    font-size: 15px;
+    text-align: center;
+    margin-top: 15px;
 }
 /* STYLES FOR PRODUCT */

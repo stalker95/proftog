@@ -59,7 +59,7 @@ $(".add_new_attribute").click(function() {
   html_attributes = $('.attributes_list_parent').html();
    html = '<tr>'+
                       '<td style="width: 30%;position: relative;">'+
-                        '<input type="text" class="search_attribute" name="attribute">'+
+                        '<input type="text" class="search_attribute" name="attribute" autocomplete="off">'+
                         '<input type="text" class="search_attribute_id" name="attributes[]" style="display: none;">'+
                         '<div class="attributes_list" style="display: none;">'+
                          html_attributes+

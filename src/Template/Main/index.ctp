@@ -107,52 +107,21 @@
 							<i class="fa fa-chevron-right"></i>
 						</div>
 			<div class="products_slider">
+				<?php foreach ($categories as $key => $value): if ($value['parent_id'] == 0) :?>
 				<div>
-					<div class="products_slider_item">
-						<img src="<?= $this->Url->build('/img/refrigerator.svg', ['fullBase' => true]) ?>" alt="">
-					</div>
+					<a href="<?= $this->Url->build(['controller' => 'categories','action'=>'view/'.$value['slug']]) ?>" class="products_slider_item">
+						<?= $value['image'] ?>
+					</a>
 				</div>
-				<div>
-					<div class="products_slider_item">
-						<img src="<?= $this->Url->build('/img/refrigerator.svg', ['fullBase' => true]) ?>" alt="">
-					</div>
-				</div>
-				<div>
-					<div class="products_slider_item">
-						<img src="<?= $this->Url->build('/img/refrigerator.svg', ['fullBase' => true]) ?>" alt="">
-					</div>
-				</div>
+			<?php endif; endforeach; ?>
+				
 
-				<div>
-					<div class="products_slider_item">
-						<img src="<?= $this->Url->build('/img/refrigerator.svg', ['fullBase' => true]) ?>" alt="">
-					</div>
-				</div><div>
-					<div class="products_slider_item">
-						<img src="<?= $this->Url->build('/img/refrigerator.svg', ['fullBase' => true]) ?>" alt="">
-					</div>
-				</div>
+				
 
-				<div>
-					<div class="products_slider_item">
-						<img src="<?= $this->Url->build('/img/refrigerator.svg', ['fullBase' => true]) ?>" alt="">
-					</div>
-				</div>
-				<div>
-					<div class="products_slider_item">
-						<img src="<?= $this->Url->build('/img/refrigerator.svg', ['fullBase' => true]) ?>" alt="">
-					</div>
-				</div>
-				<div>
-					<div class="products_slider_item">
-						<img src="<?= $this->Url->build('/img/refrigerator.svg', ['fullBase' => true]) ?>" alt="">
-					</div>
-				</div>
-				<div>
-					<div class="products_slider_item">
-						<img src="<?= $this->Url->build('/img/refrigerator.svg', ['fullBase' => true]) ?>" alt="">
-					</div>
-				</div>
+				
+				
+				
+				
 			</div>
 	</div>
 </section>

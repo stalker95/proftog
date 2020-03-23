@@ -43,11 +43,26 @@
             </a>
         </li> 
 
-        <li class="<?= $nav_['options'] ? 'active' : '' ?>">
-            <a href="<?php echo $this->Url->build(['controller' => 'options', 'action' => 'index', '_full' => true, 'prefix' => 'admin', 'plugin' => false]); ?>">
-                <i class="fa fa-list-ul"></i> <span><?php echo __('Опції'); ?></span>
-            </a>
-        </li> 
+        
+        
+                <li class="<?= $nav_['options'] ? 'active' : '' ?> treeview">
+          <a href="#">
+            <i class="fa fa-dashboard"></i> <span>Опції</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+
+            <li ><a href="<?php echo $this->Url->build(['controller' => 'options-items', 'action' => 'index', '_full' => true, 'prefix' => 'admin', 'plugin' => false]); ?>">
+                <i class="fa fa-circle-o"></i>Опції</a>
+            </li>
+            <li><a href="<?php echo $this->Url->build(['controller' => 'options', 'action' => 'index', '_full' => true, 'prefix' => 'admin', 'plugin' => false]); ?>">
+                <i class="fa fa-circle-o"></i> Групи опцій</a>
+            </li>
+
+          </ul>
+        </li>
 
         <li class="<?= $nav_['producers'] ? 'active' : '' ?>">
             <a href="<?php echo $this->Url->build(['controller' => 'producers', 'action' => 'index', '_full' => true, 'prefix' => 'admin', 'plugin' => false]); ?>">

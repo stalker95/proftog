@@ -35,12 +35,15 @@ class ProductsController extends AppController
 
         $attributes_products = $this->AttributesProducts->find()->contain(['AttributesItems'])->where(['product_id' => $product->id])->toArray();
 
+        $option_group = $product->getOptionsGroup($product->id);
+        $option_group_json = json_encode($option_group);
+
         if (empty($product)) {
             return $this->redirect(['controller'=>'main', 'action'=>'indx']);          
         }
       
         $this->set('product', $product);
-        $this->set(compact('attributes_products'));
+        $this->set(compact('attributes_products','option_group','option_group_json'));
     }
 
 }

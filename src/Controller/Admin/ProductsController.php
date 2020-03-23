@@ -112,24 +112,10 @@ class ProductsController extends AppController
                         $this->Products->updateAll(['image' => $filename], ['id' => $product->id]);
                     }
                 }
+                
+                $product->saveGallery($this->request->getData('image_gallery'), $this->request->getData('alts'), $product->id);
 
-                 foreach ($this->request->getData('image_gallery')  as $key => $value) {
-                $filename = "";
-                if ($value['name']) {
-                        $mm_dir = new Folder(WWW_ROOT . DS . 'products_gallery', true, 0777);
-                        $target_path = $mm_dir->pwd() . DS;
-
-                        $ext = pathinfo($value['name'], PATHINFO_EXTENSION);
-                        $filename = md5($value['name'].microtime(true)) . '.' . $ext;
-                        move_uploaded_file($value['tmp_name'], $target_path . $filename);
-                        $product_media = $this->ProductsGallery->newEntity();
-                        $product_media->product_id = $product->id;
-                        $product_media->name = $filename;
-                        $product_media->position = $key;
-                        $this->ProductsGallery->save($product_media);
-                        $filename = "";
-                    }
-            }
+                 
                 $this->Flash->admin_success(__('Товар додано'));
 
                 return $this->redirect(['action' => 'index']);
@@ -160,7 +146,7 @@ class ProductsController extends AppController
             'contain' => []
         ]);
         $first_options = $this->Options->find()->order('rand()')->limit(5)->toArray();
-        $products_gallery = $this->ProductsGallery->find()->where(['product_id' => $id])->toArray();
+        $products_gallery = $this->ProductsGallery->find()->where(['product_id' => $id])->order('position ASC')->toArray();
         $attributes_products = $this->AttributesProducts->find()->contain(['AttributesItems'])->where(['product_id' => $id])->toArray();        
        $option_group = $product->getOptionsGroup($product->id);
 
@@ -195,38 +181,11 @@ class ProductsController extends AppController
                         $this->Products->updateAll(['image' => $filename], ['id' => $product->id]);
                     }
                 }
-
+              
                 $new_pictures = $this->request->getData('image_gallery');
-                foreach ($new_pictures as $key => $value) {
-                    if (!empty($value['name'])) {
-                        $product_gallery = $this->ProductsGallery->get($products_gallery[$key]['id']);
-                        $this->ProductsGallery->delete($product_gallery);
-                         $mm_dir = new Folder(WWW_ROOT  . DS . 'products_gallery', true, 0777);
-                        $target_path = $mm_dir->pwd() . DS;
-                        $oldfile = $target_path . $product_gallery->name;
-
-                        if (file_exists($oldfile)) {
-                            unlink($oldfile);
-                        }
-                    }
-                }
-                foreach ($this->request->getData('image_gallery')  as $key => $value) {
-                $filename = "";
-                if ($value['name']) {
-                        $mm_dir = new Folder(WWW_ROOT . DS . 'products_gallery', true, 0777);
-                        $target_path = $mm_dir->pwd() . DS;
-
-                        $ext = pathinfo($value['name'], PATHINFO_EXTENSION);
-                        $filename = md5($value['name'].microtime(true)) . '.' . $ext;
-                        move_uploaded_file($value['tmp_name'], $target_path . $filename);
-                        $product_media = $this->ProductsGallery->newEntity();
-                        $product_media->product_id = $product->id;
-                        $product_media->name = $filename;
-                        $product_media->position = $key;
-                        $this->ProductsGallery->save($product_media);
-                        $filename = "";
-                    }
-            }
+                $product->deleteGallery($new_pictures, $products_gallery);
+                
+                $product->saveGallery($this->request->getData('image_gallery'), $this->request->getData('alts'), $product->id);
 
                 $this->Flash->success(__('The product has been saved.'));
 
@@ -252,6 +211,7 @@ class ProductsController extends AppController
         $this->request->allowMethod(['post', 'delete']);
         $product = $this->Products->get($id);
         if ($this->Products->delete($product)) {
+          $product->deleteAllData($product->id);
 
          $mm_dir = new Folder(WWW_ROOT  . DS . 'products', true, 0777);
             $target_path = $mm_dir->pwd() . DS;
@@ -264,6 +224,14 @@ class ProductsController extends AppController
         foreach ($products_gallery as $key => $item) {
             $products_gallery_item = $this->ProductsGallery->get($item['id']);
             $this->ProductsGallery->delete($products_gallery_item);    
+
+             $mm_dir = new Folder(WWW_ROOT  . DS . 'products_gallery', true, 0777);
+            $target_path = $mm_dir->pwd() . DS;
+            $oldfile = $target_path . $products_gallery_item->name;
+
+            if (file_exists($oldfile)) {
+                unlink($oldfile);
+             }
         }
             $this->Flash->success(__('The product has been deleted.'));
         } else {
@@ -280,6 +248,7 @@ class ProductsController extends AppController
       foreach ($ids as  $value) {
         $product = $this->Products->get($value);
         $this->Products->delete($product);      
+        $product->deleteAllData($product->id);
 
          $mm_dir = new Folder(WWW_ROOT  . DS . 'products', true, 0777);
             $target_path = $mm_dir->pwd() . DS;
@@ -291,7 +260,16 @@ class ProductsController extends AppController
         $products_gallery = $this->ProductsGallery->find()->where(['product_id' => $value])->toArray();
         foreach ($products_gallery as $key => $item) {
             $products_gallery_item = $this->ProductsGallery->get($item['id']);
+
             $this->ProductsGallery->delete($products_gallery_item);    
+
+             $mm_dir = new Folder(WWW_ROOT  . DS . 'products_gallery', true, 0777);
+            $target_path = $mm_dir->pwd() . DS;
+            $oldfile = $target_path . $products_gallery_item->name;
+
+            if (file_exists($oldfile)) {
+                unlink($oldfile);
+             }
         }
       } 
 

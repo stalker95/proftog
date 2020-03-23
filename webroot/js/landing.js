@@ -1,3 +1,5 @@
+var global_curs = 1;
+
 var x, i, j, selElmnt, a, b, c;
 /* Look for any elements with the class "custom-select": */
 x = document.getElementsByClassName("custom-select");
@@ -91,7 +93,7 @@ $(document).ready(function() {
  });
 
  $(".propose_left_top").click(function() {
-   $('.propose_list').slideToggle();
+   $(this).parent().parent().find('.propose_list').slideToggle();
  });
  
  $(".header_search").click(function() {
@@ -122,5 +124,23 @@ $(".mobile_menu_close").click(function() {
     // Animation complete.
   });
 });
+
+
+var flickerAPI = "https://api.privatbank.ua/p24api/pubinfo?json&exchange&coursid=5";
+  $.getJSON( flickerAPI, {
+    tags: "mount rainier",
+    tagmode: "any",
+    format: "json"
+  })
+  .done(function(data) {
+    global_curs = data[0]['buy'];
+    console.log(data);
+    $(".translate_price").each(function() {
+        var price= parseInt($(this).text());
+        $(this).text(price*data[0]['buy']);
+        $(this).css("opacity","1")
+    });
+  })
+
 
 });

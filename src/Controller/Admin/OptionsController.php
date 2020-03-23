@@ -61,16 +61,7 @@ class OptionsController extends AppController
             $option = $this->Options->patchEntity($option, $this->request->getData());
             if ($this->Options->save($option)) {
 
-                $optionsItems = $this->request->getData('option_item');
-
-                if (!empty($optionsItems)) {
-                    foreach ($optionsItems as $key => $value) {
-                        $option_item = $this->OptionsItems->newEntity();
-                        $option_item->option_id = $option->id;
-                        $option_item->name = $value;
-                        $this->OptionsItems->save($option_item);
-                    }
-                }
+                
                 $this->Flash->admin_success(__('Опцію додано'));
 
                 return $this->redirect(['action' => 'index']);
@@ -98,23 +89,7 @@ class OptionsController extends AppController
             $option = $this->Options->patchEntity($option, $this->request->getData());
             if ($this->Options->save($option)) {
 
-                if (!empty($options_items)) {
-                    foreach ($options_items as $key => $value) {
-                        $option_item = $this->OptionsItems->get($value['id']);
-                        $this->OptionsItems->delete($option_item);
-                    }
-                }
-
-                $optionsItems = $this->request->getData('option_item');
-
-                if (!empty($optionsItems)) {
-                    foreach ($optionsItems as $key => $value) {
-                        $option_item = $this->OptionsItems->newEntity();
-                        $option_item->option_id = $option->id;
-                        $option_item->name = $value;
-                        $this->OptionsItems->save($option_item);
-                    }
-                }
+                
 
                 $this->Flash->admin_success(__('Зміни збережено'));
 

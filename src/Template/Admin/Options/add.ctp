@@ -29,23 +29,7 @@
   </div>
 </div>
 
-       <div class="playlist__managment--item">
-  <div class="playlist__managment--item__left">
-    <p>Варіації</p>
-  </div>
-  <div class="playlist__managment--item__right">
-    <div class="playlist--item--sub" style="display: block;">
-      <div class="variation_list">
-        
-      </div>
-    <button type="button" id="add_new_variation">
-      Додати
-    </button>
-
-    </div>
-  </div>
-</div>
-
+  
 <?=  $this->Form->submit('Зберегти',['class'=>'btn  btn-primary save__changes__form']); ?>
      <?=   $this->Form->end() ?>
         </div>

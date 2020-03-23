@@ -5,11 +5,11 @@
 	<div class="breadcrums_list">
 		<p class="breadcrums_title"><?= $category->title; ?></p>
 		<div class="breadcrums_list_item">
-			<a href="<?= $this->Url->build(['controller' => 'main','action'    =>  'index']) ?>">Головна</a>
+			<a href="<?= $this->Url->build(['controller' => 'main','action'    =>  'index'],['fullBase' => true]) ?>">Головна</a>
 			<span> / </span>
-			<a href="<?= $this->Url->build(['controller' => 'categories','action'    =>  'index']) ?>">Категорії</a>
+			<a href="<?= $this->Url->build(['controller' => 'categories','action'    =>  'index/'], ['fullBase' => true]) ?>">Категорії</a>
 			<span> / </span>
-			<a href="<?= $this->Url->build(['controller' => 'main','action'    =>  'view/'.$category->slug]) ?>"><?= $category->title ?></a>
+			<a href="<?= $this->Url->build(['controller' => 'categories','action'    =>  'view/'.$category->slug]) ?>"><?= $category->title ?></a>
 		</div>
 	</div>
 </div>
@@ -34,7 +34,7 @@
                     <?php   if ($value['parent_id'] == 0): ?>
                      <div class="propose_item">
                         <div class="propose_item_title">
-                            <a href="?= $this->Url->build(['controller' => 'categories','action'=>'view/'.$item['slug']]) ?>"></a><?= $value['name'] ?>
+                            <a href="<?= $this->Url->build(['controller' => 'categories','action'=>'view/'.$value['slug']]) ?>"><?= $value['name'] ?></a>
                         </div>
                         <div class="propose_item_arrov">
                             <i class="fa fa-chevron-right"></i>

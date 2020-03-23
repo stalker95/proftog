@@ -166,7 +166,7 @@
                     <?php foreach ($attributes_products as $key => $value): ?>
                       <tr>
                         <td style="width: 30%;position: relative;">
-                        <input type="text" class="search_attribute" name="attribute" value="<?= $value['attributes_item']['name'] ?>">
+                        <input type="text" class="search_attribute" name="attribute" autocomplete="off" value="<?= $value['attributes_item']['name'] ?>">
                         <input type="text" class="search_attribute_id" name="attributes[]" style="display: none;" value="<?= $value['attribute_id'] ?>">
                         </td>
                         <td>
@@ -301,30 +301,50 @@
               <p>Галерея зображень</p>
             </div>
             <div class="playlist__managment--item__right">
-              <div class="playlist--item--sub">
-                  <div class="input-file-container">  
-                  <?php   for ($i=0; $i < 10 ; $i++): ?>
-                    <div class="input-file-container-item">
-                      <?=  $this->Form->control('image_gallery[]',array('type'=>'file','label' =>'false','id'=>'file_'.$i.'','class'=>'upload_gallery_item form-control','style' => 'display:none;'));?> 
-                      <label tabindex="0" for="file_<?= $i ?>" class="input-file-trigger"><i class="fa fa-close"> </i></label>
-                      <div class="image_gallery_preview">
-
-                        <?php   if(isset($products_gallery[$i]['name'])): ?>
-                          <div class="thumbnail imgNew" style="width: 100%;text-align:center;"> 
-                             <div id="img-list">
-                                <img src="<?= $this->Url->build('/products_gallery/'.$products_gallery[$i]['name'].'', ['fullBase' => true]) ?>" alt="" style="width: 100%;height:253px;object-fit:cover;border-radius:0px;">
-                             </div>
-                              <div class="deleteImg"> </div>
-                          </div>
-                         
-                           
-                        <?php   endif; ?>
-                      </div>
+                    <table class="products_add_table">
+                      <thead>
+                        <th>Зображення</th>
+                        <th>Позиція</th>
+                        <th>Alt</th>
+                        <th>Дії</th>
+                      </thead>
+                      <tbody>
+                        <?php foreach ($products_gallery as $key => $value): ?>
+                          <td>
+                            <div class="input-file-container-item">
+                               <?=  $this->Form->control('image_gallery[]',array('type'=>'file','label' =>'false','id'=>'file_'.$key.'','class'=>'upload_gallery_item form-control','style' => 'display:none;'));?> 
+                                <label tabindex="0" for="file_<?= $key ?>" class="input-file-trigger"><i class="fa fa-close"> </i></label>
+                                 <div class="image_gallery_preview">
+                                  <?php   if(isset($products_gallery[$key]['name'])): ?>
+                                    <div class="thumbnail imgNew" style="width: 100%;text-align:center;"> 
+                                     <div id="img-list">
+                                      <img src="<?= $this->Url->build('/products_gallery/'.$products_gallery[$key]['name'].'', ['fullBase' => true]) ?>" alt="" style="width: 100%;height:238px;object-fit:cover;border-radius:0px;">
+                                     </div>
+                                     <div class="deleteImg"> </div>
+                                    </div>
+                                  <?php endif; ?>
+                                 </div>
+                           </div>
+                          </td>
+                          <td class="products_add_table_padding">
+                            <input type="number" name="position[]" value="<?= $value['position'] ?>">
+                          </td>
+                          <td class="products_add_table_padding">
+                            <input type="text" name="alts[]" value="<?= $value['alt'] ?>">
+                          </td>
+                           <td class="products_add_table_padding">
+                            <button type="button" class="delete_row btn-danger"><i class="fa fa-minus"></i></button>
+                          </td>
+                        </tr>
+                        <?php endforeach; ?>
+                        
+                      </tbody>
+                    </table>
+                    <div class="add_new_attribute_container">
+                   <button class="add_row_for_gallery btn-primary" type="button"><i class="fa fa-plus"></i></button>
+                      
                     </div>
-                  <?php   endfor; ?>
-                  </div>
-              </div>
-              <div id="fotosViewMeal"></div>
+            
             </div>
         </div>
      </div>
@@ -365,7 +385,37 @@ $(".products_add_tabs_item").click(function() {
 });
 
 });
+$(document).ready(function() {
 
+var count = $(".products_add_table tbody tr").length;
+$(".add_row_for_gallery").click(function() {
+ 
+ count++;
+ 
+  $(".products_add_table tbody").append('<tr>'+
+                          '<td>'+
+                            '<div class="input-file-container-item">'+
+                                '<input type="file" name="image_gallery[]" id="file_first'+count+'" class="upload_gallery_item form-control" style="display:none;">'+
+                                '<label tabindex="0" for="file_first'+count+'" class="input-file-trigger"><i class="fa fa-close"> </i></label>'+
+                                '<div class="image_gallery_preview">  </div>'+
+                           '</div>'+
+                          '</td>'+
+                          '<td class="products_add_table_padding">'+
+                            '<input type="number" name="position[]" value="'+count+'">'+
+                          '</td>'+
+                          '<td class="products_add_table_padding">'+
+                            '<input type="text" name="alts[]">'+
+                          '</td>'+
+                           '<td class="products_add_table_padding">'+
+                            '<button type="button" class="delete_row btn-danger"><i class="fa fa-minus"></i></button>'+
+                          '</td>'+
+                        '</tr>');
+});
+
+$('body').on('click', ".delete_row", function() {
+   $(this).parent().parent().remove();
+});
+});
 $(document).ready(function() {
 
  $("#selected_option").click(function() {
@@ -392,7 +442,7 @@ $(".product_options_right_list .product_options_right_list_item:last-child").css
             readURL($(this), this);
         });
 
-        $(".upload_gallery_item").change(function () {
+$('body').on('change', ".upload_gallery_item", function() {
             readURL($(this), this);
         });
 
@@ -425,7 +475,7 @@ $(".product_options_right_list .product_options_right_list_item:last-child").css
                 } else { //suport format
                     dataView = '<div class="thumbnail imgNew" id="imgNew" style="width: 100%;text-align:center;">';
                     dataView += '<div id="img-list">';
-                    dataView += '<img id="imgMain" class="img-circle" src="' + e.target.result + '" style="width: 100%;height:253px;object-fit:cover;border-radius:0px;"/>';
+                    dataView += '<img id="imgMain" class="img-circle" src="' + e.target.result + '" style="width: 100%;height:238px;object-fit:cover;border-radius:0px;"/>';
                     dataView += '<div class="deleteImgBack" style="display:none;"></div>';
                     dataView += '<div class="deleteImg" id="delView"></div>';
                     dataView += '</div>';

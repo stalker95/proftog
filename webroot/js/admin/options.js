@@ -106,10 +106,25 @@ $('body').on('click', ".delete_item_option", function() {
 $('body').on('click', ".add_new_edit", function() {
  
  var id_option = $(this).attr('data-option');
- alert(id_option);
+ var elememt = $(this);
  get_list_options(id_option);
- setTimeout(function() {
- alert(results);
+   setTimeout(function() {
+ var  html = '<tr>'+
+                        '<td>'+
+                         '<select name="options_item[]" id="" class="choose_option">'+
+                          results+
+                         '</select>'+
+                       '</td>'+
+                       '<td>'+
+                         '<input type="number" name="amount_option[]">'+
+                       '</td>'+
+                       '<td style="text-align: center;">'+
+                         '<button class="delete_item_option">'+
+                           '<i class="fa fa-minus"></i>'+
+                         '</button>'+
+                       '</td>'+
+                     '</tr>';
+  $(elememt).parent().parent().parent().find("tbody").append(html);
 },500);
 });
 

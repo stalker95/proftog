@@ -30,10 +30,22 @@ class CategoriesController extends AppController
         $this->paginate = [
             'contain' => ['ParentCategories']
         ];
-        $categories = $this->paginate($this->Categories);
-
-        $this->set(compact('categories'));
+        $categories_main = $this->Categories->find()->contain(['ChildCategories.Products'])->toArray();
+        $count = 0;
+        foreach ($categories_main as $key => $value) {
+            if ($value['parent_id'] == 0) {
+            foreach ($value['child_categories'] as $keys => $item) {
+                $count = $count + count($item['products']);
+            }
+            $categories_main[$key]['product_count'] = $count;
+            $count = 0;
     }
+}
+           // debug($categories_main);
+
+            $this->set(compact('categories_main'));
+
+}
 
     /**
      * View method
@@ -47,6 +59,8 @@ class CategoriesController extends AppController
         $category = $this->Categories->find()->where(['slug' => $slug])->first();
 
         $products = $this->Paginate($this->Products->find()->where(['category_id' => $category->id]))->toArray();
+
+        $this->viewBuilder()->setLayout('category');
 
         
         $this->set('category', $category);

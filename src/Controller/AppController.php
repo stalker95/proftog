@@ -62,6 +62,7 @@ class AppController extends Controller
         'seo'             => false, 
         'blog_categories' => false,
         'actions'         => false,
+        'users'         => false,
     );
 
     /**
