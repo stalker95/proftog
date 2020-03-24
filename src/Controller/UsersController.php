@@ -19,7 +19,7 @@ class UsersController extends AppController
     {
         
         parent::initialize();
-        $this->Auth->allow(['forgot','resetpassword','logout','login']);
+        $this->Auth->allow(['forgot','resetpassword','logout','login','registerAjax']);
         $this->nav_['users'] = true;
     }
 
@@ -143,5 +143,94 @@ class UsersController extends AppController
 
         }
 
+    }
+
+    public function registerAjax()
+    {
+
+       $this->autoRender = false;
+      $this->RequestHandler->renderAs($this, 'json');
+      $this->response->disableCache();
+      $this->response->type('application/json');
+
+      $data = $this->request->getData();
+
+      $email = $data['email'];
+      
+      if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+             $this->response->body(json_encode(array('status' => 'false','message'=>'Не коректна пошта')));
+             return $this->response;
+      }
+
+      $user = $this->Users
+                   ->find()
+                   ->where(['mail' => $email])
+                   ->first();
+
+      if (!empty($user)) {
+         $this->response->body(json_encode(array('status' => 'false','message'=>'Користувач з таким email адресом вже існує в системі')));
+         return $this->response;
+      } else {
+        $user = $this->Users->newEntity();
+        $pass = md5(md5(substr(md5(time()), 0, 10)).time());
+        $user_name = md5(md5(substr(md5(time()), 0, 30)).time());
+        $user_surname = md5(md5(substr(md5(time()), 0, 33)).time());
+
+        $user->firstname = $user_name;
+        $user->lastname = $user_surname;
+        $user->password = $pass;
+        $user->mail = $email;
+
+        
+        if ($this->Users->save($user)) {
+            $subject = "Реєстрація в інтернет магазині";
+            $text = "Вітаємо з реєстрацією. Для авторизації використовуйте свою пошту і пароль : ".$pass;
+            $this->sendEmail($user->mail, $subject, $text);
+            $this->response->body(json_encode(array('status' => 'true','message'=>'Вітаємо з реєстрацією. Для авторизації використовуйте свою пошту і пароль надісланий на пошту')));
+            return $this->response;
+        } else {
+            $this->response->body(json_encode(array('status' => 'true','message'=>'Не коректна пошта')));
+            return $this->response;
+        }
+        
+      
+      }
+
+     
+      
+    }
+
+    public function authAjax()
+    {       
+       $this->RequestHandler->renderAs($this, 'json');  
+       $this->response->disableCache();
+       $this->response->type('application/json');
+
+        $this->autoRender = false;
+        if ($this->request->getData('email') == null OR $this->request->getData('email') == "") {
+            $this->response->body(json_encode(array('status'=>false, 'message' => 'Неверный логин или пароль, попробуйте еще раз')));
+             return $this->response; 
+        }
+
+        $_user = $this->Clients->find()->where(['OR' => ['email' => $this->request->getData('email'), 'login' =>$this->request->getData('email') ]])->first();
+        
+        if ($_user == false) {
+            $this->response->body(json_encode(array('status'=>false, 'message' => 'Неверный логин или пароль, попробуйте еще раз')));
+            return $this->response;
+        }
+
+        if (
+            (new \Cake\Auth\DefaultPasswordHasher)->check($this->request->getData('password'), $_user->password) == false
+        ) {
+            $_user = false;
+        }
+        
+        if ($_user == false) {
+            $this->response->body(json_encode(array('status'=>false, 'message' => 'Неверный логин или пароль, попробуйте еще раз')));
+            return $this->response;
+        }
+            //var_dump($_user);
+            $this->Auth->setUser($_user);
+            $this->response->body(json_encode(array('status' => true, 'message' => 'Неверный логин или пароль, попробуйте еще раз')));
     }
 }

@@ -219,7 +219,6 @@
 						<button class="product_buttons_item">
 							<img src="<?= $this->Url->build('/img/back.svg', ['fullBase' => true]) ?>" alt="">
 						</button>
-
 					</div>
 				</div>
 								<div class="propose_slider_item">
@@ -379,21 +378,15 @@
     <?php echo $this->Html->scriptStart(['block' => true]); ?>
 $(document).ready(function() {
 
-var flickerAPI = "https://api.privatbank.ua/p24api/pubinfo?json&exchange&coursid=5";
-  $.getJSON( flickerAPI, {
-    tags: "mount rainier",
-    tagmode: "any",
-    format: "json"
-  })
-  .done(function(data) {
-    global_curs = data[0]['buy'];
-  });
-
     var id_product = <?= $product->id ?>;
     var products_options = <?= $option_group_json ?>;
     var start_price = <?= $product->price ?> * global_curs;
      start_price = start_price * global_curs;
-     alert(global_curs);
+     setTimeout(function() {
+start_price = start_price * global_curs;
+alert(global_curs);
+
+     }, 300);
     var count_id_bascket = 1;
 
 	var total_options = new Map();

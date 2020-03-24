@@ -225,25 +225,16 @@ class AppController extends Controller
         }
     }
 
-    public function sendEmail($subject,$text)
+    public function sendEmail($to = null, $subject = null, $text = null)
     {
-        $to = "";
-        $email= new Email('default');
-        $email->setTransport('default');
-        $email->setEmailFormat('html');
-
-        try {
-        $res = $email
-              ->setTo($to)
-              ->setSubject($subject)                   
-              ->send($text);
-
-              //var_dump($res);
-        } catch (Exception $e) {
-            var_dump("ergerg");
-            echo 'Exception : ',  $e->getMessage(), "\n";
-
-        }
+                $email= new Email('default');
+                $email->emailFormat('html');
+                $email->transport('default');
+                $email->from('andrsaw4@gmail.com', 'Andrii Sachynetch');
+                $email->subject($subject);
+                $email->to($to);
+                
+             $email->send($text);
 
         
     }

@@ -128,7 +128,7 @@
 					<?php } ?>
 					</div>
 					<div class="propose_slider_item_price">
-						<p><?= $value['price'] ?> грн</p>
+						<p><span class="translate_price"><?= $value['price'] ?></span> грн</p>
 					</div>
 				</a>
 

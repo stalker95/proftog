@@ -2,12 +2,8 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick.min.css">
 <section class="propose">
 	<div class="propose_inside container">
-			
-		
 		<div class="row">
 			<div class="col-md-3">
-				
-				
 			</div>
 			<div class="col-md-9">
 				<div class="">
@@ -172,39 +168,19 @@
 					<div class="propose_slider_item_price">
 						<p>3100 грн</p>
 					</div>
-				</div>
-								<div class="propose_slider_item">
-					<div class="propose_slider_item_image">
-						<img src="<?= $this->Url->build('/img/product_item.png', ['fullBase' => true]) ?> " alt="">
-					</div>
-					<div class="propose_slider_item_stars">
-						<div class="product-star-item">
-							<img src="<?= $this->Url->build('/img/iconfinder_star_yellow.svg', ['fullBase' => true]) ?> " alt=""> 	
-						</div>
-						<div class="product-star-item">
-							<img src="<?= $this->Url->build('/img/iconfinder_star_yellow.svg', ['fullBase' => true]) ?> " alt=""> 	
-						</div>
-						<div class="product-star-item">
-							<img src="<?= $this->Url->build('/img/iconfinder_star_yellow.svg', ['fullBase' => true]) ?> " alt=""> 	
-						</div>
-						<div class="product-star-item">
-							<img src="<?= $this->Url->build('/img/iconfinder_star_yellow.svg', ['fullBase' => true]) ?> " alt=""> 	
-						</div>
-						<div class="product-star-item">
-							<img src="<?= $this->Url->build('/img/gray_star.svg', ['fullBase' => true]) ?> " alt=""> 	
-						</div>
-					</div>
-					<div class="propose_slider_item_title">
-						<p>Апарат для шаурми </p>
-					</div>
-					<div class="propose_slider_item_kod">
-						<p>Код товару <span class="item_kod">25456</span></p>
-					</div>
-					<div class="propose_slider_item_status">
-						<p class="on_sklad">На складі</p>
-					</div>
-					<div class="propose_slider_item_price">
-						<p>3100 грн</p>
+					<div class="product_buttons">
+						<button class="product_buttons_item">
+							<img src="<?= $this->Url->build('/img/back.svg', ['fullBase' => true]) ?>" alt="">
+						</button>
+						<button class="product_buttons_item">
+							<img src="<?= $this->Url->build('/img/back.svg', ['fullBase' => true]) ?>" alt="">
+						</button>
+						<button class="product_buttons_item add_product_to_wishlist" data-product="2">
+							<img src="<?= $this->Url->build('/img/favorite.svg', ['fullBase' => true]) ?>" alt="">
+						</button>
+						<button class="product_buttons_item">
+							<img src="<?= $this->Url->build('/img/back.svg', ['fullBase' => true]) ?>" alt="">
+						</button>
 					</div>
 				</div>
 								<div class="propose_slider_item">
@@ -240,6 +216,20 @@
 					<div class="propose_slider_item_price">
 						<p>3100 грн</p>
 					</div>
+					<div class="product_buttons">
+						<button class="product_buttons_item">
+							<img src="<?= $this->Url->build('/img/back.svg', ['fullBase' => true]) ?>" alt="">
+						</button>
+						<button class="product_buttons_item">
+							<img src="<?= $this->Url->build('/img/back.svg', ['fullBase' => true]) ?>" alt="">
+						</button>
+						<button class="product_buttons_item add_product_to_wishlist" data-product="6">
+							<img src="<?= $this->Url->build('/img/favorite.svg', ['fullBase' => true]) ?>" alt="">
+						</button>
+						<button class="product_buttons_item">
+							<img src="<?= $this->Url->build('/img/back.svg', ['fullBase' => true]) ?>" alt="">
+						</button>
+					</div>
 				</div>
 								<div class="propose_slider_item">
 					<div class="propose_slider_item_image">
@@ -273,6 +263,68 @@
 					</div>
 					<div class="propose_slider_item_price">
 						<p>3100 грн</p>
+					</div>
+					<div class="product_buttons">
+						<button class="product_buttons_item">
+							<img src="<?= $this->Url->build('/img/back.svg', ['fullBase' => true]) ?>" alt="">
+						</button>
+						<button class="product_buttons_item">
+							<img src="<?= $this->Url->build('/img/back.svg', ['fullBase' => true]) ?>" alt="">
+						</button>
+						<button class="product_buttons_item add_product_to_wishlist" data-product="3">
+							<img src="<?= $this->Url->build('/img/favorite.svg', ['fullBase' => true]) ?>" alt="">
+						</button>
+						<button class="product_buttons_item">
+							<img src="<?= $this->Url->build('/img/back.svg', ['fullBase' => true]) ?>" alt="">
+						</button>
+					</div>
+				</div>
+								<div class="propose_slider_item">
+					<div class="propose_slider_item_image">
+						<img src="<?= $this->Url->build('/img/product_item.png', ['fullBase' => true]) ?> " alt="">
+					</div>
+					<div class="propose_slider_item_stars">
+						<div class="product-star-item">
+							<img src="<?= $this->Url->build('/img/iconfinder_star_yellow.svg', ['fullBase' => true]) ?> " alt=""> 	
+						</div>
+						<div class="product-star-item">
+							<img src="<?= $this->Url->build('/img/iconfinder_star_yellow.svg', ['fullBase' => true]) ?> " alt=""> 	
+						</div>
+						<div class="product-star-item">
+							<img src="<?= $this->Url->build('/img/iconfinder_star_yellow.svg', ['fullBase' => true]) ?> " alt=""> 	
+						</div>
+						<div class="product-star-item">
+							<img src="<?= $this->Url->build('/img/iconfinder_star_yellow.svg', ['fullBase' => true]) ?> " alt=""> 	
+						</div>
+						<div class="product-star-item">
+							<img src="<?= $this->Url->build('/img/gray_star.svg', ['fullBase' => true]) ?> " alt=""> 	
+						</div>
+					</div>
+					<div class="propose_slider_item_title">
+						<p>Апарат для шаурми </p>
+					</div>
+					<div class="propose_slider_item_kod">
+						<p>Код товару <span class="item_kod">25456</span></p>
+					</div>
+					<div class="propose_slider_item_status">
+						<p class="on_sklad">На складі</p>
+					</div>
+					<div class="propose_slider_item_price">
+						<p>3100 грн</p>
+					</div>
+					<div class="product_buttons">
+						<button class="product_buttons_item">
+							<img src="<?= $this->Url->build('/img/back.svg', ['fullBase' => true]) ?>" alt="">
+						</button>
+						<button class="product_buttons_item">
+							<img src="<?= $this->Url->build('/img/back.svg', ['fullBase' => true]) ?>" alt="">
+						</button>
+						<button class="product_buttons_item add_product_to_wishlist" data-product="4">
+							<img src="<?= $this->Url->build('/img/favorite.svg', ['fullBase' => true]) ?>" alt="">
+						</button>
+						<button class="product_buttons_item">
+							<img src="<?= $this->Url->build('/img/back.svg', ['fullBase' => true]) ?>" alt="">
+						</button>
 					</div>
 				</div>
 		</div>
@@ -481,9 +533,6 @@
 					</div>
 					<div class="propose_slider_item_status">
 						<p class="on_sklad">На складі</p>
-					</div>
-					<div class="propose_slider_item_price">
-						<p>3100 грн</p>
 					</div>
 				</div>
 				</div>
@@ -694,5 +743,21 @@ $(".slider_arrow_left").click(function() {
 $(".slider_arrow_right").click(function() {
  $(this).parent().find('.slick-next.slick-arrow').trigger('click')
 });
+
+$(".add_product_to_wishlist").click(function() {
+   
+   var id_product = $(this).attr("data-product");
+
+   $.ajax({
+        url: '<?= $this->Url->build(['controller' => 'wishlist', 'action' => 'add', '_full' => true]) ?>',
+        method: 'POST',
+      	data: { "id_product": id_product},
+      	success: function(data){ 
+        	alert("Додано");
+        }
+    });
+
+});
+
 	<?php echo $this->Html->scriptEnd(); ?>
 </script>

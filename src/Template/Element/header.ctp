@@ -5,11 +5,11 @@
         <div class="header_top_inside d-flex">
         <div class="header_top_left">
             <div class="header_top-item">
-                <a href="/">
+                <a href="<?= $this->Url->build(['controller' => 'wishlist','action'=>'index']) ?>">
                    <i class="fa fa-heart"></i>
-                    Список бажань (0)
+                    Список бажань (<?php if (isset($_SESSION['wishlist'])){ echo count($_SESSION['wishlist']); } else { echo "0"; } ?>) 
                 </a>
-                <a href=".">
+                <a href="<?= $this->Url->build(['controller' => 'compares','action'=>'index']) ?>">
                     <i class="fa fa-exchange"></i>
                     Список порівнянь
                 </a>
@@ -35,10 +35,10 @@
             <div class="header_mobile_list">
                 <div class="header_mobile_list_item">
                     <div class="header_mobile_list_image">
-                        <i class="fa fa-exchange"></i>
+                        <i class="fa fa-heart"></i>
                     </div>
                     <div class="header_mobile_list_title">
-                        м.Львів вул Зелена 15
+                        Список бажань (<?= count($_SESSION['wishlist']); ?>) 
                     </div>
                 </div>
                 <div class="header_mobile_list_item">
@@ -80,20 +80,12 @@
                     <div class="header_center_form hide_mobile">
                         <form action="">
                             <div class="custom-select" >
-                                <select>
+                                <select name="category">
                                     <option value="0">Всі категорії</option>
-                                    <option value="1">Audi</option>
-                                    <option value="2">BMW</option>
-                                    <option value="3">Citroen</option>
-                                    <option value="4">Ford</option>
-                                    <option value="5">Honda</option>
-                                    <option value="6">Jaguar</option>
-                                    <option value="7">Land Rover</option>
-                                    <option value="8">Mercedes</option>
-                                    <option value="9">Mini</option>
-                                    <option value="10">Nissan</option>
-                                    <option value="11">Toyota</option>
-                                    <option value="12">Volvo</option>
+                                    <?php foreach ($categories as $key => $value): if ($value['parent_id']): ?>
+                                    <option value="<?= $value['id'] ?>"><?= $value['name'] ?></option>
+                                    
+                                <?php endif; endforeach; ?>
                                 </select>
                             </div>
                             <input type="text" class="header_center_text outline-none" placeholder="Пошук продуктів ">

@@ -5,6 +5,21 @@ body {
 .translate_price {
     opacity: 0;
 }
+.loader_svg {
+    display: none;
+}
+
+/* STYLE FOR MESSAGES BEGIN */
+.display_message_register {
+    margin-top: 15px;
+}
+.display_message_register .display_message_register_alert {
+   
+    color: #fff;
+    padding: 5px;
+} 
+
+/* STYLE FOR MESSAGES END*/
 p {
     margin-bottom: 0px;
 }
@@ -139,7 +154,7 @@ header  .select-selected.select-arrow-active:after {
 /* style the items (options), including the selected item: */
 header  .select-items div, .header_top  .select-selected {
   color: #000;
-  padding: 8px 16px;
+  padding: 2px 5px;
   border: 1px solid transparent;
   border-color: transparent transparent rgba(0, 0, 0, 0.1) transparent;
   cursor: pointer;
@@ -1021,6 +1036,16 @@ to{-webkit-transform:rotate3d(0, 0, 1, 0deg);transform:rotate3d(0, 0, 1, 0deg);}
     display: flex;
     flex-wrap: wrap;
 }
+.sales_list .propose_slider_item {
+    position: relative;
+}
+.product_item_hover .product_item_hover_after {
+    position: absolute;
+    left: -100%;
+}
+.product_item_hover {
+    position: relative;
+}
 .propose_slider_item_price {
     display: flex;
     align-items: center;
@@ -1357,15 +1382,15 @@ button.product_buttons_item {
     border-radius: 100%;
     background: #52595F;
     text-align: center;
-    width: 35px;
+    width: 40px;
     margin-right: 10px;
-    height: 35px;
+    height: 38px;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 .product_buttons_item img {
-    width: 65%;
+    width: 100%;
 }
 .propose_top_right {
     justify-content: flex-end;
@@ -1500,6 +1525,8 @@ button.product_buttons_item {
     color: #fff;
     margin-top: 20px;
     padding: 6px 30px;
+    width: 132px;
+    outline: none;
     border: none;
 }
 .user_form_description {
