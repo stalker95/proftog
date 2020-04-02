@@ -10,6 +10,8 @@ use Cake\ORM\Entity;
  * @property string $title
  * @property string $image
  * @property \Cake\I18n\FrozenTime $date_end
+ * @property int $product_id
+ * @property string $background
  */
 class Action extends Entity
 {
@@ -23,8 +25,11 @@ class Action extends Entity
      * @var array
      */
     protected $_accessible = [
+        '*'     => true,
         'title' => true,
         'image' => true,
-        'date_end' => true
+        'date_end' => true,
+        'product_id' => true,
+        'background' => true
     ];
 }

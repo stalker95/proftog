@@ -33,6 +33,12 @@ class ProducersTable extends Table
         $this->setTable('producers');
         $this->setDisplayField('name');
         $this->setPrimaryKey('id');
+
+        $this->hasMany('Products', [
+            'foreignKey' => 'producer_id',
+            'joinType' => 'INNER'
+        ]);
+
     }
 
     /**

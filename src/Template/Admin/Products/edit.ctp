@@ -63,20 +63,64 @@
             </div>
             <div class="playlist__managment--item__right">
               <div class="playlist--item--sub">
-                  <?=  $this->Form->control('price',array('label' => 'First Name','type'=>'number','min'=>0,'class'=>'form-control','required'=>'required'));?>    
+                  <?=  $this->Form->control('price',array('label' => 'First Name','type'=>'number','class'=>'form-control','required'=>'required'));?>    
+              </div>
+            </div>
+        </div>
+                <div class="playlist__managment--item">
+            <div class="playlist__managment--item__left">
+              <p>Ціна нова</p>
+            </div>
+            <div class="playlist__managment--item__right">
+              <div class="playlist--item--sub">
+                  <?=  $this->Form->control('price_new',array('label' => 'First Name','type'=>'number','class'=>'form-control'));?>    
               </div>
             </div>
         </div>
         <div class="playlist__managment--item">
             <div class="playlist__managment--item__left">
-              <p>Відео</p>
+              <p>Хіт продажу</p>
             </div>
             <div class="playlist__managment--item__right">
               <div class="playlist--item--sub">
-                  <?=  $this->Form->control('video', array('label' => 'Відео','type'=>'text','min'=>0,'class'=>'form-control'));?>    
+                  <input type="radio" name="hit" style="text-align: left;width: auto;" <?php if($product->hit): ?> checked <?php endif; ?>>   
               </div>
             </div>
         </div>
+       <div class="playlist__managment--item">
+            <div class="playlist__managment--item__left">
+              <p>Валюта</p>
+            </div>
+            <div class="playlist__managment--item__right">
+              <div class="playlist--item--sub">
+
+                  <select name="currency_id" id="" class="form-control">
+                    <?php   if ($product->currency_id == 1){ ?>
+                      <option value="1">Гривні</option>
+                    <option value="2">Євро</option>
+                    <option value="3">Доллари</option>
+                    <?php   } ?>
+
+                     <?php   if ($product->currency_id == 2){ ?>
+                      
+                    <option value="2">Євро</option>
+                    <option value="1">Гривні</option>
+                    <option value="3">Доллари</option>
+                    <?php   } ?>
+
+                     <?php   if ($product->currency_id == 3){ ?>
+                      <option value="3">Доллари</option>
+                      <option value="1">Гривні</option>
+                    <option value="2">Євро</option>
+                    
+                    <?php   } ?>
+                    
+                  </select>
+              </div>
+            </div>
+        </div>
+
+       
          
          <div class="playlist__managment--item">
             <div class="playlist__managment--item__left">
@@ -144,7 +188,7 @@
 
         <div class="playlist__managment--item">
             <div class="playlist__managment--item__left">
-              <p>Опис</p>
+              <p>Опис товару</p>
             </div>
             <div class="playlist__managment--item__right">
               <div class="playlist--item--sub">

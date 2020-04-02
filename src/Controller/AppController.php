@@ -31,6 +31,7 @@ class AppController extends Controller
      * @var App\Model\Entity\User
      */
     protected $employee;
+    protected $currency;
 
     /**
      * @var App\Model\Entity\User
@@ -62,7 +63,10 @@ class AppController extends Controller
         'seo'             => false, 
         'blog_categories' => false,
         'actions'         => false,
+        'managers'        => false,
+        'currency'        => false,
         'users'         => false,
+        'proposes'         => false,
     );
 
     /**
@@ -133,12 +137,12 @@ class AppController extends Controller
       else {
            $this->loadComponent('Auth', [
             'loginAction' => [
-                'controller' => 'Login',
+                'controller' => 'Users',
                 'action' => 'login',
                 'prefix' => $this->request->getParam('prefix')
             ],
             'logoutAction' => [
-                'controller' => 'Login',
+                'controller' => 'Users',
                 'action' => 'logout',
                 'prefix' => $this->request->getParam('prefix')
             ],
@@ -172,6 +176,7 @@ class AppController extends Controller
         parent::beforeFilter($event);
 
         $this->loadModel('Users');
+        $this->loadModel('Currency');
 
         if ($this->request->getParam('prefix') == 'admin') {
             $this->viewBuilder()->setLayout('admin');
@@ -180,6 +185,9 @@ class AppController extends Controller
             } else {
                     $this->employee = $this->user = $this->Users->newEntity();
             }
+            $currency = $this->Currency->find()->first();
+            $this->currency = $currency;
+             $this->set('currency', $this->currency);
         } else {
             if ($this->Auth->user('id')) {
             $this->user = $this->Users->get($this->Auth->user('id'));
@@ -206,10 +214,14 @@ class AppController extends Controller
         $this->set('user', $this->user);
         
         $this->loadModel('Categories');
+        $this->loadModel('Settings');
 
         $categories = $this->Categories->find()->contain(['ChildCategories'])->order('Categories.position ASC')->toArray();
+        $settings = $this->Settings->find()->toArray();
         $this->categories = $categories;
+        $this->settings = $settings;
         $this->set('categories', $this->categories);
+        $this->set('settings', $this->settings);
         
         $this->loadModel('Seo');
 

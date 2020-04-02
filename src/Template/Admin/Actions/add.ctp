@@ -1,6 +1,9 @@
 <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
 
+
+<!-- partial:index.partial.html -->
+
     <!-- Main content -->
     <section class="content">
     <div class="row">
@@ -10,35 +13,58 @@
     <?= $this->Form->create($action,['type' => 'file']); ?>
        <div class="playlist__managment--item">
   <div class="playlist__managment--item__left">
-    <p>Назва</p>
+    <p>Title</p>
   </div>
   <div class="playlist__managment--item__right">
     <div class="playlist--item--sub">
-    <?=  $this->Form->control('name',array('label' => 'First Name','class'=>'form-control','required'=>'required'));?>
-
+    <?=  $this->Form->control('title',array('label' => 'First Name','type'=>'text','class'=>'form-control','required'=>'required'));?>
     </div>
   </div>
 </div>
 
-       <div class="playlist__managment--item">
+       <div class="playlist__managment--item choose_color_picker ">
   <div class="playlist__managment--item__left">
-    <p>Опис</p>
+    <p>Фон</p>
   </div>
   <div class="playlist__managment--item__right">
     <div class="playlist--item--sub">
-    <?=  $this->Form->control('desription',array('type'=>'textarea','label' => 'First Name','class'=>'form-control','required'=>'required'));?>
-
+      <div class="form-group">
+            <div class='input-group date' id=''>
+                <input type='text' class="chosed_color form-control" name="background" required="required" />
+                <span class="input-group-addon choose__color">
+                    <span class="glyphicon glyphicon-calendar"></span>
+                </span>
+            </div>
+    </div>
     </div>
   </div>
+  <div class="pickshell cre" >
+    <div class="color_picker_close ">
+      <i class="fa fa-close"></i>
+    </div>
+<div class="picker" data-hsv="180,60,78">
+<a href="#change" class="icon change"></a>
+<input type="text" class="change" name="change" value="" />
+<div class="board"><div class="choice"></div></div>
+<div class="rainbow"></div>
+</div>
+</div>
 </div>
 
        <div class="playlist__managment--item">
   <div class="playlist__managment--item__left">
-    <p>Keywords</p>
+    <p>Дата і час завершення</p>
   </div>
   <div class="playlist__managment--item__right">
     <div class="playlist--item--sub">
-    <?=  $this->Form->control('keywords',array('type'=>'textarea','label' => 'First Name','class'=>'form-control','required'=>'required'));?>
+    <div class="form-group">
+            <div class='input-group date' id='datetimepicker6'>
+                <input type='text' class="form-control" name="date_end" required="required" />
+                <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-calendar"></span>
+                </span>
+            </div>
+    </div>
 
     </div>
   </div>
@@ -46,28 +72,16 @@
 
 <div class="playlist__managment--item">
   <div class="playlist__managment--item__left">
-    <p>Батьківська категорія</p>
+    <p>Товар</p>
   </div>
   <div class="playlist__managment--item__right">
     <div class="playlist--item--sub">
-    <select name="parent_id" id="" class="form-control">
-    	<option value="0">Без категорії</option>
-    	<?php foreach ($categories as $key => $value): ?>
-    		<option value="<?= $value['id'] ?>"> <?= $value['name']; ?></option>
+    <select name="product_id[]" id="" class="form-control js-example-basic-single" multiple="multiple">
+    	<?php foreach ($products as $key => $value): ?>
+    		<option value="<?= $value['id'] ?>"> <?= $value['title']; ?></option>
     	<?php endforeach; ?>
     </select>
 
-    </div>
-  </div>
-</div>
-
-<div class="playlist__managment--item">
-  <div class="playlist__managment--item__left">
-    <p>Image</p>
-  </div>
-  <div class="playlist__managment--item__right">
-    <div class="playlist--item--sub">
-      <?=  $this->Form->control('image',array('type'=>'textarea','label' => 'First Name','class'=>'form-control','required'=>'required'));?>      
     </div>
   </div>
 </div>
@@ -87,7 +101,7 @@
             </div>
             <div class="playlist__managment--item__right">
               <div class="playlist--item--sub" style="display: block;">
-                  <?=  $this->Form->control('picture',array('label' => 'First Name','type'=>'file','class'=>' form-control ','style'=>'font-size: 1em;padding:0px;width:200px;','id'=>'fileimgMeal'));?>  
+                  <?=  $this->Form->control('image',array('label' => 'First Name','type'=>'file','class'=>' form-control ','style'=>'font-size: 1em;padding:0px;width:200px;','id'=>'fileimgMeal','required'=>'required'));?>  
                   <div id="fotosViewMeal" style="position: relative;width: 100%;" class="image_gallery_preview"></div>  
                   </div>
             </div>
@@ -101,13 +115,14 @@
       </div>  
 </div>
 
-
 </section>
-<script>
 
+<script src='https://cdnjs.cloudflare.com/ajax/libs/tinycolor/1.3.0/tinycolor.min.js'></script>
 <?php $this->Html->script('admin/jquery.dataTables.min.js', ['block' => 'scriptBottom']); ?>
 <?php $this->Html->script('admin/dataTables.bootstrap.min.js', ['block' => 'scriptBottom']); ?>
+<script>  
 <?php echo $this->Html->scriptStart(['block' => true]); ?>
+
  $(document).ready(function() {
     $('.js-example-basic-single').select2();
 });
@@ -187,15 +202,8 @@ var fileInput  = document.querySelector( ".input-file" ),
     button     = document.querySelector( ".input-file-trigger" ),
     the_return = document.querySelector(".file-return");
       
-button.addEventListener( "keydown", function( event ) {  
-    if ( event.keyCode == 13 || event.keyCode == 32 ) {  
-        fileInput.focus();  
-    }  
-});
-button.addEventListener( "click", function( event ) {
-   fileInput.focus();
-   return false;
-});  
+
+
 
 
 $("#choose_category").change(function() {
@@ -219,6 +227,44 @@ $("#choose_category").change(function() {
       }
     });
 
-})
+});
+
+$(document).ready(function() {
+        $('#datetimepicker6').datetimepicker();
+        $('#datetimepicker7').datetimepicker({
+            useCurrent: false //Important! See issue #1075
+        });
+        $("#datetimepicker6").on("dp.change", function (e) {
+            $('#datetimepicker7').data("DateTimePicker").minDate(e.date);
+        });
+        $("#datetimepicker7").on("dp.change", function (e) {
+            $('#datetimepicker6').data("DateTimePicker").maxDate(e.date);
+        });
+    
+});
+// Create a new color picker instance
+// https://iro.js.org/guide.html#getting-started
+var colorPicker = new iro.ColorPicker(".colorPicker", {
+  // color picker options
+  // Option guide: https://iro.js.org/guide.html#color-picker-options
+  width: 280,
+  color: "rgb(255, 0, 0)",
+  borderWidth: 1,
+  borderColor: "#fff" });
+
+
+var values = document.getElementById("values");
+
+// https://iro.js.org/guide.html#color-picker-events
+colorPicker.on(["color:init", "color:change"], function (color) {
+  // Show the current color in different formats
+  // Using the selected color: https://iro.js.org/guide.html#selected-color-api
+  values.innerHTML = [
+  "hex: " + color.hexString,
+  "rgb: " + color.rgbString,
+  "hsl: " + color.hslString].
+  join("<br>");
+});
+ <?php echo $this->Html->scriptEnd(); ?>
 </script>
-<?php echo $this->Html->scriptEnd(); ?>
+

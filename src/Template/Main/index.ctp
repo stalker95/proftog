@@ -1,4 +1,9 @@
 
+<style>
+	header .propose_list {
+		display: block!important;
+	}
+</style>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick.min.css">
 <section class="propose">
 	<div class="propose_inside container">
@@ -35,58 +40,30 @@
 					</div>
 					<div class="center_slider">
 						<div class="slider_arrow_left">
-							<i class="fa fa-chevron-left"></i>
+							<img src="<?= $this->Url->build('/img/arrov_left.svg', ['fullBase' => true]) ?>" alt="">
 						</div>
 						<div class="slider_arrow_right">
-							<i class="fa fa-chevron-right"></i>
+							<img src="<?= $this->Url->build('/img/arrov_right.svg', ['fullBase' => true]) ?>" alt="">
 						</div>
-
 						<div class="slider_inialize">
-							<div>	
-							<div class="center_slider_item">
+							<?php foreach ($actions as $key => $value): ?>
+							<div style="background: <?= $value['background']; ?>;"	data-backgroud="<?= $value['background']; ?>">	
+							<div class="center_slider_item" style="background: <?= $value['background']; ?>;">
 								<div class="center_slider_item_left">
 									<p class="center_slider_title">
-										SP MINI E REAL FORNI<br>
-										Ротановая печь 
+										<?= $value['title'] ?> 
 									</p>
 
-									<a href="/" class="center_slider_link">Детальніше</a>
+									<a href="<?= $this->Url->build(['controller' => 'actions','action'=>'view/'.$value['id']]) ?>" class="center_slider_link">Детальніше</a>
 								</div>
 								<div class="center_slider_item_right">
-									<img src="<?= $this->Url->build('/img/sample for slide.png', ['fullBase' => true]) ?>" alt="">
+									<img src="<?= $this->Url->build('/actions/'.$value['image'], ['fullBase' => true]) ?>" alt="">
 								</div>
 							</div>
 						</div>
-							<div>
-							<div class="center_slider_item">
-								<div class="center_slider_item_left">
-									<p class="center_slider_title">
-										SP MINI E REAL FORNI<br>
-										Ротановая печь 
-									</p>
-
-									<a href="/" class="center_slider_link">Детальніше</a>
-								</div>
-								<div class="center_slider_item_right">
-									<img src="<?= $this->Url->build('/img/sample for slide.png', ['fullBase' => true]) ?>" alt="">
-								</div>
-							</div>
-						</div>
-						<div>
-							<div class="center_slider_item">
-								<div class="center_slider_item_left">
-									<p class="center_slider_title">
-										SP MINI E REAL FORNI<br>
-										Ротановая печь 
-									</p>
-
-									<a href="/" class="center_slider_link">Детальніше</a>
-								</div>
-								<div class="center_slider_item_right">
-									<img src="<?= $this->Url->build('/img/sample for slide.png', ['fullBase' => true]) ?>" alt="">
-								</div>
-							</div>
-						</div>
+					<?php endforeach; ?>
+							
+						
 						</div>
 					</div>
 				</div>
@@ -95,6 +72,7 @@
 	</div>
 </section>
 <section class="products">
+	<div>
 	<div class="container">
 		<div class="slider_arrow_left">
 							<i class="fa fa-chevron-left"></i>
@@ -110,16 +88,9 @@
 					</a>
 				</div>
 			<?php endif; endforeach; ?>
-				
-
-				
-
-				
-				
-				
-				
 			</div>
 	</div>
+</div>
 </section>
 <div class="propose">
 			<div class=" propose_top container">
@@ -135,10 +106,12 @@
 </div>
 	<div class="propose_container container">
 		<div class="propose_slider">
-				<div class="propose_slider_item">
-					<div class="propose_slider_item_image">
-						<img src="<?= $this->Url->build('/img/product_item.png', ['fullBase' => true]) ?> " alt="">
-					</div>
+			<?php foreach ($proposes as $key => $value): ?>
+				<div class="propose_slider_item <?php if (!empty($value['product']['actions_products'])): ?> propose_slider_item_show_action <?php endif; ?>">
+					<div class="propose_slider_item_action"><p>Акція</p></div>
+					<a href="<?= $this->Url->build(['controller' => 'products','action'=>'view/'.$value['product']['slug']]) ?>" class="propose_slider_item_image">
+						<img src="<?= $this->Url->build('/products/'.$value['product']['image'], ['fullBase' => true]) ?> " alt="">
+					</a>
 					<div class="propose_slider_item_stars">
 						<div class="product-star-item">
 							<img src="<?= $this->Url->build('/img/iconfinder_star_yellow.svg', ['fullBase' => true]) ?> " alt=""> 	
@@ -157,176 +130,45 @@
 						</div>
 					</div>
 					<div class="propose_slider_item_title">
-						<p>Апарат для шаурми </p>
+						<p><?= $value['product']['title'] ?></p>
 					</div>
 					<div class="propose_slider_item_kod">
-						<p>Код товару <span class="item_kod">25456</span></p>
+						<p>Код товару <span class="item_kod"><?= $value['product']['cod'] ?></span></p>
 					</div>
 					<div class="propose_slider_item_status">
 						<p class="on_sklad">На складі</p>
 					</div>
 					<div class="propose_slider_item_price">
-						<p>3100 грн</p>
+						<?php if ($value['product']['price_new'] > 0) { ?>
+							<p>
+							<span class="translate_price" data-currency="<?= $value['product']['currency_id'] ?>"><?= $value['product']['price_new'] ?></span> грн
+						    </p>
+						    <p class="slider_item_price_old">
+							<span class="translate_price" data-currency="<?= $value['product']['currency_id'] ?>"><?= $value['product']['price'] ?></span> грн</p>
+						<p class="slider_item_discount"> -11%</p>
+
+					    <?php }  else { ?>
+						<p><span class="translate_price" data-currency="<?= $value['product']['currency_id'] ?>"><?= $value['product']['price'] ?></span> грн</p>
+					    <?php } ?>
 					</div>
-					<div class="product_buttons">
+					<?php /* <div class="product_buttons">
 						<button class="product_buttons_item">
 							<img src="<?= $this->Url->build('/img/back.svg', ['fullBase' => true]) ?>" alt="">
 						</button>
 						<button class="product_buttons_item">
 							<img src="<?= $this->Url->build('/img/back.svg', ['fullBase' => true]) ?>" alt="">
 						</button>
-						<button class="product_buttons_item add_product_to_wishlist" data-product="2">
+						<button class="product_buttons_item add_product_to_wishlist" data-product="<?= $value['product']['id'] ?>">
 							<img src="<?= $this->Url->build('/img/favorite.svg', ['fullBase' => true]) ?>" alt="">
 						</button>
 						<button class="product_buttons_item">
 							<img src="<?= $this->Url->build('/img/back.svg', ['fullBase' => true]) ?>" alt="">
 						</button>
-					</div>
+					</div> */ ?> 
 				</div>
-								<div class="propose_slider_item">
-					<div class="propose_slider_item_image">
-						<img src="<?= $this->Url->build('/img/product_item.png', ['fullBase' => true]) ?> " alt="">
-					</div>
-					<div class="propose_slider_item_stars">
-						<div class="product-star-item">
-							<img src="<?= $this->Url->build('/img/iconfinder_star_yellow.svg', ['fullBase' => true]) ?> " alt=""> 	
-						</div>
-						<div class="product-star-item">
-							<img src="<?= $this->Url->build('/img/iconfinder_star_yellow.svg', ['fullBase' => true]) ?> " alt=""> 	
-						</div>
-						<div class="product-star-item">
-							<img src="<?= $this->Url->build('/img/iconfinder_star_yellow.svg', ['fullBase' => true]) ?> " alt=""> 	
-						</div>
-						<div class="product-star-item">
-							<img src="<?= $this->Url->build('/img/iconfinder_star_yellow.svg', ['fullBase' => true]) ?> " alt=""> 	
-						</div>
-						<div class="product-star-item">
-							<img src="<?= $this->Url->build('/img/gray_star.svg', ['fullBase' => true]) ?> " alt=""> 	
-						</div>
-					</div>
-					<div class="propose_slider_item_title">
-						<p>Апарат для шаурми </p>
-					</div>
-					<div class="propose_slider_item_kod">
-						<p>Код товару <span class="item_kod">25456</span></p>
-					</div>
-					<div class="propose_slider_item_status">
-						<p class="on_sklad">На складі</p>
-					</div>
-					<div class="propose_slider_item_price">
-						<p>3100 грн</p>
-					</div>
-					<div class="product_buttons">
-						<button class="product_buttons_item">
-							<img src="<?= $this->Url->build('/img/back.svg', ['fullBase' => true]) ?>" alt="">
-						</button>
-						<button class="product_buttons_item">
-							<img src="<?= $this->Url->build('/img/back.svg', ['fullBase' => true]) ?>" alt="">
-						</button>
-						<button class="product_buttons_item add_product_to_wishlist" data-product="6">
-							<img src="<?= $this->Url->build('/img/favorite.svg', ['fullBase' => true]) ?>" alt="">
-						</button>
-						<button class="product_buttons_item">
-							<img src="<?= $this->Url->build('/img/back.svg', ['fullBase' => true]) ?>" alt="">
-						</button>
-					</div>
-				</div>
-								<div class="propose_slider_item">
-					<div class="propose_slider_item_image">
-						<img src="<?= $this->Url->build('/img/product_item.png', ['fullBase' => true]) ?> " alt="">
-					</div>
-					<div class="propose_slider_item_stars">
-						<div class="product-star-item">
-							<img src="<?= $this->Url->build('/img/iconfinder_star_yellow.svg', ['fullBase' => true]) ?> " alt=""> 	
-						</div>
-						<div class="product-star-item">
-							<img src="<?= $this->Url->build('/img/iconfinder_star_yellow.svg', ['fullBase' => true]) ?> " alt=""> 	
-						</div>
-						<div class="product-star-item">
-							<img src="<?= $this->Url->build('/img/iconfinder_star_yellow.svg', ['fullBase' => true]) ?> " alt=""> 	
-						</div>
-						<div class="product-star-item">
-							<img src="<?= $this->Url->build('/img/iconfinder_star_yellow.svg', ['fullBase' => true]) ?> " alt=""> 	
-						</div>
-						<div class="product-star-item">
-							<img src="<?= $this->Url->build('/img/gray_star.svg', ['fullBase' => true]) ?> " alt=""> 	
-						</div>
-					</div>
-					<div class="propose_slider_item_title">
-						<p>Апарат для шаурми </p>
-					</div>
-					<div class="propose_slider_item_kod">
-						<p>Код товару <span class="item_kod">25456</span></p>
-					</div>
-					<div class="propose_slider_item_status">
-						<p class="on_sklad">На складі</p>
-					</div>
-					<div class="propose_slider_item_price">
-						<p>3100 грн</p>
-					</div>
-					<div class="product_buttons">
-						<button class="product_buttons_item">
-							<img src="<?= $this->Url->build('/img/back.svg', ['fullBase' => true]) ?>" alt="">
-						</button>
-						<button class="product_buttons_item">
-							<img src="<?= $this->Url->build('/img/back.svg', ['fullBase' => true]) ?>" alt="">
-						</button>
-						<button class="product_buttons_item add_product_to_wishlist" data-product="3">
-							<img src="<?= $this->Url->build('/img/favorite.svg', ['fullBase' => true]) ?>" alt="">
-						</button>
-						<button class="product_buttons_item">
-							<img src="<?= $this->Url->build('/img/back.svg', ['fullBase' => true]) ?>" alt="">
-						</button>
-					</div>
-				</div>
-								<div class="propose_slider_item">
-					<div class="propose_slider_item_image">
-						<img src="<?= $this->Url->build('/img/product_item.png', ['fullBase' => true]) ?> " alt="">
-					</div>
-					<div class="propose_slider_item_stars">
-						<div class="product-star-item">
-							<img src="<?= $this->Url->build('/img/iconfinder_star_yellow.svg', ['fullBase' => true]) ?> " alt=""> 	
-						</div>
-						<div class="product-star-item">
-							<img src="<?= $this->Url->build('/img/iconfinder_star_yellow.svg', ['fullBase' => true]) ?> " alt=""> 	
-						</div>
-						<div class="product-star-item">
-							<img src="<?= $this->Url->build('/img/iconfinder_star_yellow.svg', ['fullBase' => true]) ?> " alt=""> 	
-						</div>
-						<div class="product-star-item">
-							<img src="<?= $this->Url->build('/img/iconfinder_star_yellow.svg', ['fullBase' => true]) ?> " alt=""> 	
-						</div>
-						<div class="product-star-item">
-							<img src="<?= $this->Url->build('/img/gray_star.svg', ['fullBase' => true]) ?> " alt=""> 	
-						</div>
-					</div>
-					<div class="propose_slider_item_title">
-						<p>Апарат для шаурми </p>
-					</div>
-					<div class="propose_slider_item_kod">
-						<p>Код товару <span class="item_kod">25456</span></p>
-					</div>
-					<div class="propose_slider_item_status">
-						<p class="on_sklad">На складі</p>
-					</div>
-					<div class="propose_slider_item_price">
-						<p>3100 грн</p>
-					</div>
-					<div class="product_buttons">
-						<button class="product_buttons_item">
-							<img src="<?= $this->Url->build('/img/back.svg', ['fullBase' => true]) ?>" alt="">
-						</button>
-						<button class="product_buttons_item">
-							<img src="<?= $this->Url->build('/img/back.svg', ['fullBase' => true]) ?>" alt="">
-						</button>
-						<button class="product_buttons_item add_product_to_wishlist" data-product="4">
-							<img src="<?= $this->Url->build('/img/favorite.svg', ['fullBase' => true]) ?>" alt="">
-						</button>
-						<button class="product_buttons_item">
-							<img src="<?= $this->Url->build('/img/back.svg', ['fullBase' => true]) ?>" alt="">
-						</button>
-					</div>
-				</div>
+			<?php endforeach; ?>
+			
+			
 		</div>
 	</div>
 </div>
@@ -356,54 +198,31 @@
 		
 		<div class="col-sm-4 col-md-3">
 			<div class="sales_categories">
+               <?php foreach ($products as $key => $value): if (!empty($value['products'])): ?>
 				<div class="sales_categories_item">
 					<div class="sales_categories_item_image">
-						<img src="<?= $this->Url->build('/img/refrigerator.svg', ['fullBase' => true]) ?>" alt="">
+						<?= $value['image'] ?>
 					</div>
 					<div class="sales_categories_item_title">
-						<p>Барне та ресторанне обладнання </p>
+						<p><?= $value['title'] ?></p>
 					</div>
 				</div>
-				<div class="sales_categories_item sales_categories_item_active">
-					<div class="sales_categories_item_image ">
-						<img src="<?= $this->Url->build('/img/refrigerator.svg', ['fullBase' => true]) ?>" alt="">
-					</div>
-					<div class="sales_categories_item_title">
-						<p>Барне та ресторанне обладнання </p>
-					</div>
-				</div>
-				<div class="sales_categories_item">
-					<div class="sales_categories_item_image">
-						<img src="<?= $this->Url->build('/img/refrigerator.svg', ['fullBase' => true]) ?>" alt="">
-					</div>
-					<div class="sales_categories_item_title">
-						<p>Барне та ресторанне обладнання </p>
-					</div>
-				</div>
-				<div class="sales_categories_item">
-					<div class="sales_categories_item_image">
-						<img src="<?= $this->Url->build('/img/refrigerator.svg', ['fullBase' => true]) ?>" alt="">
-					</div>
-					<div class="sales_categories_item_title">
-						<p>Барне та ресторанне обладнання </p>
-					</div>
-				</div>
-				<div class="sales_categories_item">
-					<div class="sales_categories_item_image">
-						<img src="<?= $this->Url->build('/img/refrigerator.svg', ['fullBase' => true]) ?>" alt="">
-					</div>
-					<div class="sales_categories_item_title">
-						<p>Барне та ресторанне обладнання </p>
-					</div>
-				</div>
+			<?php endif; ?>
+		<?php endforeach; ?>
+
+				
 			</div>
 		</div>
 		<div class="col-sm-8 col-md-9">
 			<div class="sales_list">
-			<div class="propose_slider_item">
-					<div class="propose_slider_item_image">
-						<img src="<?= $this->Url->build('/img/product_item.png', ['fullBase' => true]) ?> " alt="">
-					</div>
+				<?php foreach ($products as $key => $value): if (!empty($value['products'])):?>
+				<div class="sales_list_item">
+					<?php foreach ($value['products'] as $key_two => $item): ?>
+			<div class="propose_slider_item <?php if (!empty($item['actions_products'])): ?> propose_slider_item_show_action <?php endif; ?>">
+				<div class="propose_slider_item_action"><p>Акція</p></div>
+					<a href="<?= $this->Url->build(['controller' => 'products','action'=>'view/'.$item['slug']]) ?>" class="propose_slider_item_image">
+						<img src="<?= $this->Url->build('/products/'.$item['image'], ['fullBase' => true]) ?> " alt="">
+					</a>
 					<div class="propose_slider_item_stars">
 						<div class="product-star-item">
 							<img src="<?= $this->Url->build('/img/iconfinder_star_yellow.svg', ['fullBase' => true]) ?> " alt=""> 	
@@ -422,119 +241,28 @@
 						</div>
 					</div>
 					<div class="propose_slider_item_title">
-						<p>Апарат для шаурми </p>
+						<p><?= $item['title'] ?></p>
 					</div>
 					<div class="propose_slider_item_kod">
-						<p>Код товару <span class="item_kod">25456</span></p>
+						<p>Код товару <span class="item_kod"><?= $item['cod'] ?></span></p>
 					</div>
 					<div class="propose_slider_item_status">
 						<p class="on_sklad">На складі</p>
 					</div>
 					<div class="propose_slider_item_price">
-						<p>3100 грн</p>
-						<p class="slider_item_price_old">3300 грн</p>
+						<?php if ($item['price_new'] > 0) { ?>
+							<p><span class="translate_price" data-currency="<?= $item['currency_id'] ?>"><?= $item['price_new'] ?></span> грн</p>
+						<p class="slider_item_price_old"><span class="translate_price" data-currency="<?= $item['currency_id'] ?>"><?= $item['price'] ?></span> грн</p>
 						<p class="slider_item_discount"> -11%</p>
+					<?php }  else { ?>
+						<p><span class="translate_price" data-currency="<?= $item['currency_id'] ?>"><?= $item['price'] ?></span> грн</p>
+					<?php } ?>
 					</div>
+				</div>	
+					<?php endforeach; ?>
 				</div>
-												<div class="propose_slider_item ">
-					<div class="propose_slider_item_image">
-						<img src="<?= $this->Url->build('/img/product_item.png', ['fullBase' => true]) ?> " alt="">
-					</div>
-					<div class="propose_slider_item_stars">
-						<div class="product-star-item">
-							<img src="<?= $this->Url->build('/img/iconfinder_star_yellow.svg', ['fullBase' => true]) ?> " alt=""> 	
-						</div>
-						<div class="product-star-item">
-							<img src="<?= $this->Url->build('/img/iconfinder_star_yellow.svg', ['fullBase' => true]) ?> " alt=""> 	
-						</div>
-						<div class="product-star-item">
-							<img src="<?= $this->Url->build('/img/iconfinder_star_yellow.svg', ['fullBase' => true]) ?> " alt=""> 	
-						</div>
-						<div class="product-star-item">
-							<img src="<?= $this->Url->build('/img/iconfinder_star_yellow.svg', ['fullBase' => true]) ?> " alt=""> 	
-						</div>
-						<div class="product-star-item">
-							<img src="<?= $this->Url->build('/img/gray_star.svg', ['fullBase' => true]) ?> " alt=""> 	
-						</div>
-					</div>
-					<div class="propose_slider_item_title">
-						<p>Апарат для шаурми </p>
-					</div>
-					<div class="propose_slider_item_kod">
-						<p>Код товару <span class="item_kod">25456</span></p>
-					</div>
-					<div class="propose_slider_item_status">
-						<p class="on_sklad">На складі</p>
-					</div>
-					<div class="propose_slider_item_price">
-						<p>3100 грн</p>
-					</div>
-				</div>
-												<div class="propose_slider_item">
-					<div class="propose_slider_item_image">
-						<img src="<?= $this->Url->build('/img/product_item.png', ['fullBase' => true]) ?> " alt="">
-					</div>
-					<div class="propose_slider_item_stars">
-						<div class="product-star-item">
-							<img src="<?= $this->Url->build('/img/iconfinder_star_yellow.svg', ['fullBase' => true]) ?> " alt=""> 	
-						</div>
-						<div class="product-star-item">
-							<img src="<?= $this->Url->build('/img/iconfinder_star_yellow.svg', ['fullBase' => true]) ?> " alt=""> 	
-						</div>
-						<div class="product-star-item">
-							<img src="<?= $this->Url->build('/img/iconfinder_star_yellow.svg', ['fullBase' => true]) ?> " alt=""> 	
-						</div>
-						<div class="product-star-item">
-							<img src="<?= $this->Url->build('/img/iconfinder_star_yellow.svg', ['fullBase' => true]) ?> " alt=""> 	
-						</div>
-						<div class="product-star-item">
-							<img src="<?= $this->Url->build('/img/gray_star.svg', ['fullBase' => true]) ?> " alt=""> 	
-						</div>
-					</div>
-					<div class="propose_slider_item_title">
-						<p>Апарат для шаурми </p>
-					</div>
-					<div class="propose_slider_item_kod">
-						<p>Код товару <span class="item_kod">25456</span></p>
-					</div>
-					<div class="propose_slider_item_status">
-						<p class="on_sklad">На складі</p>
-					</div>
-					<div class="propose_slider_item_price">
-						<p>3100 грн</p>
-					</div>
-				</div>
-												<div class="propose_slider_item">
-					<div class="propose_slider_item_image">
-						<img src="<?= $this->Url->build('/img/product_item.png', ['fullBase' => true]) ?> " alt="">
-					</div>
-					<div class="propose_slider_item_stars">
-						<div class="product-star-item">
-							<img src="<?= $this->Url->build('/img/iconfinder_star_yellow.svg', ['fullBase' => true]) ?> " alt=""> 	
-						</div>
-						<div class="product-star-item">
-							<img src="<?= $this->Url->build('/img/iconfinder_star_yellow.svg', ['fullBase' => true]) ?> " alt=""> 	
-						</div>
-						<div class="product-star-item">
-							<img src="<?= $this->Url->build('/img/iconfinder_star_yellow.svg', ['fullBase' => true]) ?> " alt=""> 	
-						</div>
-						<div class="product-star-item">
-							<img src="<?= $this->Url->build('/img/iconfinder_star_yellow.svg', ['fullBase' => true]) ?> " alt=""> 	
-						</div>
-						<div class="product-star-item">
-							<img src="<?= $this->Url->build('/img/gray_star.svg', ['fullBase' => true]) ?> " alt=""> 	
-						</div>
-					</div>
-					<div class="propose_slider_item_title">
-						<p>Апарат для шаурми </p>
-					</div>
-					<div class="propose_slider_item_kod">
-						<p>Код товару <span class="item_kod">25456</span></p>
-					</div>
-					<div class="propose_slider_item_status">
-						<p class="on_sklad">На складі</p>
-					</div>
-				</div>
+			<?php endif; endforeach; ?>
+
 				</div>
 		</div>
 		</div>
@@ -600,6 +328,20 @@
 				    	<a href="/">Детальніше</a>
 				    </div>
 				</div>
+				<div class="news_slider_item">
+					<div class="news_slider_item_image">
+						<img src="<?= $this->Url->build('/img/news_image.png', ['fullBase' => true]) ?>" alt="">
+					</div>
+					<div class="news_slider_item_data">
+						<p>9 лютого 2020</p>
+					</div>
+				    <div class="news_slider_item_title">
+				    	<p>Новинки у сфері барнного обладнання</p>
+				    </div>
+				    <div class="news_slider_item_link">
+				    	<a href="/">Детальніше</a>
+				    </div>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -622,29 +364,13 @@
 		</div>
 		<div class="producer_inside">	
 		<div class="producer_slider">
-			<a href="/">
-				<img src="<?= $this->Url->build('/img/adv.png', ['fullBase' => true]) ?>" alt="">
-			</a>
-			<a href="/">
-				<img src="<?= $this->Url->build('/img/adv.png', ['fullBase' => true]) ?>" alt="">
-			</a>
-			<a href="/">
-				<img src="<?= $this->Url->build('/img/adv.png', ['fullBase' => true]) ?>" alt="">
-			</a>
 
-			<a href="/">
-				<img src="<?= $this->Url->build('/img/adv.png', ['fullBase' => true]) ?>" alt="">
-			</a>
-			<a href="/">
-				<img src="<?= $this->Url->build('/img/adv.png', ['fullBase' => true]) ?>" alt="">
-			</a>
-			<a href="/">
-				<img src="<?= $this->Url->build('/img/adv.png', ['fullBase' => true]) ?>" alt="">
-			</a>
+			<?php foreach ($producers as $key => $value): ?>
+				<a href="<?= $this->Url->build(['controller' => 'producers','action'=>'view/'.$value['id']]) ?>">
+					<img src="<?= $this->Url->build('/producers/'.$value['image'], ['fullBase' => true]) ?>" alt="">
+				</a>
+			<?php endforeach; ?>
 
-			<a href="/">
-				<img src="<?= $this->Url->build('/img/adv.png', ['fullBase' => true]) ?>" alt="">
-			</a>
 		</div>
 		</div>
 	</div>
@@ -737,11 +463,11 @@ $('.news_slider').slick({
 }); 
 
 $(".slider_arrow_left").click(function() {
- $(this).parent().find('.slick-prev.slick-arrow').trigger('click')
+ $(this).parent().parent().parent().find('.slick-prev.slick-arrow').first().trigger('click')
 });
 
 $(".slider_arrow_right").click(function() {
- $(this).parent().find('.slick-next.slick-arrow').trigger('click')
+ $(this).parent().parent().parent().find('.slick-next.slick-arrow').first().trigger('click')
 });
 
 $(".add_product_to_wishlist").click(function() {

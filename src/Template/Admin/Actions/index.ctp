@@ -10,15 +10,7 @@
                      Delete
           </button>
           <?php   echo  $this->Html->link('Додати ',['action'=>'add'],['class'=>'btn btn-primary create__new__user']); ?>
-              <div class="search-form-find">
-               <?= $this->Form->create('Search',['url'   => array(
-               'controller' => 'category','action' => 'search'
-                 )]);
-                echo  $this->Form->control('name',array('label' => false,'class'=>'form-control','min'=>6));
-                echo  $this->Form->end(); 
-             ?>
-               <p class="search-form-find-title"> Пошук </p>
-            </div>
+             
             </div>
               
            </div>
@@ -29,7 +21,7 @@
                           <input type="checkbox" id="delete-all">
                           <span class="checkmark"></span>
                     </label></th>
-                  <th>ID</th>
+                  <th>Позиція</th>
                   <th>Назва</th>
                   <th>Зображення</th>
                   <th>Дата завершення</th>
@@ -43,14 +35,18 @@
                           <input type="checkbox" id="delete-all" value="<?= $action->id ?>" class='delete_item'>
                           <span class="checkmark"></span>
                     </label></td>
-                    <td><?= $category->title ?></td>
+                    <td><?= $action->position ?></td>
+                    <td><?= $action->title ?></td>
                     <td>
-                      <img style="max-width: 100px; max-height: 100px;" src="<?= $this->Url->build('/actions/'.$category->image, ['fullBase' => true]) ?>" alt="" class="img-fluid">
+                      <img style="max-width: 100px; max-height: 100px;" src="<?= $this->Url->build('/actions/'.$action->image, ['fullBase' => true]) ?>" alt="" class="img-fluid">
+                    </td>
+                    <td>
+                      <?= $action->date_end ?>
                     </td>
                     <td class='table__flex'>
                       <?php
-                        echo   $this->Html->link('<i class="fa fa-pencil"></i>', ['action' => 'edit', $category->id], ['class'=>'btn change__user','escape' => false]);
-                        echo  $this->Form->postLink('<i class="fa fa-trash"></i>', ['action' => 'delete', $category->id], ['class'=>'btn  delete__user','escape' => false,'confirm' => __('Ви справді хочете видалити категорію # {0}?', $category->id)]);  ?>
+                        echo   $this->Html->link('<i class="fa fa-pencil"></i>', ['action' => 'edit', $action->id], ['class'=>'btn change__user','escape' => false]);
+                        echo  $this->Form->postLink('<i class="fa fa-trash"></i>', ['action' => 'delete', $action->id], ['class'=>'btn  delete__user','escape' => false,'confirm' => __('Ви справді хочете видалити акцію # {0}?', $action->id)]);  ?>
                     </td>
                     </tr>
                 <?php endforeach; ?>

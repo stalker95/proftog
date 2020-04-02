@@ -1,5 +1,47 @@
 [
     {
+        "name": "admad/cakephp-hybridauth",
+        "version": "4.2.0",
+        "version_normalized": "4.2.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/ADmad/CakePHP-HybridAuth.git",
+            "reference": "9864e068184b55e663e5024d6a30411870437016"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/ADmad/CakePHP-HybridAuth/zipball/9864e068184b55e663e5024d6a30411870437016",
+            "reference": "9864e068184b55e663e5024d6a30411870437016",
+            "shasum": ""
+        },
+        "require": {
+            "cakephp/cakephp": "~3.1",
+            "hybridauth/hybridauth": "^2.9.1"
+        },
+        "time": "2018-07-11T14:16:05+00:00",
+        "type": "cakephp-plugin",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "ADmad\\HybridAuth\\": "src"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "description": "A CakePHP plugin for using the HybridAuth social sign on library",
+        "homepage": "http://github.com/ADmad/CakePHP-HybridAuth",
+        "keywords": [
+            "cakephp",
+            "hybridauth",
+            "multi provider",
+            "social",
+            "social authentication",
+            "social signon"
+        ]
+    },
+    {
         "name": "ajgl/breakpoint-twig-extension",
         "version": "0.3.3",
         "version_normalized": "0.3.3.0",
@@ -1037,6 +1079,202 @@
         ]
     },
     {
+        "name": "facebook/graph-sdk",
+        "version": "5.7.0",
+        "version_normalized": "5.7.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/facebook/php-graph-sdk.git",
+            "reference": "2d8250638b33d73e7a87add65f47fabf91f8ad9b"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/facebook/php-graph-sdk/zipball/2d8250638b33d73e7a87add65f47fabf91f8ad9b",
+            "reference": "2d8250638b33d73e7a87add65f47fabf91f8ad9b",
+            "shasum": ""
+        },
+        "require": {
+            "php": "^5.4|^7.0"
+        },
+        "require-dev": {
+            "guzzlehttp/guzzle": "~5.0",
+            "mockery/mockery": "~0.8",
+            "phpunit/phpunit": "~4.0"
+        },
+        "suggest": {
+            "guzzlehttp/guzzle": "Allows for implementation of the Guzzle HTTP client",
+            "paragonie/random_compat": "Provides a better CSPRNG option in PHP 5"
+        },
+        "time": "2018-12-11T22:56:31+00:00",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "5.x-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Facebook\\": "src/Facebook/"
+            },
+            "files": [
+                "src/Facebook/polyfills.php"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "Facebook Platform"
+        ],
+        "authors": [
+            {
+                "name": "Facebook",
+                "homepage": "https://github.com/facebook/php-graph-sdk/contributors"
+            }
+        ],
+        "description": "Facebook SDK for PHP",
+        "homepage": "https://github.com/facebook/php-graph-sdk",
+        "keywords": [
+            "facebook",
+            "sdk"
+        ]
+    },
+    {
+        "name": "friendsofcake/cakephp-csvview",
+        "version": "3.4.0",
+        "version_normalized": "3.4.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/FriendsOfCake/cakephp-csvview.git",
+            "reference": "6f80532122e58b37d2a05259b5cb11f2d9576d3d"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/FriendsOfCake/cakephp-csvview/zipball/6f80532122e58b37d2a05259b5cb11f2d9576d3d",
+            "reference": "6f80532122e58b37d2a05259b5cb11f2d9576d3d",
+            "shasum": ""
+        },
+        "require": {
+            "cakephp/cakephp": "^3.5.5",
+            "php": ">=5.6"
+        },
+        "require-dev": {
+            "cakephp/cakephp-codesniffer": "^3.0",
+            "phpunit/phpunit": "^5.7.14|^6.0"
+        },
+        "time": "2019-08-28T07:40:24+00:00",
+        "type": "cakephp-plugin",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "CsvView\\": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Jose Diaz-Gonzalez",
+                "email": "email@josediazgonzalez.com",
+                "homepage": "http://josediazgonzalez.com",
+                "role": "Maintainer"
+            },
+            {
+                "name": "ADmad",
+                "homepage": "https://github.com/admad",
+                "role": "Contributor"
+            },
+            {
+                "name": "Mark Scherer",
+                "homepage": "https://github.com/dereuromark",
+                "role": "Contributor"
+            },
+            {
+                "name": "Joshua Paling",
+                "homepage": "https://github.com/joshuapaling",
+                "role": "Contributor"
+            },
+            {
+                "name": "Gaurish Sharma",
+                "homepage": "https://github.com/gaurish",
+                "role": "Contributor"
+            },
+            {
+                "name": "Gregory Gaskill",
+                "homepage": "https://github.com/chronon",
+                "role": "Contributor"
+            }
+        ],
+        "description": "A CSV View class for CakePHP 3.x",
+        "homepage": "http://github.com/friendsofcake/cakephp-csvview",
+        "keywords": [
+            "cakephp",
+            "csv",
+            "export",
+            "view"
+        ]
+    },
+    {
+        "name": "hybridauth/hybridauth",
+        "version": "v2.15.1",
+        "version_normalized": "2.15.1.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/hybridauth/hybridauth.git",
+            "reference": "f713e93e620ccda31a724ad31f1e42e808e85994"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/hybridauth/hybridauth/zipball/f713e93e620ccda31a724ad31f1e42e808e85994",
+            "reference": "f713e93e620ccda31a724ad31f1e42e808e85994",
+            "shasum": ""
+        },
+        "require": {
+            "ext-curl": "*",
+            "facebook/graph-sdk": "^5.4",
+            "paypal/rest-api-sdk-php": "*",
+            "php": ">=5.2.0"
+        },
+        "require-dev": {
+            "squizlabs/php_codesniffer": "2.*"
+        },
+        "time": "2019-06-11T13:22:54+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-0": {
+                "Hybrid": "hybridauth/"
+            },
+            "classmap": [
+                "hybridauth/Hybrid"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "(MIT or GPL-3.0+)"
+        ],
+        "authors": [
+            {
+                "name": "Miled",
+                "email": "hybridauth@gmail.com"
+            }
+        ],
+        "description": "Open source social sign on PHP library.",
+        "homepage": "http://hybridauth.sourceforge.net",
+        "keywords": [
+            "OpenId",
+            "facebook",
+            "google",
+            "hybridauth",
+            "login",
+            "oauth",
+            "social",
+            "twitter",
+            "yahoo"
+        ]
+    },
+    {
         "name": "jakub-onderka/php-console-color",
         "version": "v0.2",
         "version_normalized": "0.2.0.0",
@@ -1580,6 +1818,57 @@
         "keywords": [
             "parser",
             "php"
+        ]
+    },
+    {
+        "name": "paypal/rest-api-sdk-php",
+        "version": "1.14.0",
+        "version_normalized": "1.14.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/paypal/PayPal-PHP-SDK.git",
+            "reference": "72e2f2466975bf128a31e02b15110180f059fc04"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/paypal/PayPal-PHP-SDK/zipball/72e2f2466975bf128a31e02b15110180f059fc04",
+            "reference": "72e2f2466975bf128a31e02b15110180f059fc04",
+            "shasum": ""
+        },
+        "require": {
+            "ext-curl": "*",
+            "ext-json": "*",
+            "php": ">=5.3.0",
+            "psr/log": "^1.0.0"
+        },
+        "require-dev": {
+            "phpunit/phpunit": "^4.8.35"
+        },
+        "time": "2019-01-04T20:04:25+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-0": {
+                "PayPal": "lib/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "Apache-2.0"
+        ],
+        "authors": [
+            {
+                "name": "PayPal",
+                "homepage": "https://github.com/paypal/rest-api-sdk-php/contributors"
+            }
+        ],
+        "description": "PayPal's PHP SDK for REST APIs",
+        "homepage": "http://paypal.github.io/PayPal-PHP-SDK/",
+        "keywords": [
+            "payments",
+            "paypal",
+            "rest",
+            "sdk"
         ]
     },
     {
@@ -4244,12 +4533,12 @@
         "version_normalized": "4.3.8.0",
         "source": {
             "type": "git",
-            "url": "https://github.com/WyriHaximus/TwigView.git",
+            "url": "https://github.com/cakephp/legacy-twig-view.git",
             "reference": "a5ec66690aa045d6eda17ab1c8a5baf0efdcfa45"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/WyriHaximus/TwigView/zipball/a5ec66690aa045d6eda17ab1c8a5baf0efdcfa45",
+            "url": "https://api.github.com/repos/cakephp/legacy-twig-view/zipball/a5ec66690aa045d6eda17ab1c8a5baf0efdcfa45",
             "reference": "a5ec66690aa045d6eda17ab1c8a5baf0efdcfa45",
             "shasum": ""
         },
@@ -4362,6 +4651,7 @@
             "http",
             "psr",
             "psr-7"
-        ]
+        ],
+        "abandoned": "laminas/laminas-diactoros"
     }
 ]

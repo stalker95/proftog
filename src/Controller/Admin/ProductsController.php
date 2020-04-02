@@ -91,6 +91,8 @@ class ProductsController extends AppController
             $product = $this->Products->patchEntity($product, $this->request->getData());
             $product->image = $fileName;
             $product->status = 0;
+
+            
             if ($this->Products->save($product)) {
 
     $attributes_products = $this->request->getData('attributes');
@@ -187,11 +189,11 @@ class ProductsController extends AppController
                 
                 $product->saveGallery($this->request->getData('image_gallery'), $this->request->getData('alts'), $product->id);
 
-                $this->Flash->success(__('The product has been saved.'));
+                $this->Flash->admin_success(__('Товар збережено'));
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The product could not be saved. Please, try again.'));
+            $this->Flash->admin_error(__('Товар не збережено спробуйте пізніше'));
         }
         $category_id = $this->Products->Categories->find('list', ['limit' => 200]);
         $producer_id = $this->Products->Producers->find('list', ['limit' => 200]);

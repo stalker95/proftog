@@ -32,12 +32,17 @@ class CategoryController   extends AppController
 
     public function index()
     {
-        $categories = $this->paginate(
-            $this->Categories->find('all')->contain('ParentCategories')->order('Categories.id DESC')
+        if (!$this->user->is_abs()):
+            $this->Flash->admin_error(__('У вас не має прав'));
+             return $this->redirect(['controller'=>'dashboard','action' => 'index']);
+        endif;
+
+        $categories_admin = $this->paginate(
+            $this->Categories->find('all')->contain('ParentCategories')
             );
 
         $this->nav_['category'] = true; 
-        $this->set('categories', $categories);   
+        $this->set('categories_admin', $categories_admin);   
     }
 
 
@@ -48,6 +53,11 @@ class CategoryController   extends AppController
      */
     public function add()
     {
+         if (!$this->user->is_abs()):
+            $this->Flash->admin_error(__('У вас не має прав'));
+             return $this->redirect(['controller'=>'dashboard','action' => 'index']);
+        endif;
+
         $category   = $this->Categories->newEntity();
         $categories = $this->Categories->find('all')->toArray();
         $attributes = $this->Attributes->find()->toArray();
@@ -91,8 +101,13 @@ class CategoryController   extends AppController
      */
     public function edit($id = null)
     {
+         if (!$this->user->is_abs()):
+            $this->Flash->admin_error(__('У вас не має прав'));
+             return $this->redirect(['controller'=>'dashboard','action' => 'index']);
+        endif;
+
         $category = $this->Categories->get($id);
-        $parent_category = $this->Categories->find()->where(['parent_id' => $category->parent_id])->first();
+        $parent_category = $this->Categories->find()->where(['id' => $category->parent_id])->first();
         $attributes = $this->Attributes->find()->toArray();
         $attributes_categories = $this->AttributesCategories->find()->contain(['Attributes'])->where(['category_id' => $category->id])->toArray();
 
@@ -173,6 +188,11 @@ class CategoryController   extends AppController
      */
     public function delete($id = null)
     {
+         if (!$this->user->is_abs()):
+            $this->Flash->admin_error(__('У вас не має прав'));
+             return $this->redirect(['controller'=>'dashboard','action' => 'index']);
+        endif;
+
         $this->request->allowMethod(['post', 'delete']);
         $category = $this->Categories->get($id);
         if ($this->Categories->delete($category)) {
@@ -192,6 +212,11 @@ class CategoryController   extends AppController
     }
 
     public function deletechecked() {
+        if (!$this->user->is_abs()):
+            $this->Flash->admin_error(__('У вас не має прав'));
+             return $this->redirect(['controller'=>'dashboard','action' => 'index']);
+        endif;
+
      $ids=$this->request->getData('ids');
      $this->request->allowMethod(['post', 'delete']);
      
@@ -213,6 +238,10 @@ class CategoryController   extends AppController
 
      public function search($name = null)
     {
+         if (!$this->user->is_abs()):
+            $this->Flash->admin_error(__('У вас не має прав'));
+             return $this->redirect(['controller'=>'dashboard','action' => 'index']);
+        endif;
      if ($this->request->is(['patch', 'post', 'put'])) 
      {
         $name = $this->getRequest()->getData('name');

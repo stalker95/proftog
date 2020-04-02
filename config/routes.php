@@ -62,6 +62,8 @@ Router::scope('/', function (RouteBuilder $routes) {
         // And have the prefix => admin route element added.
         $routes->fallbacks(DashedRoute::class);
     });
+    Router::extensions('csv');
+
 
     $routes->connect('/admin/', ['controller' => 'dashboard', 'action' => 'index', 'prefix' => 'admin']);
     /**

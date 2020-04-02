@@ -19,7 +19,7 @@ class UsersController extends AppController
     {
         
         parent::initialize();
-        $this->Auth->allow(['forgot','resetpassword','logout','login','registerAjax']);
+        $this->Auth->allow(['forgot','resetpassword','logout','login','registerAjax','authAjax']);
         $this->nav_['users'] = true;
     }
 
@@ -201,27 +201,30 @@ class UsersController extends AppController
     }
 
     public function authAjax()
-    {       
+    {  
+       $this->autoRender = false;
        $this->RequestHandler->renderAs($this, 'json');  
        $this->response->disableCache();
        $this->response->type('application/json');
+       
+        $data = $this->request->getData();
+        $email = $data['email'];
+        $password = $data['password'];
 
         $this->autoRender = false;
-        if ($this->request->getData('email') == null OR $this->request->getData('email') == "") {
+        if ($email == null OR $email == "") {
             $this->response->body(json_encode(array('status'=>false, 'message' => 'Неверный логин или пароль, попробуйте еще раз')));
              return $this->response; 
         }
 
-        $_user = $this->Clients->find()->where(['OR' => ['email' => $this->request->getData('email'), 'login' =>$this->request->getData('email') ]])->first();
+        $_user = $this->Users->find()->where(['mail' => $email])->first();
         
         if ($_user == false) {
             $this->response->body(json_encode(array('status'=>false, 'message' => 'Неверный логин или пароль, попробуйте еще раз')));
             return $this->response;
         }
 
-        if (
-            (new \Cake\Auth\DefaultPasswordHasher)->check($this->request->getData('password'), $_user->password) == false
-        ) {
+        if ((new \Cake\Auth\DefaultPasswordHasher)->check($password, $_user->password) == false) {
             $_user = false;
         }
         
@@ -229,8 +232,9 @@ class UsersController extends AppController
             $this->response->body(json_encode(array('status'=>false, 'message' => 'Неверный логин или пароль, попробуйте еще раз')));
             return $this->response;
         }
-            //var_dump($_user);
+
             $this->Auth->setUser($_user);
-            $this->response->body(json_encode(array('status' => true, 'message' => 'Неверный логин или пароль, попробуйте еще раз')));
+             $this->response->body(json_encode(array('status'=>true, 'message' => 'Неверный логин или пароль, попробуйте еще раз')));
+            return $this->response;
     }
 }

@@ -2,6 +2,8 @@
 namespace App\Model\Entity;
 
 use Cake\ORM\Entity;
+use Cake\ORM\TableRegistry;
+use Cake\Filesystem\Folder;
 
 /**
  * AttributesItem Entity
@@ -30,4 +32,77 @@ class AttributesItem extends Entity
         'parent_attributes_item' => true,
         'child_attributes_items' => true
     ];
+
+    public function getListAttributesBeforeFilter($category_id = null)
+    {
+       $this->AttributesItems = TableRegistry::get('attributes_items');
+        
+        $attributes = $this->AttributesItems
+                        ->find('all')->contain(['AttributesProducts',
+                            'AttributesProducts.Products'
+                                => function ($e) use ($category_id) {
+                                    $e ->find('all');
+                                    $e ->autoFields(true);
+                                    $e ->where(['Products.category_id' => $category_id]);
+                                    return $e;
+                               }
+                
+      ])->toArray();
+        
+        $attributes_to_view = [];   
+        foreach ($attributes as $key => $value) {
+            $attributes_to_view[$value['name']] = [];
+            foreach ($value['attributes_products'] as $keys => $item) {
+                $attribute_item = [];
+                $attribute_item['name'] = $item['value'];
+                $attribute_item['attribute_id'] = $item['attribute_id'];
+                $attribute_item['count'] = 1;
+                if (!isset($attributes_to_view[$value['name']][$attribute_item['name']]))
+                {
+                    $attributes_to_view[$value['name']][$attribute_item['name']] = $attribute_item ;
+                }
+                else {
+                    $attributes_to_view[$value['name']][$attribute_item['name']]['count'] = $attributes_to_view[$value['name']][$attribute_item['name']]['count'] + 1;
+                }
+            }
+        }
+        return $attributes_to_view;
+    }
+
+    public function getListAttributesAfterFilter($products = null)
+    {
+       $this->AttributesItems = TableRegistry::get('attributes_items');
+        
+        $attributes = $this->AttributesItems
+                        ->find('all')->contain(['AttributesProducts',
+                            'AttributesProducts.Products'
+                                => function ($e) use ($category_id) {
+                                    $e ->find('all');
+                                    $e ->autoFields(true);
+                                    $e ->where(['Products.category_id' => $category_id]);
+                                    return $e;
+                               }
+                
+      ])->toArray();
+        
+        $attributes_to_view = [];   
+        foreach ($attributes as $key => $value) {
+            $attributes_to_view[$value['name']] = [];
+            foreach ($value['attributes_products'] as $keys => $item) {
+                $attribute_item = [];
+                $attribute_item['name'] = $item['value'];
+                $attribute_item['attribute_id'] = $item['attribute_id'];
+                $attribute_item['count'] = 1;
+                if (!isset($attributes_to_view[$value['name']][$attribute_item['name']]))
+                {
+                    $attributes_to_view[$value['name']][$attribute_item['name']] = $attribute_item ;
+                }
+                else {
+                    $attributes_to_view[$value['name']][$attribute_item['name']]['count'] = $attributes_to_view[$value['name']][$attribute_item['name']]['count'] + 1;
+                }
+            }
+        }
+        return $attributes_to_view;
+    }
+
 }

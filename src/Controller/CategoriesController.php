@@ -18,6 +18,10 @@ class CategoriesController extends AppController
         parent::initialize();
         $this->Auth->allow(['index','view']);
         $this->loadModel('Products');
+        $this->loadModel('Attributes');
+        $this->loadModel('Producers');
+        $this->loadModel('AttributesProducts');
+        $this->loadModel('AttributesItems');
         $this->nav_['users'] = true;
     }
     /**
@@ -57,14 +61,108 @@ class CategoriesController extends AppController
     public function view($slug = null)
     {
         $category = $this->Categories->find()->where(['slug' => $slug])->first();
+        $id = $category->id;
 
-        $products = $this->Paginate($this->Products->find()->where(['category_id' => $category->id]))->toArray();
+        $attributes_items = $this->AttributesItems->newEntity();
+        $producers = $this->Producers->newEntity();
+
+        $producers_list = $producers->getAllProducers($id);
+
+        $min_price = 0;
+        $current_value_min = 0;
+        $selected_values = [];
+       
+
+        $products = $this->Paginate(
+                    $this->Products
+                         ->find()
+                         ->contain(['Actions','Producers'])
+                         ->where(['category_id' => $category->id]))
+                         ->toArray();
+                       //  debug($products);
+
+        $max_price = $this->Products->find('all',[
+                    'fields' => array('amount' => 'MAX(Products.price)')])->toArray();
+
+        $max_price = $max_price[0]['amount'] * 30;
+        $current_value_max = $max_price;
+        
+        $id_products = array_column($products, 'id');
+       
+        $attributes_to_view = $attributes_items->getListAttributesBeforeFilter($id);
+        if ($this->request->is(['post', 'put'])) {
+            
+            $attibutes_items = [];
+            $attributes_names = [];
+            $producers = [];
+            foreach ($this->request->getData() as $key => $value) {
+                if (stristr($key, 'checkbox')) {
+                    $item_checkbox = explode('_', $key);
+                    array_push($attibutes_items, $item_checkbox[2]);
+                    array_push($attributes_names, $item_checkbox[1]);
+                }
+
+                if (stristr($key, 'producer')) {
+                    $item_checkbox = explode('_', $key);
+                    array_push($producers, $item_checkbox[2]);
+                }
+            }
+            $products_attributes = [];        
+
+            if (!empty($attibutes_items) AND !empty($attributes_names)) {
+            $products_attributes = $this->AttributesProducts
+                                        ->find()
+                                        ->select(['product_id'])
+                                        ->where(['attribute_id IN' => $attibutes_items])
+                                        ->where(['value IN' => $attributes_names])
+                                        ->toArray();
+            }
+            
+            $query_for_products = $this->Products
+                                        ->find()
+                                        ->contain(['Actions'])
+                                        ->where(['category_id' => $category->id])
+                                        ->where(['price >=' => $this->request->getData('start_price')])
+                                        ->where(['price <=' => $this->request->getData('end_price')]);
+
+            if (!empty($products_attributes)) {
+                $query_for_products = $query_for_products->where(['id IN ' => array_column($products_attributes,'product_id')]);
+            }
+
+             if (!empty($producers)) {
+                $query_for_products = $query_for_products->where(['producer_id  IN ' => $producers]);
+            }
+
+            $products = $this->Paginate($query_for_products)->toArray();
+
+          $data = $this->request->getData();
+          $selected_values = $this->request->getData();
+        //  debug($attibutes_items);
+
+          
+
+          $min_value  = $this->request->getData('start_price');
+          $max_value  = $this->request->getData('end_price');
+          $this->set('min_price', $min_value);
+          $this->set('max_price', $max_value);
+          $this->set('selected_values', $selected_values);
+        }
+        else {
+        $this->set('selected_values', $selected_values);
+        $this->set('max_price', $max_price);
+        $this->set('min_price', $min_price);
+        }
 
         $this->viewBuilder()->setLayout('category');
 
-        
+        $this->set('current_value_min', $current_value_min);
+        $this->set('current_value_max', $current_value_max);
+
         $this->set('category', $category);
         $this->set('products', $products);
+        $this->set('attributes_to_view', $attributes_to_view);
+        $this->set('producers_list', $producers_list);
+
 
     }
 }

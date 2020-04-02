@@ -20,6 +20,10 @@ class AttributesController extends AppController
      */
     public function index()
     {
+        if (!$this->user->is_abs()):
+            $this->Flash->admin_error(__('У вас не має прав'));
+             return $this->redirect(['controller'=>'dashboard','action' => 'index']);
+        endif;
         $attributes = $this->paginate($this->Attributes);
         $this->nav_['attributes'] = true; 
 
@@ -33,6 +37,10 @@ class AttributesController extends AppController
      */
     public function add()
     {
+        if (!$this->user->is_abs()):
+            $this->Flash->admin_error(__('У вас не має прав'));
+             return $this->redirect(['controller'=>'dashboard','action' => 'index']);
+        endif;
         $attribute = $this->Attributes->newEntity();
         if ($this->request->is('post')) {
             $attribute = $this->Attributes->patchEntity($attribute, $this->request->getData());
@@ -56,6 +64,10 @@ class AttributesController extends AppController
      */
     public function edit($id = null)
     {
+        if (!$this->user->is_abs()):
+            $this->Flash->admin_error(__('У вас не має прав'));
+             return $this->redirect(['controller'=>'dashboard','action' => 'index']);
+        endif;
         $attribute = $this->Attributes->get($id, [
             'contain' => []
         ]);
@@ -81,6 +93,10 @@ class AttributesController extends AppController
      */
     public function delete($id = null)
     {
+        if (!$this->user->is_abs()):
+            $this->Flash->admin_error(__('У вас не має прав'));
+             return $this->redirect(['controller'=>'dashboard','action' => 'index']);
+        endif;
         $this->request->allowMethod(['post', 'delete']);
         $attribute = $this->Attributes->get($id);
         if ($this->Attributes->delete($attribute)) {
@@ -94,6 +110,10 @@ class AttributesController extends AppController
 
      public function deletechecked() 
      {
+        if (!$this->user->is_abs()):
+            $this->Flash->admin_error(__('У вас не має прав'));
+             return $this->redirect(['controller'=>'dashboard','action' => 'index']);
+        endif;
      $ids=$this->request->getData('ids');
      $this->request->allowMethod(['post', 'delete']);
      
@@ -108,6 +128,7 @@ class AttributesController extends AppController
 
  public function getListAttributes()
     {
+        
         $this->loadModel('AttributesItems');
         $name = $this->request->getQuery('attribute');
         $type = 1;

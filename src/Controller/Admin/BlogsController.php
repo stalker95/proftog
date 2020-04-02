@@ -22,6 +22,7 @@ class BlogsController extends AppController
         
         // Load Files model
         $this->loadModel('BlogCategories');
+
     }
 
     /**
@@ -31,6 +32,11 @@ class BlogsController extends AppController
      */
     public function index()
     {
+        if (!$this->user->is_abs()):
+            $this->Flash->admin_error(__('У вас не має прав'));
+             return $this->redirect(['controller'=>'dashboard','action' => 'index']);
+        endif;
+
         $blogs = $this->paginate($this->Blogs);
         $this->nav_['blogs'] = true; 
 
@@ -60,6 +66,11 @@ class BlogsController extends AppController
      */
     public function add()
     {
+        if (!$this->user->is_abs()):
+            $this->Flash->admin_error(__('У вас не має прав'));
+             return $this->redirect(['controller'=>'dashboard','action' => 'index']);
+        endif;
+
         $blog = $this->Blogs->newEntity();
         
        if ($this->request->is('post')) {
@@ -108,6 +119,11 @@ class BlogsController extends AppController
      */
     public function edit($id = null)
     {
+        if (!$this->user->is_abs()):
+            $this->Flash->admin_error(__('У вас не має прав'));
+             return $this->redirect(['controller'=>'dashboard','action' => 'index']);
+        endif;
+
         $blog = $this->Blogs->get($id, [
             'contain' => []
         ]);
@@ -152,6 +168,11 @@ class BlogsController extends AppController
      */
     public function delete($id = null)
     {
+        if (!$this->user->is_abs()):
+            $this->Flash->admin_error(__('У вас не має прав'));
+             return $this->redirect(['controller'=>'dashboard','action' => 'index']);
+        endif;
+
         $this->request->allowMethod(['post', 'delete']);
         $blog = $this->Blogs->get($id);
         if ($this->Blogs->delete($blog)) {
@@ -171,6 +192,10 @@ class BlogsController extends AppController
         return $this->redirect(['action' => 'index']);
     }
         public function deletechecked() {
+            if (!$this->user->is_abs()):
+            $this->Flash->admin_error(__('У вас не має прав'));
+             return $this->redirect(['controller'=>'dashboard','action' => 'index']);
+        endif;
      $ids=$this->request->getData('ids');
      $this->request->allowMethod(['post', 'delete']);
      

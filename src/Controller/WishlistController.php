@@ -24,9 +24,7 @@ class WishlistController extends AppController
      */
     public function index()
     {
-        $wishlist = $this->paginate($this->Wishlist);
-
-        $this->set(compact('wishlist'));
+        
     }
     
     public function add()

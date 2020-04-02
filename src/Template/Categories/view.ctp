@@ -15,53 +15,21 @@
 </div>
 <section class="propose ">
 	<div class="categories_page background_white container">
+		<?= $this->Form->create($category, ['type' => 'file'] )  ?>
 		<div class="row">
 			<div class="col-md-3">
+				<?= $this->element('catalog_categories'); ?>
+				<?= $this->element('filter_block', 
+						   array('max_price'         => $max_price, 
+				      			 'min_price'         => $min_price, 
+				                 'attributes_to_view'=> $attributes_to_view,
+				                 'current_value_min' => $current_value_min,
+				                 'current_value_max' => $current_value_max,
+				                 'selected_values'   => $selected_values,
+				                 'producers_list'    => $producers_list
+				  ));
 
-                <div class="propose_left">
-                    <div class="propose_left_top">
-                        <div class="propose_left_gamburger">
-                            <div class="menu-opener-inner active"></div>
-                        </div>
-                        <div class="propose_left_title">
-                            <p><i class="fa fa-bars"></i> Каталог товарів</p>
-                        </div>
-                    </div>
-
-                </div>                    
-                    <div class="propose_list">
-                    <?php foreach ($categories as $key => $value): ?>
-                    <?php   if ($value['parent_id'] == 0): ?>
-                     <div class="propose_item">
-                        <div class="propose_item_title">
-                            <a href="<?= $this->Url->build(['controller' => 'categories','action'=>'view/'.$value['slug']]) ?>"><?= $value['name'] ?></a>
-                        </div>
-                        <div class="propose_item_arrov">
-                            <i class="fa fa-chevron-right"></i>
-                        </div>
-                        <div class="propose_item_list">
-                            <?php  foreach ($value['child_categories'] as $key => $item):?>
-                                <div class="propose_item_list_item">
-                                    <a href="<?= $this->Url->build(['controller' => 'categories','action'=>'view/'.$item['slug']]) ?>"><?= $item['name']; ?></a>
-                                
-                           
-                                <?php foreach ($categories as $key => $item_two): ?>
-                                    <div class="propose_item_list_two">
-                                <?php if ($item_two['parent_id'] == $item['id'] AND $item_two['name'] != $item['name']) {
-                                 echo "<a  href=".$this->Url->build(['controller' => 'categories','action'=>'view/'.$item['slug']]).">".$item_two['name']."</a>"; } ?>
-                                  </div>
-                            <?php endforeach; ?>
-                           </div>
-                            <?php   endforeach; ?>
-                          
-                           
-                           
-                        </div>
-                     </div>
-                 <?php endif; ?>
-                    <?php endforeach; ?>
-
-                    </div>
+				       ?>
 			</div>
 			<div class="col-md-9">
 	          <div class="categories_product">
@@ -139,5 +107,6 @@
 	          </div>
 			</div>
 		</div>
+		     <?=   $this->Form->end() ?>
 	</div>
 </section>

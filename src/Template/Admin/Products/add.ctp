@@ -12,15 +12,31 @@
                           <?php   endforeach; ?>
                         </div>
 
-    <section class="content">
+    <section class="content white_background products_container">
     <div class="row">
       <div class="col-md-12">
-      	<h1 class="blog__title">Додавання товара</h1>
-        <div class="playlist__managment__item">
+        <div class="products_container_top">
+          <p class="products_container_title">Товари/Додавання товару</p>
+          <div class="product_container_buttons">
+         <a href="<?= $this->Url->build(['controller' => 'products','action'=>'add']) ?>" class="product_container_buttons_add btn-primary">
+           <i class="fa fa-plus"></i>
+         </a>
+         <div class="create__new__user">
+            <button class="btn delete_form_checked  btn-dangeres save__changes__form__playlist copy_checked" data-toggle="modal" data-target="#mediaGallery" >
+                     <i class="fa fa-copy"></i>
+          </button>
+         </div>
+        
+       </div>
+     </div> 
+     <div class="playlist__managment__item">
             <?= $this->Form->create($product,['type' => 'file']); ?>
             <div class="products_add_tabs">
               <div class="products_add_tabs_item active_add_tabs_item">
                 <p>Загальна інформація</p>
+              </div>
+              <div class="products_add_tabs_item">
+                <p>Данні</p>
               </div>
               <div class="products_add_tabs_item">
                 <p>Атрибути</p>
@@ -39,7 +55,7 @@
             <div class="product_container_item" style="display: block;">
               <div class="playlist__managment--item">
                   <div class="playlist__managment--item__left">
-                    <p>Назва</p>
+                    <p><span class="important">*</span>Найменування товару</p>
                   </div>
                   <div class="playlist__managment--item__right">
                     <div class="playlist--item--sub">
@@ -47,9 +63,20 @@
                     </div>
                   </div>
                 </div>
+                        <div class="playlist__managment--item">
+            <div class="playlist__managment--item__left">
+              <p>Опис</p>
+            </div>
+            <div class="playlist__managment--item__right">
+              <div class="playlist--item--sub">
+                <?=  $this->Form->control('description',array('label' => 'First Name','type'=>'textarea','class'=>'form-control','id' => 'editor1'));?>    
+              </div>
+        </div>
+        </div>  
+
         <div class="playlist__managment--item">
             <div class="playlist__managment--item__left">
-              <p>Slug</p>
+              <p><span class="important">*</span>Slug</p>
             </div>
             <div class="playlist__managment--item__right">
               <div class="playlist--item--sub">
@@ -57,13 +84,73 @@
               </div>
             </div>
         </div>
+
+        <div class="playlist__managment--item">
+            <div class="playlist__managment--item__left">
+              <p>HTML тег title</p>
+            </div>
+            <div class="playlist__managment--item__right">
+              <div class="playlist--item--sub">
+                  <?=  $this->Form->control('title_page',array('label' => 'Заголовок сторінки','type'=>'text','class'=>'form-control','required'=>'required'));?>    
+              </div>
+            </div>
+        </div>
+
+         <div class="playlist__managment--item">
+            <div class="playlist__managment--item__left">
+              <p>HTML тег description</p>
+            </div>
+            <div class="playlist__managment--item__right">
+              <div class="playlist--item--sub">
+                  <?=  $this->Form->control('page_description',array('label' => 'First Name','type'=>'textarea','class'=>'form-control','required'=>'required'));?>    
+              </div>
+            </div>
+        </div>      
+
+          <div class="playlist__managment--item">
+            <div class="playlist__managment--item__left">
+              <p>Ключові слова</p>
+            </div>
+            <div class="playlist__managment--item__right">
+              <div class="playlist--item--sub">
+                  <?=  $this->Form->control('keywords',array('label' => 'First Name','type'=>'textarea','class'=>'form-control','required'=>'required'));?>    
+              </div>
+            </div>
+        </div>
+
+        <div class="playlist__managment--item">
+            <div class="playlist__managment--item__left">
+              <p>Хіт продажу</p>
+            </div>
+            <div class="playlist__managment--item__right">
+              <div class="playlist--item--sub">
+                  <input type="radio" name="hit" style="text-align: left;width: auto;">   
+              </div>
+            </div>
+        </div>
+
         <div class="playlist__managment--item">
             <div class="playlist__managment--item__left">
               <p>Ціна</p>
             </div>
             <div class="playlist__managment--item__right">
               <div class="playlist--item--sub">
-                  <?=  $this->Form->control('price',array('label' => 'Ціна','type'=>'number','min'=>0,'class'=>'form-control','required'=>'required'));?>    
+                  <?=  $this->Form->control('price',array('label' => 'Ціна','type'=>'number','min'=>0,'class'=>'form-control'));?>    
+              </div>
+            </div>
+        </div>
+          <div class="playlist__managment--item">
+            <div class="playlist__managment--item__left">
+              <p>Валюта</p>
+            </div>
+            <div class="playlist__managment--item__right">
+              <div class="playlist--item--sub">
+
+                  <select name="currency_id" id="" class="form-control">
+                    <option value="1">Гривні</option>
+                    <option value="2">Євро</option>
+                    <option value="3">Доллари</option>
+                  </select>
               </div>
             </div>
         </div>
@@ -89,7 +176,12 @@
             </div>
         </div>
 
-        <div class="playlist__managment--item">
+       
+
+        
+            </div>
+                        <div class="product_container_item" style="display: none;">
+                           <div class="playlist__managment--item">
             <div class="playlist__managment--item__left">
               <p>Код товару</p>
             </div>
@@ -99,50 +191,7 @@
               </div>
             </div>
         </div>
-
-        <div class="playlist__managment--item">
-            <div class="playlist__managment--item__left">
-              <p>Заголовок сторінки</p>
-            </div>
-            <div class="playlist__managment--item__right">
-              <div class="playlist--item--sub">
-                  <?=  $this->Form->control('title_page',array('label' => 'Заголовок сторінки','type'=>'text','class'=>'form-control','required'=>'required'));?>    
-              </div>
-            </div>
-        </div>
-
-        <div class="playlist__managment--item">
-            <div class="playlist__managment--item__left">
-              <p>Ключові слова</p>
-            </div>
-            <div class="playlist__managment--item__right">
-              <div class="playlist--item--sub">
-                  <?=  $this->Form->control('keywords',array('label' => 'First Name','type'=>'textarea','class'=>'form-control','required'=>'required'));?>    
-              </div>
-            </div>
-        </div>
-        <div class="playlist__managment--item">
-            <div class="playlist__managment--item__left">
-              <p>Опис сторінки </p>
-            </div>
-            <div class="playlist__managment--item__right">
-              <div class="playlist--item--sub">
-                  <?=  $this->Form->control('page_description',array('label' => 'First Name','type'=>'textarea','class'=>'form-control','required'=>'required'));?>    
-              </div>
-            </div>
-        </div>
-
-        <div class="playlist__managment--item">
-            <div class="playlist__managment--item__left">
-              <p>Опис товару</p>
-            </div>
-            <div class="playlist__managment--item__right">
-              <div class="playlist--item--sub">
-                <?=  $this->Form->control('description',array('label' => 'First Name','type'=>'textarea','class'=>'form-control','id' => 'editor1','required'=>'required'));?>    
-              </div>
-        </div>
-        </div>              
-            </div>
+                        </div>
             <div class="product_container_item" style="display: none;">
               <div class="attributes_products">
                 <p class="attributes_products_title">Атрибути</p>

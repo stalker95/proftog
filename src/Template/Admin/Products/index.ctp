@@ -1,7 +1,20 @@
- <section class="content">
+ <section class="content white_background products_container">
   <div class="row">
    <div class="col-xs-12">
-     <h1 class="blog__title">Товари</h1>
+     <div class="products_container_top">
+       <p class="products_container_title">Товари</p>
+       <div class="product_container_buttons">
+         <a href="<?= $this->Url->build(['controller' => 'products','action'=>'add']) ?>" class="product_container_buttons_add btn-primary">
+           <i class="fa fa-plus"></i>
+         </a>
+         <div class="create__new__user">
+            <button class="btn delete_form_checked  btn-dangeres save__changes__form__playlist copy_checked" data-toggle="modal" data-target="#mediaGallery" >
+                     <i class="fa fa-copy"></i>
+          </button>
+         </div>
+         
+       </div>
+     </div>
      <div class="box">
       <div class="box-body table-responsive no-padding">
        <div class="box-header">
@@ -9,8 +22,8 @@
           <button class="btn delete_form_checked  btn-dangeres save__changes__form__playlist" data-toggle="modal" data-target="#mediaGallery" >
                      Delete
           </button>
-          <?php   echo  $this->Html->link('Додати ',['action'=>'add'],['class'=>'btn btn-primary create__new__user']); ?>
-              <div class="search-form-find">
+          <!--<?php   echo  $this->Html->link('Додати ',['action'=>'add'],['class'=>'btn btn-primary create__new__user']); ?> -->
+           <?php /*   <div class="search-form-find">
                <?= $this->Form->create('Search',['url'   => array(
                'controller' => 'products','action' => 'search'
                  )]);
@@ -18,7 +31,7 @@
                 echo  $this->Form->end(); 
              ?>
                <p class="search-form-find-title"> Пошук </p>
-            </div>
+            </div> */ ?>
             </div>
               
            </div>
@@ -31,11 +44,11 @@
                           <span class="checkmark"></span>
                     </label>
                   </th>
-                  <th>ID</th>
-                  <th>Заголовок</th>
                   <th>Зображення</th>
+                  <th>Найменування товару </th>
+                  <th>Кількість</th>
                   <th>Категорія</th>
-                  <th>Ціна</th>
+                  <th>Ціна на сайті</th>
                   <th>Дії</th>
                 </tr>
                 </thead>
@@ -48,16 +61,20 @@
                           <span class="checkmark"></span>
                     </label>
                     </td>
-                    <td><?= $product['id'] ?></td>
-                    <td><?= $product['title'] ?></td>
                     <td>
-                      <img style="max-width: 100px; max-height: 100px;" src="<?= $this->Url->build('/products/'.$product->image, ['fullBase' => true]) ?>" alt="" class="img-fluid">
+                      <img style="max-width: 90px; max-height: 90px;" src="<?= $this->Url->build('/products/'.$product->image, ['fullBase' => true]) ?>" alt="" class="img-fluid">
                     </td>
+                    <td><?= $product['title'] ?></td>
+                    <td><?= $product['amount'] ?></td>
+                    
                     <td><?= $product->category->name ?></td>
-                    <td><?= $product->price ?></td>
+                    <td>
+                      <span class="translate_price" data-currency="<?= $product['currency_id'] ?>"><?= $product->price ?></span>
+                   грн</td>
                     <td class='table__flex'>
                       <?php
                         echo   $this->Html->link('<i class="fa fa-pencil"></i>', ['action' => 'edit', $product->id], ['class'=>'btn change__user','escape' => false]);
+                         echo   $this->Html->link('<i class="fa fa-copy"></i>', ['action' => 'copy', $product->id], ['class'=>'btn copy_product','escape' => false]);
                         echo  $this->Form->postLink('<i class="fa fa-trash"></i>', ['action' => 'delete', $product->id], ['class'=>'btn  delete__user','escape' => false,'confirm' => __('Ви справді хочете видалити категорію # {0}?', $product->id)]);  ?>
                     </td>
                     </tr>

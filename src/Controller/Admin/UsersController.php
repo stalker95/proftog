@@ -6,6 +6,8 @@ use Cake\ORM\TableRegistry;
 use Cake\Utility\Security;
 use Cake\Mailer\Email;
 use Cake\Auth\DefaultPasswordHasher;
+use Cake\View\ViewBuilder;
+
 /**
  * Users Controller
  *
@@ -21,6 +23,7 @@ class UsersController extends AppController
         parent::initialize();
         $this->Auth->allow(['forgot','resetpassword']);
         $this->nav_['users'] = true;
+
     }
 
 	public function login()
@@ -104,12 +107,21 @@ class UsersController extends AppController
 
     public function index()
     {
-        $users = $this->Paginate($this->Users->find()->order('Users.id DESC'))->toArray();
+         if (!$this->user->is_abs()):
+            $this->Flash->admin_error(__('У вас не має прав'));
+             return $this->redirect(['controller'=>'dashboard','action' => 'index']);
+        endif;
+        $users = $this->Paginate($this->Users->find()->where(['Users.is_admin' => 0])->order('Users.id DESC'))->toArray();
         $this->set(compact('users'));
     }
 
     public function edit($id = null) 
     {
+
+         if (!$this->user->is_abs()):
+            $this->Flash->admin_error(__('У вас не має прав'));
+             return $this->redirect(['controller'=>'dashboard','action' => 'index']);
+        endif;
         $user = $this->Users->get($id, [
             'contain' => []
         ]);
@@ -124,4 +136,41 @@ class UsersController extends AppController
         }
         $this->set(compact('program'));
     }
+
+public function export()
+{
+     if (!$this->user->is_abs()):
+            $this->Flash->admin_error(__('У вас не має прав'));
+             return $this->redirect(['controller'=>'dashboard','action' => 'index']);
+        endif;
+        
+   $data_table = "<table>
+   <thead>
+    <th>Firstname</th>
+    <th>Lastname</th>
+    <th>Email</th>
+   </thead>";
+   
+   $users = $this->Users->find()->where(['is_admin' => 0])->toArray();
+
+   foreach ($users as $key => $value) {
+       $data_table = $data_table . 
+       "<tr>
+            <td>".$value['firstname']."</td>
+            <td>".$value['lastname']."</td>
+            <td>".$value['mail']."</td>
+            <td></td>
+       </tr>";
+   }
+
+   $data_table = $data_table .  "</table>";
+
+   header('Content-Type: application/force-download');
+   header('Content-disposition: attachment; filename = report.xls ');
+   header('Pragma: ');
+   header('Cache-Control: ');
+   echo $data_table;
+   die();
 }
+}
+

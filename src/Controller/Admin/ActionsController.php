@@ -2,6 +2,7 @@
 namespace App\Controller\Admin;
 
 use App\Controller\AppController;
+use Cake\Filesystem\Folder;
 
 /**
  * Actions Controller
@@ -12,6 +13,17 @@ use App\Controller\AppController;
  */
 class ActionsController extends AppController
 {
+    public function initialize(){
+        parent::initialize();
+
+        // Include the FlashComponent
+        $this->loadComponent('Flash');
+        
+        // Load Files model
+        $this->loadModel('ActionsProducts');
+        $this->loadModel('Products');
+        
+    }
     /**
      * Index method
      *
@@ -19,8 +31,12 @@ class ActionsController extends AppController
      */
     public function index()
     {
-        $actions = $this->paginate($this->Actions);
-
+        if (!$this->user->is_abs()):
+            $this->Flash->admin_error(__('У вас не має прав'));
+             return $this->redirect(['controller'=>'dashboard','action' => 'index']);
+        endif;
+        $actions = $this->paginate($this->Actions->find()->order('position ASC'));
+        $this->nav_['actions'] = true; 
         $this->set(compact('actions'));
     }
 
@@ -36,7 +52,7 @@ class ActionsController extends AppController
         $action = $this->Actions->get($id, [
             'contain' => []
         ]);
-
+      
         $this->set('action', $action);
     }
 
@@ -47,17 +63,49 @@ class ActionsController extends AppController
      */
     public function add()
     {
+        if (!$this->user->is_abs()):
+            $this->Flash->admin_error(__('У вас не має прав'));
+             return $this->redirect(['controller'=>'dashboard','action' => 'index']);
+        endif;
+        $this->loadModel('Products');
         $action = $this->Actions->newEntity();
+        $products = $this->Products->find()->toArray();
+
+
         if ($this->request->is('post')) {
             $action = $this->Actions->patchEntity($action, $this->request->getData());
+            $action->date_end = date("Y-m-d H:i:s", strtotime($this->request->getData('date_end')));    
             if ($this->Actions->save($action)) {
-                $this->Flash->success(__('The action has been saved.'));
+
+                foreach ($this->request->getData('product_id') as $key => $value) {
+                    $action_product = $this->ActionsProducts->newEntity();
+                    $action_product->action_id = $action->id;
+                    $action_product->products_id = $value;
+                    $this->ActionsProducts->save($action_product);
+                }
+
+                if ($this->request->getData('image.error')['error'] == 0) {
+            $mm_dir = new Folder(WWW_ROOT . DS . 'actions', true, 0777);
+            $target_path = $mm_dir->pwd() . DS;
+                    $this->Actions->updateAll(['image' => ""], ['id' => $action->id]);    
+                    $img = $this->request->getData('image');
+                    if ($img['name']) {
+                        $ext = pathinfo($img['name'], PATHINFO_EXTENSION);
+                        $filename = md5(microtime(true)) . '.' . $ext;
+                        move_uploaded_file($img['tmp_name'], $target_path . $filename);
+                        $action->image=$filename;
+                        $this->Actions->updateAll(['image' => $filename], ['id' => $action->id]);
+                    }
+                }
+                $this->Flash->admin_success(__('Акцію збережно'));
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The action could not be saved. Please, try again.'));
+            debug($action);
+            $this->Flash->admin_error(__('Акцію не збережно. Спробуйте пізніше'));
         }
-        $this->set(compact('action'));
+        $this->nav_['actions'] = true; 
+        $this->set(compact('action', 'products'));
     }
 
     /**
@@ -69,19 +117,57 @@ class ActionsController extends AppController
      */
     public function edit($id = null)
     {
+        if (!$this->user->is_abs()):
+            $this->Flash->admin_error(__('У вас не має прав'));
+             return $this->redirect(['controller'=>'dashboard','action' => 'index']);
+        endif;
+
         $action = $this->Actions->get($id, [
             'contain' => []
         ]);
+        $old_picture = $action->image;
+        $product = $this->ActionsProducts->find()->contain('products')->where(['action_id' => $action->id])->toArray();
+        $products = $this->Products->find()->toArray();
         if ($this->request->is(['patch', 'post', 'put'])) {
             $action = $this->Actions->patchEntity($action, $this->request->getData());
+            $action->date_end = date("Y-m-d H:i:s", strtotime($this->request->getData('date_end')));
+            $action->image = $old_picture;
             if ($this->Actions->save($action)) {
-                $this->Flash->success(__('The action has been saved.'));
+               
+               foreach ($product as $key => $value):
+                $action_items = $this->ActionsProducts->get($value['id']);
+                $this->ActionsProducts->delete($action_items);
+               endforeach;
+               if (!empty($this->request->getData('product_id'))) {
+               foreach ($this->request->getData('product_id') as $key => $value) {
+                    $action_product = $this->ActionsProducts->newEntity();
+                    $action_product->action_id = $action->id;
+                    $action_product->products_id = $value;
+                    $this->ActionsProducts->save($action_product);
+                }
+            }
+
+                if ($this->request->getData('image.error')['error'] == 0) {
+                $mm_dir = new Folder(WWW_ROOT . DS . 'actions', true, 0777);
+                $target_path = $mm_dir->pwd() . DS;
+                    $img = $this->request->getData('image');
+                    if ($img['name']) {
+                        $ext = pathinfo($img['name'], PATHINFO_EXTENSION);
+                        $filename = md5(microtime(true)) . '.' . $ext;
+                        move_uploaded_file($img['tmp_name'], $target_path . $filename);
+                        $action->image=$filename;
+                        $this->Actions->updateAll(['image' => $filename], ['id' => $action->id]);
+                    }
+                }
+                $this->Flash->admin_success(__('Акцію збережено'));
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The action could not be saved. Please, try again.'));
+debug($action);
+            $this->Flash->admin_error(__('Акцію не збережено. Спробуйте пізніше'));
         }
-        $this->set(compact('action'));
+        $this->nav_['actions'] = true; 
+        $this->set(compact('action','product','products'));
     }
 
     /**
@@ -96,11 +182,44 @@ class ActionsController extends AppController
         $this->request->allowMethod(['post', 'delete']);
         $action = $this->Actions->get($id);
         if ($this->Actions->delete($action)) {
-            $this->Flash->success(__('The action has been deleted.'));
-        } else {
-            $this->Flash->error(__('The action could not be deleted. Please, try again.'));
-        }
+             $mm_dir = new Folder(WWW_ROOT  . DS . 'actions', true, 0777);
+            $target_path = $mm_dir->pwd() . DS;
+            $oldfile = $target_path . $action->image;
 
+            if (file_exists($oldfile)) {
+                unlink($oldfile);
+             }
+            $this->Flash->admin_success(__('Акцію видално'));
+        } else {
+            $this->Flash->admin_error(__('Акцію не видалено. Спробуйте пізніше'));
+        }
+    
         return $this->redirect(['action' => 'index']);
     }
+
+        public function deletechecked() {
+        if (!$this->user->is_abs()):
+            $this->Flash->admin_error(__('У вас не має прав'));
+             return $this->redirect(['controller'=>'dashboard','action' => 'index']);
+        endif;
+
+     $ids=$this->request->getData('ids');
+     $this->request->allowMethod(['post', 'delete']);
+     
+      foreach ($ids as  $value) {
+        $action = $this->Actions->get($value);
+        $this->Actions->delete($action);      
+         $mm_dir = new Folder(WWW_ROOT  . DS . 'actions', true, 0777);
+            $target_path = $mm_dir->pwd() . DS;
+            $oldfile = $target_path . $action->image;
+
+            if (file_exists($oldfile)) {
+                unlink($oldfile);
+             }
+      } 
+
+     $this->Flash->admin_success(__('Акції видалено'));
+     return $this->redirect(['action' => 'index']);
+    }
+
 }

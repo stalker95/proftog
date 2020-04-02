@@ -16,12 +16,12 @@
     <div class="user_form">
         <div class="user_authorization">
             <p class="user_form_title">Авторизаці</p>
-            <form action="" class="b ">
+            <form action="" class="user_register">
                 <label for="login">Логін або Email</label>
-                <input type="text" name="email" class="login_input">
+                <input type="email" name="email" class="login_input" required="required">
 
                 <label for="password"></label>
-                <input type="password" name="password" class="login_input">
+                <input type="password" name="password" class="login_input"  required="required">
                 
                 <div class="user_form_checkbox">
                     <input type="checkbox"> Запаматати мене
@@ -41,7 +41,9 @@
                         </path>
                     </svg>
                     <span class="hide_submit">Увійти</span>
-                </button>                   
+                </button> 
+                                <output class="display_message_register"></output>
+                  
             </form>
         </div>
         <div class="user_registration">
@@ -115,10 +117,13 @@
         type: 'POST',
         data: $(this).serialize(),
         success: function(data){ 
-                   $(element).parent().parent().find('.hide_submit').css("display",'block');
-       $(element).parent().parent().find(".loader_svg").css('display','none');
+                   $(element).parent().find('.hide_submit').css("display",'block');
+       $(element).parent().find(".loader_svg").css('display','none');
+        if (data.status == false ) {
+            $(element).parent().find('.display_message_register').html('<p class="display_message_register_alert btn-danger"><strong>Увага</strong> '+data.message+'</p>');
+          }
          if (data.status == true) {
-           window.location.href = '<?= $baseUrl ?>'+'/users/cabinet';
+           window.location.href = '<?= $baseUrl ?>'+'/cabinet/index';
          }
         }
      });

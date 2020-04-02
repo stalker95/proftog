@@ -12,6 +12,14 @@ use App\Controller\AppController;
  */
 class ProducersController extends AppController
 {
+     public function initialize()
+    {
+        
+        parent::initialize();
+        $this->Auth->allow(['index','view']);
+        $this->loadModel('Products');
+        $this->nav_['users'] = true;
+    }
     /**
      * Index method
      *
@@ -33,74 +41,26 @@ class ProducersController extends AppController
      */
     public function view($id = null)
     {
-        $producer = $this->Producers->get($id, [
-            'contain' => []
-        ]);
+        $data_today = date('Y-m-d H:i:s');
+        $new_date = date('Y-m-d H:i:s', strtotime($data_today));
+
+        $producer = $this->Producers->get($id);
+
+        $title = $producer->title;
+        $description = $producer->description_page;
+        $keywords = $producer->keywords;
+
+        $products = $this->Products->find()->contain(['Actions' => [
+                                                                     'conditions' => [
+                                                                       'Actions.date_end >' => $new_date
+            ]]
+        ])->where(['producer_id' => $producer->id])->toArray();
+
+        //debug($products);
+
+         $this->viewBuilder()->setLayout('producer');
 
         $this->set('producer', $producer);
-    }
-
-    /**
-     * Add method
-     *
-     * @return \Cake\Http\Response|null Redirects on successful add, renders view otherwise.
-     */
-    public function add()
-    {
-        $producer = $this->Producers->newEntity();
-        if ($this->request->is('post')) {
-            $producer = $this->Producers->patchEntity($producer, $this->request->getData());
-            if ($this->Producers->save($producer)) {
-                $this->Flash->success(__('The producer has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
-            }
-            $this->Flash->error(__('The producer could not be saved. Please, try again.'));
-        }
-        $this->set(compact('producer'));
-    }
-
-    /**
-     * Edit method
-     *
-     * @param string|null $id Producer id.
-     * @return \Cake\Http\Response|null Redirects on successful edit, renders view otherwise.
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function edit($id = null)
-    {
-        $producer = $this->Producers->get($id, [
-            'contain' => []
-        ]);
-        if ($this->request->is(['patch', 'post', 'put'])) {
-            $producer = $this->Producers->patchEntity($producer, $this->request->getData());
-            if ($this->Producers->save($producer)) {
-                $this->Flash->success(__('The producer has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
-            }
-            $this->Flash->error(__('The producer could not be saved. Please, try again.'));
-        }
-        $this->set(compact('producer'));
-    }
-
-    /**
-     * Delete method
-     *
-     * @param string|null $id Producer id.
-     * @return \Cake\Http\Response|null Redirects to index.
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function delete($id = null)
-    {
-        $this->request->allowMethod(['post', 'delete']);
-        $producer = $this->Producers->get($id);
-        if ($this->Producers->delete($producer)) {
-            $this->Flash->success(__('The producer has been deleted.'));
-        } else {
-            $this->Flash->error(__('The producer could not be deleted. Please, try again.'));
-        }
-
-        return $this->redirect(['action' => 'index']);
+        $this->set('products', $products);
     }
 }

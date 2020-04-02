@@ -9,6 +9,8 @@ use Cake\Validation\Validator;
 /**
  * Actions Model
  *
+ * @property |\Cake\ORM\Association\BelongsTo $Products
+ *
  * @method \App\Model\Entity\Action get($primaryKey, $options = [])
  * @method \App\Model\Entity\Action newEntity($data = null, array $options = [])
  * @method \App\Model\Entity\Action[] newEntities(array $data, array $options = [])
@@ -33,6 +35,16 @@ class ActionsTable extends Table
         $this->setTable('actions');
         $this->setDisplayField('title');
         $this->setPrimaryKey('id');
+
+        $this->belongsTo('Products', [
+            'foreignKey' => 'product_id',
+            'joinType' => 'INNER'
+        ]);
+
+        $this->hasMany('ActionsProducts', [
+            'foreignKey' => 'action_id',
+            'joinType' => 'INNER'
+        ]);
     }
 
     /**
@@ -52,16 +64,34 @@ class ActionsTable extends Table
             ->requirePresence('title', 'create')
             ->allowEmptyString('title', false);
 
-        $validator
-            ->scalar('image')
-            ->requirePresence('image', 'create')
-            ->allowEmptyFile('image', false);
+        
 
-        $validator
+        /*$validator
             ->dateTime('date_end')
             ->requirePresence('date_end', 'create')
             ->allowEmptyDateTime('date_end', false);
+            */
+
+        $validator
+            ->scalar('background')
+            ->maxLength('background', 1000)
+            ->requirePresence('background', 'create')
+            ->allowEmptyString('background', false);
 
         return $validator;
+    }
+
+    /**
+     * Returns a rules checker object that will be used for validating
+     * application integrity.
+     *
+     * @param \Cake\ORM\RulesChecker $rules The rules object to be modified.
+     * @return \Cake\ORM\RulesChecker
+     */
+    public function buildRules(RulesChecker $rules)
+    {
+       // $rules->add($rules->existsIn(['product_id'], 'Products'));
+
+        return $rules;
     }
 }

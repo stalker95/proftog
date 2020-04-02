@@ -53,6 +53,21 @@ class ProductsTable extends Table
             'foreignKey' => 'product_id',
             'joinType' => 'INNER'
         ]);
+
+        $this->hasMany('Rewiev', [
+            'foreignKey' => 'product_id',
+            'joinType' => 'INNER'
+        ]);
+
+        $this->hasMany('Actions', [
+            'foreignKey' => 'product_id',
+            'joinType' => 'INNER'
+        ]);
+
+        $this->hasMany('ActionsProducts', [
+            'foreignKey' => 'products_id',
+            'joinType' => 'INNER'
+        ]);
     }
 
     /**

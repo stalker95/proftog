@@ -59,6 +59,7 @@
 
 </head>
 <body class="hold-transition <?= $employee->getTheme(); ?> sidebar-mini">
+  
 <div class="wrapper">
 
   <header class="main-header">
@@ -66,7 +67,7 @@
     <!-- Logo -->
     <a href="<?php echo $baseUrl; ?>" class="logo">
       <!-- mini logo for sidebar mini 50x50 pixels -->
-      <?= $this->Html->image('logo.png', ['alt' => '']) ?>
+      <?= $_SERVER['SERVER_NAME'] ?>
     </a>
 
     <!-- Header Navbar: style can be found in header.less -->
@@ -77,7 +78,28 @@
       </a>
       <!-- Navbar Right Menu -->
       <div class="navbar-custom-menu">
+        <div class="currency_curs">
+          <div class="currency_curs_title">
+            курс валют
+          </div> 
+          <?php if ($currency->type == 2){ ?> 
+          <div class="currency_curs_item">
+            USD: <?= $currency->value_dollar ?>
+          </div>
+          <div class="currency_curs_item">
+            EUR: <?= $currency->value ?>
+          </div>
+        <?php } else { ?>
+      <div class="currency_curs_item">
+            USD: <span class="translate_price" data-currency="3">1</span>
+          </div>
+          <div class="currency_curs_item">
+            EUR: <span class="translate_price" data-currency="2">1</span>
+          </div>
+        <?php } ?>
+        </div>
         <ul class="nav navbar-nav">
+
           <?php if (false && $employee->isMaster()) : ?>
             <li class="dropdown messages-menu" style="">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" onclick="notify_show_companies();return false;">
@@ -295,6 +317,8 @@
   <!-- jQuery 3 -->
   <?php echo $this->Html->script('admin/jquery/dist/jquery.min.js'); ?>
   <?php echo $this->Html->script('admin/jquery/dist/jquery-ui.js'); ?>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment-with-locales.min.js">  </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js">  </script>
   <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
   <!-- Bootstrap 3.3.7 -->
   <?php echo $this->Html->script('admin/bootstrap/dist/js/bootstrap.min.js'); ?>
@@ -333,6 +357,30 @@
       $(".dropdown-toggle").click(function() {
         $(this).parent().find(".dropdown-menu-notification").slideToggle();
       });
+
+          setTimeout(function() {
+var flickerAPI = "https://api.privatbank.ua/p24api/pubinfo?json&exchange&coursid=5";
+  $.getJSON( flickerAPI, {
+    tags: "mount rainier",
+    tagmode: "any",
+    format: "json"
+  })
+  .done(function(data) {
+    global_curs = data[1]['buy'];
+    global_curs_dollar = data[0]['buy'];
+    console.log(data);
+   $(".translate_price").each(function() {
+        var price= parseInt($(this).text());
+        if ($(this).attr('data-currency') == 2) {
+        $(this).text(price * global_curs);
+      }
+      if ($(this).attr('data-currency') == 3) {
+        $(this).text(price * global_curs_dollar);
+      }
+        $(this).css("opacity","1");
+    });
+  })
+}, 500);
 
     </script>
   <?= $this->fetch('script') ?>

@@ -1,5 +1,6 @@
-var global_curs = 1;
 
+var global_curs = 1;
+var global_curs_dollar = 1;
 var x, i, j, selElmnt, a, b, c;
 /* Look for any elements with the class "custom-select": */
 x = document.getElementsByClassName("custom-select");
@@ -125,7 +126,22 @@ $(".mobile_menu_close").click(function() {
   });
 });
 
-
+var type_currency = 1;
+var custom_currency;
+var custom_currency_dollar;
+$.ajax({
+        url: ''+currency_url+'/currency/get-type-currency',
+        type: 'POST',
+        data: $(this).serialize(),
+        success: function(data){ 
+                   type_currency = data.result.type;
+                   custom_currency = data.result.value;
+                   custom_currency_dollar = data.result.value_dollar;
+        }
+     });
+setTimeout(function() {
+  if (type_currency == 1) {
+    setTimeout(function() {
 var flickerAPI = "https://api.privatbank.ua/p24api/pubinfo?json&exchange&coursid=5";
   $.getJSON( flickerAPI, {
     tags: "mount rainier",
@@ -133,14 +149,69 @@ var flickerAPI = "https://api.privatbank.ua/p24api/pubinfo?json&exchange&coursid
     format: "json"
   })
   .done(function(data) {
-    global_curs = data[0]['buy'];
+    global_curs = data[1]['buy'];
+    global_curs_dollar = data[0]['buy'];
     console.log(data);
-    $(".translate_price").each(function() {
+   $(".translate_price").each(function() {
         var price= parseInt($(this).text());
-        $(this).text(price*data[0]['buy']);
-        $(this).css("opacity","1")
+        if ($(this).attr('data-currency') == 2) {
+        $(this).text(Math.floor(price * global_curs));
+      }
+      if ($(this).attr('data-currency') == 3) {
+        $(this).text(Math.floor(price * global_curs_dollar));
+      }
+        $(this).css("opacity","1");
     });
   })
+}, 500);
+  } else {
+    global_curs = custom_currency;
+    $(".translate_price").each(function() {
+        var price= parseInt($(this).text());
+        if ($(this).attr('data-currency') == 2) {
+        $(this).text(Math.floor(price * custom_currency));
+        }
 
+        if ($(this).attr('data-currency') == 3) {
+        $(this).text(Math.floor(price * custom_currency_dollar));
+        }
+        $(this).css("opacity","1");
+    });
+
+  }
+
+},600);
+
+
+$(".propose_item_list_two").each(function(i) {
+  if ($(this).find('a').length > 0 ) {
+    $(this).parent().addClass('propose_item_list_item_float');
+    $(this).parent().parent().addClass('propose_item_list_big');
+  }
 
 });
+
+$(".propose_item_list").each(function(i) {
+var top = 20;
+  $(this).find('.propose_item_list_item_float').each(function(el) {
+     $(el).css("top",top+"px");
+  top = top + 150;
+  });
+  
+});
+
+$(".sales_list_item").eq(0).css('display', 'flex');
+$(".sales_categories_item").eq(0).addClass('sales_categories_item_active');
+
+$(".sales_categories_item").click(function() {
+  var index = $(this).index();
+  $(".sales_categories_item").removeClass('sales_categories_item_active');
+  $(this).addClass('sales_categories_item_active');
+  
+  $(".sales_list_item").css('display', 'none');
+  $(".sales_list_item").eq(index).css('display', 'flex');
+
+});
+
+});
+

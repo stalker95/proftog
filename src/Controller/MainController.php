@@ -18,6 +18,9 @@ class MainController extends AppController
         // Include the FlashComponent
         $this->loadComponent('Flash');
         $this->loadModel('Categories');
+        $this->loadModel('Actions');
+        $this->loadModel('Proposes');
+        $this->loadModel('Producers');
         
     }
     /**
@@ -28,7 +31,19 @@ class MainController extends AppController
     public function index()
     {
         $categories = $this->Categories->find()->contain(['ChildCategories'])->order('Categories.position ASC')->toArray();
-        $this->set(compact('categories'));
+        
+        $actions = $this->Actions->find()->order('Actions.position ASC')->toArray();
+        $proposes = $this->Proposes->find()->contain(['Products','Products.ActionsProducts'])->order('Proposes.position ASC')->toArray();
+
+
+        $products = $this->Categories->find()->contain(['Products'=> [
+                                                                     'conditions' => [
+                                                                       'Products.hit' => 1
+            ]
+        ],'Products.ActionsProducts'])->where(['Categories.parent_id' => 0])->toArray();
+       // debug($products);
+        $producers = $this->Producers->find()->toArray();
+        $this->set(compact('categories','actions', 'proposes','products','producers'));
     }
 
     /**

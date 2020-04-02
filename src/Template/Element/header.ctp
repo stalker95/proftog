@@ -105,14 +105,14 @@
                                 <p class="header_center-link-subtitle">1 товар</p>
                             </div>
                         </a>
-                        <a href="" class="header_center-link">
+                        <a href="<?= $this->Url->build(['controller' => 'cabinet','action'    =>  'index']) ?>" class="header_center-link">
                             <div class="header_center-link_circle">
                                 <i class="fa fa-user"></i>
                             </div>
                             <div class="header_center-link-description">
                                 <p class="header_center-link-title">Кабінет</p>
-                                <p class="header_center-link-subtitle">Андрвій</p>
-                            </div>
+                                <p class="header_center-link-subtitle"> <?php   if (isset($user->firstname)) { echo $user->firstname;} ?>  </p>
+                            </div>      
                         </a>
                 </div>
                  <div class="header_buttons_mobile">
@@ -141,51 +141,7 @@
     <div class="container header_bottom">
                 <div class="row">
             <div class="col-md-3">
-
-                <div class="propose_left">
-                    <div class="propose_left_top">
-                        <div class="propose_left_gamburger">
-                            <div class="menu-opener-inner active"></div>
-                        </div>
-                        <div class="propose_left_title">
-                            <p><i class="fa fa-bars"></i> Каталог товарів</p>
-                        </div>
-                    </div>
-
-                </div>                    
-                    <div class="propose_list">
-                    <?php foreach ($categories as $key => $value): ?>
-                    <?php   if ($value['parent_id'] == 0): ?>
-                     <div class="propose_item">
-                        <div class="propose_item_title">
-                            <a href="<?= $this->Url->build(['controller' => 'categories','action'=>'view/'.$value['slug']]) ?>"><?= $value['name'] ?></a>
-                        </div>
-                        <div class="propose_item_arrov">
-                            <i class="fa fa-chevron-right"></i>
-                        </div>
-                        <div class="propose_item_list">
-                            <?php  foreach ($value['child_categories'] as $key => $item):?>
-                                <div class="propose_item_list_item">
-                                    <a href="<?= $this->Url->build(['controller' => 'categories','action'=>'view/'.$item['slug']]) ?>"><?= $item['name']; ?></a>
-                                
-                           
-                                <?php foreach ($categories as $key => $item_two): ?>
-                                    <div class="propose_item_list_two">
-                                <?php if ($item_two['parent_id'] == $item['id'] AND $item_two['name'] != $item['name']) {
-                                 echo "<a  href=".$this->Url->build(['controller' => 'categories','action'=>'view/'.$item['slug']]).">".$item_two['name']."</a>"; } ?>
-                                  </div>
-                            <?php endforeach; ?>
-                           </div>
-                            <?php   endforeach; ?>
-                          
-                           
-                           
-                        </div>
-                     </div>
-                 <?php endif; ?>
-                    <?php endforeach; ?>
-
-                    </div>
+                <?= $this->element('catalog_categories'); ?>
             </div>
             <div class="col-md-9">
                 <div class="">
@@ -194,8 +150,8 @@
                             <ul>
                                 <li><a href="<?= $this->Url->build(['controller' => 'main','action'    =>  'index']) ?>">Головна</a></li>
                                 <li><a href="<?= $this->Url->build(['controller' => 'about','action'   =>  'index']) ?>">Про нас</a></li>
-                                <li><a href="<?= $this->Url->build(['controller' => 'actions','action' =>  'index']) ?>">Акції</a></li>
-                                <li><a href="<?= $this->Url->build(['controller' => 'blogs','action'   =>  'index']) ?>">Блог</a></li>
+                                <li><a href="<?= $this->Url->build(['controller' => 'actions','action' =>  'index/']) ?>">Акції</a></li>
+                                <li><a href="<?= $this->Url->build(['controller' => 'blogs','action'   =>  'index/']) ?>">Блог</a></li>
                                 <li><a href="">Відгуки</a></li>
                                 <li><a href="<?= $this->Url->build(['controller' => 'contacts','action'=>'index']) ?>">Контакти</a></li>
                             </ul>

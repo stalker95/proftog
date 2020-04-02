@@ -31,19 +31,28 @@ class ProductsController extends AppController
     public function view($slug = null)
     {
 
-        $product = $this->Products->find()->contain(['AttributesProducts','Categories'])->where(['Products.slug' => $slug])->first();
+        $product = $this->Products->find()->contain(['AttributesProducts','Categories','Rewiev'])->where(['Products.slug' => $slug])->first();
 
+         
         $attributes_products = $this->AttributesProducts->find()->contain(['AttributesItems'])->where(['product_id' => $product->id])->toArray();
 
         $option_group = $product->getOptionsGroup($product->id);
         $option_group_json = json_encode($option_group);
+
+        $products = $this->Products
+                         ->find('all')
+                         ->limit(10)
+                         ->where(['category_id' => $product->category_id])
+                         ->where(['id !=' => $product->id])
+                         ->toArray();
+
 
         if (empty($product)) {
             return $this->redirect(['controller'=>'main', 'action'=>'indx']);          
         }
       
         $this->set('product', $product);
-        $this->set(compact('attributes_products','option_group','option_group_json'));
+        $this->set(compact('attributes_products','option_group','option_group_json', 'products'));
     }
 
 }

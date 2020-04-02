@@ -47,6 +47,9 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
 <?= $this->fetch('content') ?>
 
 <?= $this->element('footer'); ?>
+<script>
+    var currency_url = '<?= $baseUrl ?>';
+</script>
 <?= $this->Html->script('landing.js?v=123'); ?>
     <?= $this->fetch('script') ?>
 

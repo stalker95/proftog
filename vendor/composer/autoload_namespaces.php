@@ -10,6 +10,8 @@ return array(
     'Umpirsky\\' => array($vendorDir . '/umpirsky/twig-php-function/src'),
     'Twig_' => array($vendorDir . '/twig/twig/lib'),
     'Prophecy\\' => array($vendorDir . '/phpspec/prophecy/src'),
+    'PayPal' => array($vendorDir . '/paypal/rest-api-sdk-php/lib'),
+    'Hybrid' => array($vendorDir . '/hybridauth/hybridauth/hybridauth'),
     'Detection' => array($vendorDir . '/mobiledetect/mobiledetectlib/namespaced'),
     'Aptoma' => array($vendorDir . '/aptoma/twig-markdown/src'),
 );

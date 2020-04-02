@@ -18,18 +18,24 @@
                 <i class="fa fa-pencil"></i> <span><?php echo __('Дошка'); ?></span>
             </a>
         </li>  
-
+<?php   if ($user->is_abs()): ?>
         <li class="<?= $nav_['users'] ? 'active' : '' ?>">
             <a href="<?php echo $this->Url->build(['controller' => 'users', 'action' => 'index', '_full' => true, 'prefix' => 'admin', 'plugin' => false]); ?>">
                 <i class="fa fa-list-ul"></i> <span><?php echo __('Користувачі'); ?></span>
             </a>
         </li> 
-
+         <li class="<?= $nav_['managers'] ? 'active' : '' ?>">
+            <a href="<?php echo $this->Url->build(['controller' => 'managers', 'action' => 'index', '_full' => true, 'prefix' => 'admin', 'plugin' => false]); ?>">
+                <i class="fa fa-list-ul"></i> <span><?php echo __('Менеджери'); ?></span>
+            </a>
+        </li> 
+<?php endif; ?>
       <li class="<?= $nav_['products'] ? 'active' : '' ?>">
             <a href="<?php echo $this->Url->build(['controller' => 'products', 'action' => 'index', '_full' => true, 'prefix' => 'admin', 'plugin' => false]); ?>">
                 <i class="fa fa-list-ul"></i> <span><?php echo __('Товари'); ?></span>
             </a>
         </li> 
+<?php   if ($user->is_abs()): ?>
          
         <li class="<?= $nav_['category'] ? 'active' : '' ?>">
             <a href="<?php echo $this->Url->build(['controller' => 'category', 'action' => 'index', '_full' => true, 'prefix' => 'admin', 'plugin' => false]); ?>">
@@ -43,8 +49,11 @@
             </a>
         </li> 
 
-        
-        
+        <li class="<?= $nav_['proposes'] ? 'active' : '' ?>">
+            <a href="<?php echo $this->Url->build(['controller' => 'proposes', 'action' => 'index', '_full' => true, 'prefix' => 'admin', 'plugin' => false]); ?>">
+                <i class="fa fa-list-ul"></i> <span><?php echo __('Пропозиції'); ?></span>
+            </a>
+        </li> 
                 <li class="<?= $nav_['options'] ? 'active' : '' ?> treeview">
           <a href="#">
             <i class="fa fa-dashboard"></i> <span>Опції</span>
@@ -96,8 +105,6 @@
           </ul>
         </li>
 
-
-
           <li class="<?= $nav_['blogs'] ? 'active' : '' ?>">
             <a href="<?php echo $this->Url->build(['controller' => 'blogs', 'action' => 'index', '_full' => true, 'prefix' => 'admin', 'plugin' => false]); ?>">
                 <i class="fa fa-list-ul"></i> <span><?php echo __('Блог'); ?></span>
@@ -126,14 +133,20 @@
                 <i class="fa fa-list-ul"></i> <span><?php echo __('Seo'); ?></span>
             </a>
         </li> 
-       
+
+        <li class="<?= $nav_['currency'] ? 'active' : '' ?>">
+            <a href="<?php echo $this->Url->build(['controller' => 'currency', 'action' => 'index', '_full' => true, 'prefix' => 'admin', 'plugin' => false]); ?>">
+                <i class="fa fa-list-ul"></i> <span><?php echo __('Валюти'); ?></span>
+            </a>
+        </li> 
      
         
              <li class="<?= $nav_['dashboard'] ? 'active' : '' ?>">
             <a href="<?php echo $this->Url->build(['controller' => 'settings', 'action' => 'edit', '_full' => true, 'prefix' => 'admin', 'plugin' => false]); ?>">
                 <i class="fa fa-play"></i> <span><?php echo __('Налаштування'); ?></span>
             </a>
-        </li> 
+        </li>
+         <?php endif; ?>
          
       
         

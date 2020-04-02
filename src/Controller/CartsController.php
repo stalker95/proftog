@@ -46,8 +46,10 @@ class CartsController extends AppController
       debug($types);
 
       $index = $data["product_id"].$names.$types;
-
+      
       if (!isset($_SESSION['cart'][$index])) {
+        var_dump("e4rgerg");
+
          $_SESSION['cart'][$index] = [];
          $_SESSION['cart'][$index]['count'] = $data['count_id_bascket'];
          
@@ -66,6 +68,7 @@ class CartsController extends AppController
       }
       else {
         $_SESSION['cart'][$index]['count'] = $_SESSION['cart'][$index]['count'] + $data['count_id_bascket'];
+        var_dump("reg");
       }
 
     

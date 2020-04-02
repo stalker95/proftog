@@ -38,7 +38,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <?php   foreach ($categories as $category): ?>
+                <?php   foreach ($categories_admin as $category): ?>
                   <tr>
                     <td class="first-check"> <label class="custom-checkbox">
                           <input type="checkbox" id="delete-all" value="<?= $category->id ?>" class='delete_item'>

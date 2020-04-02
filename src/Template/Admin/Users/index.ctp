@@ -2,6 +2,7 @@
   <div class="row">
    <div class="col-xs-12">
      <h1 class="blog__title">Клієнти</h1>
+     <a href="<?= $this->Url->build(['controller' => 'users', 'action' => 'export', '_full' => true]) ?>" class="btn btn-success">Скачати</a>
      <div class="box">
       <div class="box-body table-responsive no-padding">
        <div class="box-header">

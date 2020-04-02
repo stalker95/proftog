@@ -28,6 +28,11 @@ class AttributesItemsController extends AppController
      */
     public function index()
     {
+        if (!$this->user->is_abs()):
+            $this->Flash->admin_error(__('У вас не має прав'));
+             return $this->redirect(['controller'=>'dashboard','action' => 'index']);
+        endif;
+
         $this->paginate = [
             'contain' => ['ParentAttributesItems']
         ];
@@ -59,6 +64,10 @@ class AttributesItemsController extends AppController
      */
     public function add()
     {
+        if (!$this->user->is_abs()):
+            $this->Flash->admin_error(__('У вас не має прав'));
+             return $this->redirect(['controller'=>'dashboard','action' => 'index']);
+        endif;
         $attributesItem = $this->AttributesItems->newEntity();
         if ($this->request->is('post')) {
             $attributesItem = $this->AttributesItems->patchEntity($attributesItem, $this->request->getData());
@@ -82,6 +91,10 @@ class AttributesItemsController extends AppController
      */
     public function edit($id = null)
     {
+        if (!$this->user->is_abs()):
+            $this->Flash->admin_error(__('У вас не має прав'));
+             return $this->redirect(['controller'=>'dashboard','action' => 'index']);
+        endif;
         $attributesItem = $this->AttributesItems->get($id, [
             'contain' => []
         ]);
@@ -108,6 +121,10 @@ class AttributesItemsController extends AppController
      */
     public function delete($id = null)
     {
+        if (!$this->user->is_abs()):
+            $this->Flash->admin_error(__('У вас не має прав'));
+             return $this->redirect(['controller'=>'dashboard','action' => 'index']);
+        endif;
         $this->request->allowMethod(['post', 'delete']);
         $attributesItem = $this->AttributesItems->get($id);
         if ($this->AttributesItems->delete($attributesItem)) {
@@ -119,6 +136,10 @@ class AttributesItemsController extends AppController
         return $this->redirect(['action' => 'index']);
     }
         public function deletechecked() {
+            if (!$this->user->is_abs()):
+            $this->Flash->admin_error(__('У вас не має прав'));
+             return $this->redirect(['controller'=>'dashboard','action' => 'index']);
+        endif;
      $ids=$this->request->getData('ids');
      $this->request->allowMethod(['post', 'delete']);
      

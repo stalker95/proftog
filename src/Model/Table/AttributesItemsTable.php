@@ -42,6 +42,11 @@ class AttributesItemsTable extends Table
             'foreignKey' => 'parent_id'
         ]);
 
+        $this->hasMany('AttributesProducts', [
+            'foreignKey' => 'attribute_id',
+            'joinType' => 'INNER'
+        ]);
+
     }
 
     /**

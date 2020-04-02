@@ -2,6 +2,8 @@
 namespace App\Model\Entity;
 
 use Cake\ORM\Entity;
+use Cake\ORM\TableRegistry;
+use Cake\Filesystem\Folder;
 
 /**
  * Producer Entity
@@ -28,4 +30,38 @@ class Producer extends Entity
         'image' => true,
         'slug' => true
     ];
+
+    public function getAllProducers($category_id)
+    {
+       $this->Producers = TableRegistry::get('producers');
+
+       $producers = $this->Producers->find('all')->contain(['Products' => function ($e) use ($category_id) {
+                                    $e ->find('all');
+                                    $e ->autoFields(true);
+                                   
+                                    $e ->where(['Products.category_id' => $category_id]);
+                                    return $e;
+                               }
+        ])->toArray();
+
+       $producers_list = [];
+      // debug($producers);
+      // debug($producers);
+       foreach ($producers as $key => $value) {
+        foreach ($value['products'] as $keys => $item) {
+             if (!isset($producers_list[$value['name']])) {
+             $producers_list[$value['name']] = [];
+             $producers_list[$value['name']]['name'] = $value['name'];
+             $producers_list[$value['name']]['id'] = $value['id'];
+             $producers_list[$value['name']]['count'] = 1;
+           } else {
+            $producers_list[$value['name']]['count'] = $producers_list[$value['name']]['count'] + 1;
+           }
+        }
+          
+       }
+      // debug($producers_list);
+
+       return $producers_list;
+    }
 }
