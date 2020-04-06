@@ -4,6 +4,10 @@ body {
 .sidebar-menu li {
     position: relative;
 }
+.absolute_link {
+    position: absolute;
+    margin-top: 30px!important;
+}
 .red_notification {
     position: absolute;
     right: 12px;
@@ -1132,7 +1136,7 @@ button.cancel_button {
 }
 .attributes_products table thead th {
     border-right: 1px solid #ccc;
-    padding: 3px;
+    padding: 5px 8px;
 }
 .attributes_products table thead th:last-child {
     border-right: 0px;
@@ -1155,7 +1159,7 @@ button.cancel_button {
     text-align: center;
 }
 .attributes_products table tbody td{
-    padding: 3px;
+    padding: 6px 10px;
 }
 .attributes_products table tbody input {
     width: 100%;
@@ -1183,6 +1187,7 @@ button.cancel_button {
     width: 100%;
     background: #fff;
     margin-left: 5px;
+    z-index: 9;
     border: 1px solid #ccc;
     box-shadow: 2px 2px 2px #ccc;
     padding: 5px;
@@ -1440,7 +1445,7 @@ button.cancel_button {
 .product_container_buttons a {
     background: none;
     border: none;
-    padding: 5px 8px;
+    padding: 9px 13px;
     border-radius: 3px;
     margin-right: 5px;
 }
@@ -1500,7 +1505,7 @@ a.product_container_buttons_add {
     color: #000;
 }
 .copy_checked.delete_form_checked {
-     padding: 5px;
+    padding: 9px 13px;
     background: #fff!important;
     border: 1px solid #000;
     color: #000!important;   
@@ -1553,5 +1558,167 @@ a.product_container_buttons_add {
 .products_container .playlist__managment--item__right input, .products_container .playlist__managment--item__right textarea {
     border: 1px solid #707070;
 }
-
+.products_container .choose_currency {
+    display: flex;
+} 
+.products_container .currency_flex {
+    display: flex;
+    align-items: center;
+}
+.products_container .choose_currency {
+    margin-left: 50px;
+}
+.products_container .choose_currency_title {
+    margin-right: 20px;
+}
+.products_container .choose_currency_title p {
+    margin-bottom: 0px;
+}
+.products_container  .choose_currency label {
+    display: flex;
+    margin-right: 20px;
+    align-items: center;
+    margin-bottom: 0px;
+}
+.products_container  .choose_currency label input {
+    margin-left: 7px;
+}
+.product_container_buttons .redirect_back {
+    border: 1px solid #000;
+    text-align: center;
+    color: #000;
+    margin-left: 5px;
+}
+.product_container_buttons button {
+    padding: 5px 12px;
+    border: none;
+    border-radius: 3px;
+}
+.products_container .top_new_pictures {
+    display: flex;
+    align-items: center;
+    border: 1px solid #d2d6de;
+    padding: 15px;
+}
+.products_container .top_new_pictures_left {
+    width: 20%;
+}
+.products_container .top_new_pictures_right {
+    width: 40%;
+    margin-left: 20px;
+}
+.products_container .products_add_table thead  {
+    border: 1px solid #707070;
+}
+.products_container .products_add_table thead th {
+    border-right: 1px solid #707070;
+    padding: 8px;
+}
+.products_container .products_add_table thead th:last-child {
+    border: none;
+}
+.products_container .input-file-trigger {
+    margin: 23px;
+    padding: 77px 55px;
+    border: 1px solid #707070;
+}
+.products_container .selected_options_delete_option {
+    background: #3c8dbc;
+    padding: 1px 4px;
+    border-radius: 3px;
+}
+.products_container .selected_options_products_item_active .fa {
+    background: #fff;
+    border-radius: 3px;
+    padding: 1px 2px;
+    color: #707070;
+}
+.products_container .discounts_container thead   {
+    border: 1px solid #707070;
+}
+.products_container .discounts_container table {
+    width: 100%;
+}
+.products_container .discounts_container thead th {
+    border-right: 1px solid #707070;
+    padding: 8px;
+}
+.products_container .discounts_container table tbody td {
+    padding: 14px 10px;
+}
+.products_container .discounts_container table tbody tr {
+    border: 1px solid #707070;
+}
+.products_container .discounts_container table tbody td {
+    border-right: 1px solid #707070;
+}
+.products_container .discounts_container table tbody td:last-child {
+    border-right: 0px;
+}
+.products_container .discounts_container table tbody td input {
+    width: 100%;
+    padding: 3px;
+}
+.products_container .delete_discount {
+    border-radius: 2px;
+    border: none;
+    padding: 8px 12px;
+    color: #fff;
+    text-align: right;
+    font-size: 15px;
+    background-color: #dd4b39;
+    text-align: center;
+}
+.products_container .add_new_discount {
+    border-radius: 2px;
+    border: none;
+    padding: 8px 12px;
+    text-align: right;
+    font-size: 15px;
+    text-align: center;
+    margin-top: 15px;
+}
+.products_container .table-condensed>tbody>tr>td {
+    padding: 3px;
+}
+.products_container .checkmark {
+    top: -7px;
+    left: 30%;
+    background: none;
+    height: 22px;
+    width: 22px;
+    border: 1px solid #000;
+}
+.products_container .custom-checkbox .checkmark:after {
+    left: 8px;
+    top: 3px;
+}
+.product_container_buttons button {
+    padding: 8px 12px;
+    font-size: 15px;
+}
+.product_container_buttons .create__new__user {
+    height: 40px;
+}
+.product_container_buttons .delete_form_checked:last-child {
+    background: #F56B6B!important;
+    color: #fff!important;
+    padding: 10px 15px;
+}
+.products_container .products_container_title {
+    margin: 0px;
+    margin-top: 8px;
+    font-size: 20px;
+}
+.products_container  .first-check {
+    border-bottom: 1px solid #222D32!important;
+}
 /* products_container*/
+
+.skin-black-light .sidebar-menu>li:hover>a, .skin-black-light .sidebar-menu>li.active>a {
+    color: #fff;
+    background: rgba(255,255,255, 0.3);
+}
+.sidebar-menu>li>a {
+    padding-left: 38px;
+}

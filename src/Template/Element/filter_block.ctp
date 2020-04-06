@@ -40,7 +40,7 @@
                     <input id="producer_<?= $item['name'] ?>_<?= $item['id'] ?>" 
                            name="producer_<?= $item['name'] ?>_<?= $item['id'] ?>" 
                            type="checkbox" 
-                           <?php if (isset($selected_values["checkbox_".$item['name']."_".$item['id'].""])): ?>
+                           <?php if (isset($selected_values["producer_".$item['name']."_".$item['id'].""])): ?>
                            	checked
                            <?php endif; ?>
                            >

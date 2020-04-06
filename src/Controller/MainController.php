@@ -32,16 +32,18 @@ class MainController extends AppController
     {
         $categories = $this->Categories->find()->contain(['ChildCategories'])->order('Categories.position ASC')->toArray();
         
+        $data = date("Y-m-d H:i:s");
         $actions = $this->Actions->find()->order('Actions.position ASC')->toArray();
-        $proposes = $this->Proposes->find()->contain(['Products','Products.ActionsProducts'])->order('Proposes.position ASC')->toArray();
+        $proposes = $this->Proposes->find()->contain(['Products','Products.ActionsProducts','Products.Discounts','Products.Rewiev'])->order('Proposes.position ASC')->toArray();
+
 
 
         $products = $this->Categories->find()->contain(['Products'=> [
                                                                      'conditions' => [
                                                                        'Products.hit' => 1
             ]
-        ],'Products.ActionsProducts'])->where(['Categories.parent_id' => 0])->toArray();
-       // debug($products);
+        ],'Products.ActionsProducts','Products.Discounts','Products.Rewiev'])->where(['Categories.parent_id' => 0])->toArray();
+      //  debug($products);
         $producers = $this->Producers->find()->toArray();
         $this->set(compact('categories','actions', 'proposes','products','producers'));
     }

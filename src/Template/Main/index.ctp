@@ -75,10 +75,10 @@
 	<div>
 	<div class="container">
 		<div class="slider_arrow_left">
-							<i class="fa fa-chevron-left"></i>
+							<img src="<?= $this->Url->build('/img/arrov_left.svg', ['fullBase' => true]) ?>" alt="">
 						</div>
 						<div class="slider_arrow_right">
-							<i class="fa fa-chevron-right"></i>
+							<img src="<?= $this->Url->build('/img/arrov_right.svg', ['fullBase' => true]) ?>" alt="">
 						</div>
 			<div class="products_slider">
 				<?php foreach ($categories as $key => $value): if ($value['parent_id'] == 0) :?>
@@ -97,10 +97,10 @@
 		<p class="propose_title">Пропозиція дня</p>
 		<div class="propose_arrows">
 			<div class="slider_arrow_left">
-				<i class="fa fa-chevron-left"></i>
+				<img src="<?= $this->Url->build('/img/arrov_left.svg', ['fullBase' => true]) ?>" alt="">
 			</div>
 			<div class="slider_arrow_right">
-				<i class="fa fa-chevron-right"></i>
+				<img src="<?= $this->Url->build('/img/arrov_right.svg', ['fullBase' => true]) ?>" alt="">
 			</div>
 		</div>	
 </div>
@@ -139,18 +139,9 @@
 						<p class="on_sklad">На складі</p>
 					</div>
 					<div class="propose_slider_item_price">
-						<?php if ($value['product']['price_new'] > 0) { ?>
-							<p>
-							<span class="translate_price" data-currency="<?= $value['product']['currency_id'] ?>"><?= $value['product']['price_new'] ?></span> грн
-						    </p>
-						    <p class="slider_item_price_old">
-							<span class="translate_price" data-currency="<?= $value['product']['currency_id'] ?>"><?= $value['product']['price'] ?></span> грн</p>
-						<p class="slider_item_discount"> -11%</p>
-
-					    <?php }  else { ?>
-						<p><span class="translate_price" data-currency="<?= $value['product']['currency_id'] ?>"><?= $value['product']['price'] ?></span> грн</p>
-					    <?php } ?>
+						<?= $this->element('price_product', array("item" => $value['product'])); ?>
 					</div>
+
 					<?php /* <div class="product_buttons">
 						<button class="product_buttons_item">
 							<img src="<?= $this->Url->build('/img/back.svg', ['fullBase' => true]) ?>" alt="">
@@ -250,13 +241,8 @@
 						<p class="on_sklad">На складі</p>
 					</div>
 					<div class="propose_slider_item_price">
-						<?php if ($item['price_new'] > 0) { ?>
-							<p><span class="translate_price" data-currency="<?= $item['currency_id'] ?>"><?= $item['price_new'] ?></span> грн</p>
-						<p class="slider_item_price_old"><span class="translate_price" data-currency="<?= $item['currency_id'] ?>"><?= $item['price'] ?></span> грн</p>
-						<p class="slider_item_discount"> -11%</p>
-					<?php }  else { ?>
-						<p><span class="translate_price" data-currency="<?= $item['currency_id'] ?>"><?= $item['price'] ?></span> грн</p>
-					<?php } ?>
+						<?= $this->element('price_product', array("item" => $item)); ?>
+						
 					</div>
 				</div>	
 					<?php endforeach; ?>
@@ -277,10 +263,10 @@
 			</div>
             <div class="section_buttons">
             	<div class="slider_arrow_left">
-					<i class="fa fa-chevron-left"></i>
+					<img src="<?= $this->Url->build('/img/arrov_left.svg', ['fullBase' => true]) ?>" alt="">
 				</div>
 				<div class="slider_arrow_right">
-					<i class="fa fa-chevron-right"></i>
+					<img src="<?= $this->Url->build('/img/arrov_right.svg', ['fullBase' => true]) ?>" alt="">
 				</div>
             </div>
 		</div>
@@ -355,10 +341,10 @@
 			</div>
             <div class="section_buttons">
             	<div class="slider_arrow_left">
-					<i class="fa fa-chevron-left"></i>
+					<img src="<?= $this->Url->build('/img/arrov_left.svg', ['fullBase' => true]) ?>" alt="">
 				</div>
 				<div class="slider_arrow_right">
-					<i class="fa fa-chevron-right"></i>
+					<img src="<?= $this->Url->build('/img/arrov_right.svg', ['fullBase' => true]) ?>" alt="">
 				</div>
             </div>
 		</div>

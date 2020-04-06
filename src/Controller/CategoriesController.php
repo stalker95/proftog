@@ -22,6 +22,7 @@ class CategoriesController extends AppController
         $this->loadModel('Producers');
         $this->loadModel('AttributesProducts');
         $this->loadModel('AttributesItems');
+        $this->loadModel('Currency');
         $this->nav_['users'] = true;
     }
     /**
@@ -76,7 +77,7 @@ class CategoriesController extends AppController
         $products = $this->Paginate(
                     $this->Products
                          ->find()
-                         ->contain(['Actions','Producers'])
+                         ->contain(['Actions','Producers','Discounts'])
                          ->where(['category_id' => $category->id]))
                          ->toArray();
                        //  debug($products);
@@ -90,7 +91,12 @@ class CategoriesController extends AppController
         $id_products = array_column($products, 'id');
        
         $attributes_to_view = $attributes_items->getListAttributesBeforeFilter($id);
-        if ($this->request->is(['post', 'put'])) {
+
+        if ($this->request->is(['get'])) {
+            //    die();
+        }
+        if ($this->request->is(['get'])  AND $this->request['?']['_method'] == 'PUT') {
+            debug($this->request);
             
             $attibutes_items = [];
             $attributes_names = [];
@@ -120,10 +126,10 @@ class CategoriesController extends AppController
             
             $query_for_products = $this->Products
                                         ->find()
-                                        ->contain(['Actions'])
+                                        ->contain(['Actions','Discounts'])
                                         ->where(['category_id' => $category->id])
-                                        ->where(['price >=' => $this->request->getData('start_price')])
-                                        ->where(['price <=' => $this->request->getData('end_price')]);
+                                        ->where(['price * 30 >=' => $this->request->getData('start_price')])
+                                        ->where(['price * 30 <=' => $this->request->getData('end_price')]);
 
             if (!empty($products_attributes)) {
                 $query_for_products = $query_for_products->where(['id IN ' => array_column($products_attributes,'product_id')]);
@@ -163,6 +169,12 @@ class CategoriesController extends AppController
         $this->set('attributes_to_view', $attributes_to_view);
         $this->set('producers_list', $producers_list);
 
+
+    }
+
+    public function getCurrenctCurs()
+    {
+        $currency = $this->Currency->find()->first();
 
     }
 }

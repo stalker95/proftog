@@ -21,10 +21,10 @@
 
  }
 
- $(".choosed_option").click(function() {
+ $("#selected_option").change(function() {
  $(".selected_options_products_list").css("display", "block");
-   var name_option = $(this).attr('data-name');
-   var id_option = $(this).attr('data-option');
+   var name_option = $('option:selected', this).attr('data-name');
+   var id_option = $('option:selected', this).attr('data-option');
 get_list_options(id_option);
 setTimeout(function() {
 
@@ -93,7 +93,7 @@ $('body').on('click', ".product_options_right_list_item tbody", function() {
 
 $('body').on('click', ".selected_options_delete_option", function() {
    
-   var index = $(this).index();
+   var index = $(this).parent().index();
    $(this).parent().remove();
    $(".product_options_right_list_item").eq(index).remove();
 });

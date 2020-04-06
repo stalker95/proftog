@@ -70,7 +70,7 @@ $(".add_new_attribute").click(function() {
                       '</td>'+
                       '<td style="text-align: center;">'+
                         '<button class="delete_new_attribute btn-danger">'+
-                         '<i class="fa fa-minus"></i>'+
+                         '<i class="fa fa-trash"></i>'+
                         '</button>'+
                       '</td>'+
                     '</tr>';

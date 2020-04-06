@@ -177,6 +177,7 @@ class AppController extends Controller
 
         $this->loadModel('Users');
         $this->loadModel('Currency');
+        $this->loadModel('Settings');
 
         if ($this->request->getParam('prefix') == 'admin') {
             $this->viewBuilder()->setLayout('admin');
@@ -187,6 +188,8 @@ class AppController extends Controller
             }
             $currency = $this->Currency->find()->first();
             $this->currency = $currency;
+
+            $contacts = $this->Settings->find()->first();
              $this->set('currency', $this->currency);
         } else {
             if ($this->Auth->user('id')) {

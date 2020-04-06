@@ -8,7 +8,9 @@ body {
 .loader_svg {
     display: none;
 }
-
+.propose {
+    margin-top: 25px;
+}
 /* STYLE FOR MESSAGES BEGIN */
 .display_message_register {
     margin-top: 15px;
@@ -785,7 +787,7 @@ min-height: 300px;
     display: flex;
     align-items: center;
     justify-content: space-around;
-    padding: 0px 75px;
+    padding: 15px 75px;
 }
 .center_slider_item_left {
     flex-basis: 50%;
@@ -851,15 +853,19 @@ min-height: 300px;
 }
 .products_slider_item {
     background: #E1E1E1;
-    padding: 30px;
+    padding: 30px 36px;
     border-radius: 100%;
     text-align: center;
-    margin-right: 20px;
+    margin-right: 39px;
     display: flex;
     align-items: center;
     justify-content: center;
     transition: 0.3s;
+    width: 134px;
     height: 127px;
+}
+.products_slider_item svg {
+    max-width: 73%;
 }
 .products_slider_item:hover  {
     border: 2px dashed #000;
@@ -881,7 +887,7 @@ to{-webkit-transform:rotate3d(0, 0, 1, 0deg);transform:rotate3d(0, 0, 1, 0deg);}
     margin: auto;
 }
 .products_slider {
-    padding: 0px 75px;
+    padding: 0px 100px;
 }
 .products_slider  .slick-next.slick-arrow, .products_slider .slick-prev.slick-arrow{
     display: none;
@@ -1584,9 +1590,7 @@ button.product_buttons_item {
 }
 @import url(//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css);
 
-fieldset, label { margin: 0; padding: 0; }
-body{ margin: 20px; }
-h1 { font-size: 1.5em; margin: 10px; }
+
 
 /****** Style Star Rating Widget *****/
 
@@ -1764,6 +1768,9 @@ h1 { font-size: 1.5em; margin: 10px; }
     font-weight: 400;
     text-transform: uppercase;
 }
+.categories_product_description {
+    flex-basis: 88%;
+}
 /* CATEGORIES PAGE END*/
 
 /* CATEGORIES PAGE BEGIN*/
@@ -1825,7 +1832,7 @@ h1 { font-size: 1.5em; margin: 10px; }
     flex-wrap: wrap;
 }
 .products_list .propose_slider_item {
-    flex-basis: 31%;
+    flex-basis: 32%;
     box-shadow: none;
     margin-right: 15px;
     border: 1px solid #ccc;

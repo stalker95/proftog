@@ -307,7 +307,7 @@
   <!-- /.content-wrapper -->
 
   <footer class="main-footer">
-    <strong>Copyright &copy; <?php echo date('Y'); ?> <a href="http://softsprint.net">SoftSprint</a>.</strong>  All rights reserved.
+    <strong>Розроблено компанією Project Solution</strong>
   </footer>
 
 </div>

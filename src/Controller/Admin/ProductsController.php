@@ -28,7 +28,7 @@ class ProductsController extends AppController
         $this->loadModel('AttributesItems');
         $this->loadModel('ProductsOptions');
         $this->loadModel('Attributes');
-
+        $this->loadModel('Discounts');
     }
 
     /**
@@ -95,8 +95,22 @@ class ProductsController extends AppController
             
             if ($this->Products->save($product)) {
 
-    $attributes_products = $this->request->getData('attributes');
-    $attributes_values = $this->request->getData('attributes_values');
+                $attributes_products = $this->request->getData('attributes');
+                $attributes_values = $this->request->getData('attributes_values');
+
+                $discounts_price = $this->request->getData('discount_price');
+                $discounts_start_date = $this->request->getData('date_begin');
+                $discounts_end_date = $this->request->getData('date_end');
+
+                foreach ($discounts_price as $key => $value) {
+                    $discounts = $this->Discounts->newEntity();
+                    $discounts->price = $value;
+                    $discounts->start_data =  date("Y-m-d H:i:s", strtotime($discounts_start_date[$key]));
+                    $discounts->end_data =  date("Y-m-d H:i:s", strtotime($discounts_start_date[$key]));
+                    $discounts->product_id = $product->id;
+
+                    $this->Discounts->save($discounts);
+                }
 
     $product->saveOptions($this->request->getData(), $product->id);
     $product->saveAttributes($this->request->getData('attributes'), $this->request->getData('attributes_values'), $product->id);
@@ -152,6 +166,8 @@ class ProductsController extends AppController
         $attributes_products = $this->AttributesProducts->find()->contain(['AttributesItems'])->where(['product_id' => $id])->toArray();        
        $option_group = $product->getOptionsGroup($product->id);
 
+       $discounts = $this->Discounts->find()->where(['product_id' => $product->id])->toArray();
+
         $old_picture = $product->image;
 
                 $attributes = $this->Attributes->find()->contain('AttributesItems')->toArray();
@@ -166,14 +182,22 @@ class ProductsController extends AppController
               }
             }
 
-          
-
+           $discounts_price = $this->request->getData('discount_price');
+                $discounts_start_date = $this->request->getData('date_begin');
+                $discounts_end_date = $this->request->getData('date_end');
             if ($this->Products->save($product)) {
                   $product->saveOptions($this->request->getData(), $product->id);
-    $product->saveAttributes($this->request->getData('attributes'), $this->request->getData('attributes_values'), $product->id);
+                  $product->saveAttributes($this->request->getData('attributes'), $this->request->getData('attributes_values'), $product->id);
+                  $product->saveDiscounts(
+                            $this->request->getData('discount_price'),
+                            $this->request->getData('date_begin'),
+                            $this->request->getData('date_end'),
+                            $product->id
+                 );
+
                 if ($this->request->getData('image.error')['error'] == 0) {
-            $mm_dir = new Folder(WWW_ROOT . DS . 'products', true, 0777);
-            $target_path = $mm_dir->pwd() . DS;
+                    $mm_dir = new Folder(WWW_ROOT . DS . 'products', true, 0777);
+                    $target_path = $mm_dir->pwd() . DS;
                     $img = $this->request->getData('image');
                     if ($img['name']) {
                         $ext = pathinfo($img['name'], PATHINFO_EXTENSION);
@@ -198,7 +222,7 @@ class ProductsController extends AppController
         $category_id = $this->Products->Categories->find('list', ['limit' => 200]);
         $producer_id = $this->Products->Producers->find('list', ['limit' => 200]);
         $this->nav_['products'] = true;
-        $this->set(compact('product', 'category_id', 'products_gallery', 'attributes','attributes_products', 'producer_id','option_group','first_options','id'));
+        $this->set(compact('product', 'category_id', 'products_gallery', 'attributes','attributes_products', 'producer_id','option_group','first_options','id','discounts'));
     }
 
     /**
@@ -300,5 +324,14 @@ class ProductsController extends AppController
         $this->response->disableCache();
         $this->response->type('application/json');   
         $this->response->body(json_encode(array('result'=>$data)));
+    }
+
+    public function copyElement($id = null)
+    {
+        $this->autoRender = false;
+        $product = $this->Products->newEntity();
+
+        $product->copyElement($id);
+        return $this->redirect(['action' => 'index']);
     }
 }

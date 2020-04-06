@@ -13,24 +13,21 @@
                         </div>
 
     <section class="content white_background products_container">
+    <?= $this->Form->create($product,['type' => 'file']); ?>
     <div class="row">
       <div class="col-md-12">
         <div class="products_container_top">
           <p class="products_container_title">Товари/Додавання товару</p>
           <div class="product_container_buttons">
-         <a href="<?= $this->Url->build(['controller' => 'products','action'=>'add']) ?>" class="product_container_buttons_add btn-primary">
-           <i class="fa fa-plus"></i>
-         </a>
-         <div class="create__new__user">
-            <button class="btn delete_form_checked  btn-dangeres save__changes__form__playlist copy_checked" data-toggle="modal" data-target="#mediaGallery" >
-                     <i class="fa fa-copy"></i>
-          </button>
-         </div>
+         
         
+        <button class="btn-primary">
+          <i class="fa fa-save"></i>
+        </button>
+        <a class="redirect_back" href="<?= $this->Url->build(['controller' => 'products','action'=>'index']) ?>"><svg xmlns="http://www.w3.org/2000/svg" width="21.263" height="15" viewBox="0 0 25.263 20"><defs><style>.a{fill:#222d32;}</style></defs><g transform="translate(10 -56)"><path class="a" d="M89.257,113.908a11.925,11.925,0,0,0-3.2-8.928c-2.316-2.329-5.283-3.513-9.428-3.7V96L64,104.421l12.632,8.421v-5.25a13.279,13.279,0,0,1,5.7,1.316c2.033.908,3.638,2.895,4.987,5.039L88.586,116h.678C89.263,115.336,89.257,114.493,89.257,113.908Z" transform="translate(-74 -40)"/></g></svg></a>
        </div>
      </div> 
      <div class="playlist__managment__item">
-            <?= $this->Form->create($product,['type' => 'file']); ?>
             <div class="products_add_tabs">
               <div class="products_add_tabs_item active_add_tabs_item">
                 <p>Загальна інформація</p>
@@ -38,15 +35,19 @@
               <div class="products_add_tabs_item">
                 <p>Данні</p>
               </div>
+               <div class="products_add_tabs_item">
+                <p>Звязки</p>
+              </div>
+              <div class="products_add_tabs_item">
+                <p>Знижки</p>
+              </div>
               <div class="products_add_tabs_item">
                 <p>Атрибути</p>
               </div>
               <div class="products_add_tabs_item">
                 <p>Опції</p>
               </div>
-              <div class="products_add_tabs_item">
-                <p>Виробник</p>
-              </div>
+             
               <div class="products_add_tabs_item">
                 <p>Фото та відео</p>
               </div>
@@ -91,7 +92,7 @@
             </div>
             <div class="playlist__managment--item__right">
               <div class="playlist--item--sub">
-                  <?=  $this->Form->control('title_page',array('label' => 'Заголовок сторінки','type'=>'text','class'=>'form-control','required'=>'required'));?>    
+                  <?=  $this->Form->control('title_page',array('label' => 'Заголовок сторінки','type'=>'text','class'=>'form-control'));?>    
               </div>
             </div>
         </div>
@@ -102,7 +103,7 @@
             </div>
             <div class="playlist__managment--item__right">
               <div class="playlist--item--sub">
-                  <?=  $this->Form->control('page_description',array('label' => 'First Name','type'=>'textarea','class'=>'form-control','required'=>'required'));?>    
+                  <?=  $this->Form->control('page_description',array('label' => 'First Name','type'=>'textarea','class'=>'form-control'));?>    
               </div>
             </div>
         </div>      
@@ -113,11 +114,63 @@
             </div>
             <div class="playlist__managment--item__right">
               <div class="playlist--item--sub">
-                  <?=  $this->Form->control('keywords',array('label' => 'First Name','type'=>'textarea','class'=>'form-control','required'=>'required'));?>    
+                  <?=  $this->Form->control('keywords',array('label' => 'First Name','type'=>'textarea','class'=>'form-control'));?>    
               </div>
             </div>
         </div>
 
+        
+
+       
+         
+        
+
+            </div>
+                        <div class="product_container_item" style="display: none;">
+
+                           <div class="playlist__managment--item">
+            <div class="playlist__managment--item__left">
+              <p><span class="important">*</span>Артикул (Код товару)</p>
+            </div>
+            <div class="playlist__managment--item__right">
+              <div class="playlist--item--sub">
+                  <?=  $this->Form->control('cod',array('label' => 'Кількість','type'=>'text','class'=>'form-control','required'=>'required'));?>    
+              </div>
+            </div>
+        </div>
+
+        <div class="playlist__managment--item">
+            <div class="playlist__managment--item__left">
+              <p><span class="important">*</span>Ціна</p>
+            </div>
+            <div class="playlist__managment--item__right currency_flex">
+              <div class="playlist--item--sub">
+                  <?=  $this->Form->control('price',array('label' => 'Ціна','type'=>'number','min'=>0,'class'=>'form-control'));?>    
+              </div>
+              <div class="choose_currency">
+                <div class="choose_currency_title"><p>Виберіть валюту</p></div>
+                <label for="first_currency">Гривня
+                  <input type="radio" name="currency_id" value="1" checked="checked">
+                </label>
+                <label for="first_currency">Євро
+                  <input type="radio" name="currency_id" value="2">
+                </label>
+                <label for="first_currency">Доллари
+                  <input type="radio" name="currency_id" value="3">
+                </label>
+              </div>
+            </div>
+        </div>
+         <div class="playlist__managment--item">
+            <div class="playlist__managment--item__left">
+              <p><span class="important">*</span>Кількість</p>
+            </div>
+            <div class="playlist__managment--item__right">
+              <div class="playlist--item--sub">
+                  <?=  $this->Form->control('amount',array('label' => 'Кількість','type'=>'number','min'=>0,'class'=>'form-control','required'=>'required'));?>    
+              </div>
+            </div>
+        </div>
         <div class="playlist__managment--item">
             <div class="playlist__managment--item__left">
               <p>Хіт продажу</p>
@@ -129,34 +182,11 @@
             </div>
         </div>
 
-        <div class="playlist__managment--item">
+                        </div>
+            <div class="product_container_item" style="display: none;">
+ <div class="playlist__managment--item">
             <div class="playlist__managment--item__left">
-              <p>Ціна</p>
-            </div>
-            <div class="playlist__managment--item__right">
-              <div class="playlist--item--sub">
-                  <?=  $this->Form->control('price',array('label' => 'Ціна','type'=>'number','min'=>0,'class'=>'form-control'));?>    
-              </div>
-            </div>
-        </div>
-          <div class="playlist__managment--item">
-            <div class="playlist__managment--item__left">
-              <p>Валюта</p>
-            </div>
-            <div class="playlist__managment--item__right">
-              <div class="playlist--item--sub">
-
-                  <select name="currency_id" id="" class="form-control">
-                    <option value="1">Гривні</option>
-                    <option value="2">Євро</option>
-                    <option value="3">Доллари</option>
-                  </select>
-              </div>
-            </div>
-        </div>
-         <div class="playlist__managment--item">
-            <div class="playlist__managment--item__left">
-              <p>Категорія</p>
+              <p><span class="important">*</span>Виберіть категорію </p>
             </div>
             <div class="playlist__managment--item__right">
               <div class="playlist--item--sub">
@@ -164,70 +194,74 @@
               </div>
             </div>
         </div>
-
-        <div class="playlist__managment--item">
+         <div class="playlist__managment--item">
             <div class="playlist__managment--item__left">
-              <p>Кількість</p>
+              <p><span class="important">*</span>Виберіть виробника</p>
             </div>
             <div class="playlist__managment--item__right">
               <div class="playlist--item--sub">
-                  <?=  $this->Form->control('amount',array('label' => 'Кількість','type'=>'number','min'=>0,'class'=>'form-control','required'=>'required'));?>    
+                  <?=  $this->Form->control('producer_id',array('label' => 'Категорія','type'=>'select','min'=>0,'class'=>'form-control', 'options'=>$producer_id, 'required'=>'required','empty'=>'Виберіть виробника','id'=>'choose_category'));?>    
               </div>
             </div>
         </div>
-
-       
-
-        
             </div>
-                        <div class="product_container_item" style="display: none;">
-                           <div class="playlist__managment--item">
-            <div class="playlist__managment--item__left">
-              <p>Код товару</p>
-            </div>
-            <div class="playlist__managment--item__right">
-              <div class="playlist--item--sub">
-                  <?=  $this->Form->control('cod',array('label' => 'Кількість','type'=>'text','class'=>'form-control','required'=>'required'));?>    
-              </div>
-            </div>
-        </div>
+            <div class="product_container_item" style="display: none;">
+               <div class="discounts_container">
+                 <table>
+                   <thead>
+                     <th>Ціна</th>
+                     <th>Початок знижки</th>
+                     <th>Кінець знижки</th>
+                     <th>Дія</th>
+                   </thead>
+                   <tbody>
+                    <!-- <tr>
+                       <td><input type="number" name="discount_price[]"></td>
+                       <td> 
+                        <div class="">
+                          <div class='input-group date datetimepicker' >
+                            <input type='text' class="" name="date_begin[]" required="required" />
+                            <span class="input-group-addon">
+                              <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                          </div>
                         </div>
+                      </td>
+                       <td>
+                        <div class="">
+                          <div class='input-group date datetimepicker' >
+                            <input type='text' class="" name="date_end[]" required="required" />
+                            <span class="input-group-addon">
+                              <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                          </div>
+                        </div>
+                      </td>
+                       <td style="text-align: center;">
+                        <button class="delete_discount">
+                         <i class="fa fa-trash"></i>
+                       </button>
+                     </td>
+                     </tr> -->
+                   </tbody>
+                 </table>
+                 <div class="add_new_attribute_container">
+                    <button class="add_new_discount btn-primary" type="button">
+                      <i class="fa fa-plus"></i>
+                    </button>
+              </div>
+               </div>
+            </div>
             <div class="product_container_item" style="display: none;">
               <div class="attributes_products">
-                <p class="attributes_products_title">Атрибути</p>
                 <table class="attributes_table">
                   <thead>
                     <th>Атрибут</th>
                     <th>Значення</th>
-                    <th></th>
+                    <th>Дія</th>
                   </thead>
                   <tbody>
-                   <!-- <tr>
-                      <td style="width: 30%;position: relative;">
-                        <input type="text" class="search_attribute" name="attribute">
-                        <input type="text" class="search_attribute_id" name="attributes[]">
-                        <div class="attributes_list" style="display: none;">
-                          <?php  foreach ($attributes as $key => $value): ?>
-                            <div class="attributes_list_item">
-                              <p class="attributes_list_item_title"><?= $value['name']; ?></p>
-                              <div class="attributes_list_item_list">
-                                <?php foreach ($value['attributes_items'] as $key => $item): ?>
-                                  <p class="attributes_list_item_list_item choose_attribute" data-attribute="<?= $item['id'] ?>" data-name="<?= $item['name'] ?>"> <?= $item['name']; ?></p>
-                                <?php endforeach; ?>
-                              </div>
-                            </div>
-                          <?php   endforeach; ?>
-                        </div>
-                      </td>
-                      <td>
-                        <input type="text">
-                      </td>
-                      <td style="text-align: center;">
-                        <button class="delete_new_attribute btn-danger">
-                         <i class="fa fa-minus"></i>
-                        </button>       
-                      </td>
-                    </tr> -->
+                  
                   </tbody>
                 </table>
                 <div class="add_new_attribute_container">
@@ -243,73 +277,42 @@
                   <div class="selected_options_products">
                   </div>
                   <div class="selected_options_products_add">
-                    <input type="text" id="selected_option" placeholder="Опція">
-                    <div class="selected_options_products_list" >
-                      <?php  foreach ($first_options as $key => $value): ?>
-                        <p class="choosed_option" data-option="<?= $value['id'] ?>" data-name="<?= $value['name'] ?>"><?=  $value['name'] ?></p>
+                   <!-- <input type="text" id="selected_option" placeholder="Опція"> -->
+                    <select name="selected_option" id="selected_option" >
+                      <option value="0" >Виберіть опцію</option>
+                       <?php  foreach ($first_options as $key => $value): ?>
+
+                        <option value="<?= $value['id'] ?>" data-option="<?= $value['id'] ?>" data-name="<?= $value['name'] ?>" ><?=  $value['name'] ?></option>
+                        
                       <?php   endforeach ?>
-                     <p>  </p>
-                    </div>
+                    </select>
+                  
                   </div>
                 </div>
                 <div class="product_options_right">
                   <div class="product_options_right_list">
-                  <!--  <div class="product_options_right_list_item">
-                      <table>
-                       <thead>
-                        <th>Значення опції</th>
-                        <th>Ціна</th>
-                        <th>Дії</th>
-                      </thead>
-                      <tbody>
-                       <tr>
-                        <td>
-                         <select name="" id="" class="choose_option">
-                          <option value="1">1</option>
-                          <option value="1">1</option>
-                          <option value="1">1</option>
-                          <option value="1">1</option>
-                          <option value="1">1</option>
-                         </select>
-                       </td>
-                       <td>
-                         <input type="number" class="amount_option">
-                       </td>
-                       <td style="text-align: center;">
-                         <button class="delete_item_option">
-                           <i class="fa fa-minus"></i>
-                         </button>
-                       </td>
-                     </tr>
-                     </tbody>
-
-                   </table>
-                   <div style="text-align: right;">
-                    <button class="add_new_row">
-                      <i class="fa fa-plus"></i>
-                    </button>
-                   </div>
-
-                    </div> -->
-
+                  
                   </div>
                 </div>
               </div>
             </div>
             <div class="product_container_item" style="display: none;">
-              <div class="playlist__managment--item">
-            <div class="playlist__managment--item__left">
-              <p>Виробник</p>
-            </div>
-            <div class="playlist__managment--item__right">
-              <div class="playlist--item--sub">
-                  <?=  $this->Form->control('producer_id',array('label' => 'Категорія','type'=>'select','min'=>0,'class'=>'form-control', 'options'=>$producer_id, 'required'=>'required','empty'=>'Виберіть виробника','id'=>'choose_category'));?>    
+
+              <div class="top_new_pictures">
+                <div class="top_new_pictures_left">
+                  <div id="fotosViewMeal" style="position: relative;width: 100%; min-height: 200px;" class="image_gallery_preview"></div>  
+                </div>
+                <div class="top_new_pictures_right">
+                  <div class="top_new_pictures_right_top">
+                    <?=  $this->Form->control('image',array('label' => false,'type'=>'file','class'=>' form-control ','required'=>'required','style'=>'font-size: 1em;padding:0px;width:200px;','id'=>'fileimgMeal'));?>  
+                  </div>
+                  <div class="top_new_pictures_right_bottom">
+                    <p>Відеогляд</p>
+                    <?=  $this->Form->control('video', array('label' => false,'type'=>'text','min'=>0,'class'=>'form-control'));?>   
+                  </div>
+                </div>
               </div>
-            </div>
-        </div>
-            </div>
-            <div class="product_container_item" style="display: none;">
-                      <div class="playlist__managment--item">
+                  <!--    <div class="playlist__managment--item">
             <div class="playlist__managment--item__left">
               <p>Головне зображення</p>
             </div>
@@ -319,28 +322,17 @@
                   <div id="fotosViewMeal" style="position: relative;width: 33%;" class="image_gallery_preview"></div>  
                   </div>
             </div>
-        </div>
-                <div class="playlist__managment--item">
-            <div class="playlist__managment--item__left">
-              <p>Відео</p>
-            </div>
-            <div class="playlist__managment--item__right">
-              <div class="playlist--item--sub">
-                  <?=  $this->Form->control('video', array('label' => 'Відео','type'=>'text','min'=>0,'class'=>'form-control'));?>    
-              </div>
-            </div>
-        </div>
-        <div class="playlist__managment--item">
-            <div class="playlist__managment--item__left">
-              <p>Галерея зображень</p>
-            </div>
+        </div> -->
+                
+        <div class="playlist__managment--item" style="display: block;">
+            
             <div class="playlist__managment--item__right">
               <div class="playlist--item--sub">
                   <div class="input-file-container" style="display: block;">  
                     
                     <table class="products_add_table">
                       <thead>
-                        <th>Зображення</th>
+                        <th>Галерея зображень</th>
                         <th>Позиція</th>
                         <th>Alt</th>
                         <th>Дії</th>
@@ -348,10 +340,13 @@
                       <tbody>
                         <tr>
                           <td>
+
                             <div class="input-file-container-item">
+                              <div><div><div>
                                 <?=  $this->Form->control('image_gallery[]',array('type'=>'file','label' =>'false','id'=>'file_first','class'=>'upload_gallery_item form-control','style' => 'display:none;'));?> 
                                 <label tabindex="0" for="file_first" class="input-file-trigger"><i class="fa fa-close"> </i></label>
                                 <div class="image_gallery_preview">  </div>
+                              </div></div></div>
                            </div>
                           </td>
                           <td class="products_add_table_padding">
@@ -361,66 +356,14 @@
                             <input type="text" name="alts[]">
                           </td>
                            <td class="products_add_table_padding">
-                            <button type="button" class="delete_row btn-danger"><i class="fa fa-minus"></i></button>
+                            <button type="button" class="delete_row btn-danger"><i class="fa fa-trash"></i></button>
                           </td>
                         </tr>
                       </tbody>
                     </table>
                     
 
-                  <!--  <div class="input-file-container-item">
-                      <?=  $this->Form->control('image_gallery[]',array('type'=>'file','label' =>'false','id'=>'file_second','class'=>'upload_gallery_item form-control','style' => 'display:none;'));?> 
-                      <label tabindex="0" for="file_second" class="input-file-trigger"><i class="fa fa-close"> </i></label>
-                      <div class="image_gallery_preview">  </div>
-                    </div>
-
-                    <div class="input-file-container-item">
-                      <?=  $this->Form->control('image_gallery[]',array('type'=>'file','label' =>'false','id'=>'file_third','class'=>'upload_gallery_item form-control','style' => 'display:none;'));?> 
-                      <label tabindex="0" for="file_third" class="input-file-trigger"><i class="fa fa-close"> </i></label>
-                      <div class="image_gallery_preview">  </div>
-                    </div>
-
-                     <div class="input-file-container-item">
-                      <?=  $this->Form->control('image_gallery[]',array('type'=>'file','label' =>'false','id'=>'file_four','class'=>'upload_gallery_item form-control','style' => 'display:none;'));?> 
-                      <label tabindex="0" for="file_four" class="input-file-trigger"><i class="fa fa-close"> </i></label>
-                      <div class="image_gallery_preview">  </div>
-                    </div>
-
-                     <div class="input-file-container-item">
-                      <?=  $this->Form->control('image_gallery[]',array('type'=>'file','label' =>'false','id'=>'file_five','class'=>'upload_gallery_item form-control','style' => 'display:none;'));?> 
-                      <label tabindex="0" for="file_five" class="input-file-trigger"><i class="fa fa-close"> </i></label>
-                      <div class="image_gallery_preview">  </div>
-                    </div>
-
-                     <div class="input-file-container-item">
-                      <?=  $this->Form->control('image_gallery[]',array('type'=>'file','label' =>'false','id'=>'file_six','class'=>'upload_gallery_item form-control','style' => 'display:none;'));?> 
-                      <label tabindex="0" for="file_six" class="input-file-trigger"><i class="fa fa-close"> </i></label>
-                      <div class="image_gallery_preview">  </div>
-                    </div>
-
-                     <div class="input-file-container-item">
-                      <?=  $this->Form->control('image_gallery[]',array('type'=>'file','label' =>'false','id'=>'file_seven','class'=>'upload_gallery_item form-control','style' => 'display:none;'));?> 
-                      <label tabindex="0" for="file_seven" class="input-file-trigger"><i class="fa fa-close"> </i></label>
-                      <div class="image_gallery_preview">  </div>
-                    </div>
-
-                     <div class="input-file-container-item">
-                      <?=  $this->Form->control('image_gallery[]',array('type'=>'file','label' =>'false','id'=>'file_eight','class'=>'upload_gallery_item form-control','style' => 'display:none;'));?> 
-                      <label tabindex="0" for="file_eight" class="input-file-trigger"><i class="fa fa-close"> </i></label>
-                      <div class="image_gallery_preview">  </div>
-                    </div>
-
-                     <div class="input-file-container-item">
-                      <?=  $this->Form->control('image_gallery[]',array('type'=>'file','label' =>'false','id'=>'file_eing','class'=>'upload_gallery_item form-control','style' => 'display:none;'));?> 
-                      <label tabindex="0" for="file_eing" class="input-file-trigger"><i class="fa fa-close"> </i></label>
-                      <div class="image_gallery_preview">  </div>
-                    </div>
-
-                     <div class="input-file-container-item">
-                      <?=  $this->Form->control('image_gallery[]',array('type'=>'file','label' =>'false','id'=>'file_ten','class'=>'upload_gallery_item form-control','style' => 'display:none;'));?> 
-                      <label tabindex="0" for="file_ten" class="input-file-trigger"><i class="fa fa-close"> </i></label>
-                      <div class="image_gallery_preview">  </div>
-                    </div> -->
+                  
                     <div class="add_new_attribute_container">
                    <button class="add_row_for_gallery btn-primary" type="button"><i class="fa fa-plus"></i></button>
                       
@@ -428,18 +371,17 @@
                   </div>
                   
               </div>
-              <div id="fotosViewMeal"></div>
             </div>
         </div>
             </div>
           </div>
   
-			<?=  $this->Form->submit('Додати',['class'=>'btn  btn-primary save__changes__form']); ?>
      		<?=   $this->Form->end() ?>
        </div>
     </div>
 </div>
 
+        <?=   $this->Form->end() ?>
 
 </section>
 <script src="//cdn.ckeditor.com/4.13.1/full/ckeditor.js"></script>
@@ -512,9 +454,9 @@ $('body').on('change', ".upload_gallery_item", function() {
                     dataView += '<div class="deleteImg" id="delView"></div>';
                     dataView += '</div>';
                     dataView += '</div>';
-                    $(element).parent().parent().find('.image_gallery_preview').html(dataView);
+                    $(element).parent().parent().parent().parent().find('.image_gallery_preview').html(dataView);
                     $("#blockAddImgMeal").hide();
-                    $(this).parent().find('.image_gallery_preview').attr('src', e.target.result);
+                    $(this).parent().parent().parent().parent().find('.image_gallery_preview').attr('src', e.target.result);
                    // $("#imgMainProfile").attr('src', e.target.result);
 
                     //main_img = e.target.result;
@@ -568,11 +510,11 @@ $(".add_row_for_gallery").click(function() {
 
   $(".products_add_table tbody").append('<tr>'+
                           '<td>'+
-                            '<div class="input-file-container-item">'+
+                            '<div class="input-file-container-item"><div><div><div>'+
                                 '<input type="file" name="image_gallery[]" id="file_first_'+count+'" class="upload_gallery_item form-control" style="display:none;">'+
                                 '<label tabindex="0" for="file_first_'+count+'" class="input-file-trigger"><i class="fa fa-close"> </i></label>'+
                                 '<div class="image_gallery_preview">  </div>'+
-                           '</div>'+
+                           '</div></div></div></div>'+
                           '</td>'+
                           '<td class="products_add_table_padding">'+
                             '<input type="number" name="position[]" value="'+count+'">'+
@@ -581,7 +523,7 @@ $(".add_row_for_gallery").click(function() {
                             '<input type="text" name="alts[]">'+
                           '</td>'+
                            '<td class="products_add_table_padding">'+
-                            '<button type="button" class="delete_row btn-danger"><i class="fa fa-minus"></i></button>'+
+                            '<button type="button" class="delete_row btn-danger"><i class="fa fa-trash"></i></button>'+
                           '</td>'+
                         '</tr>');
 });
@@ -592,4 +534,48 @@ $('body').on('click', ".delete_row", function() {
 
 });
 
+$(document).ready(function() {
+  $('body').on('click', ".datetimepicker", function() {
+    $(this).datetimepicker();
+  });
+       
+       
+
+  $(".add_new_discount").click(function() {
+    
+    $(".discounts_container tbody").append('<tr>'+
+                       '<td><input type="number" name="discount_price[]"></td>'+
+                       '<td>'+
+                        '<div class="">'+
+                          '<div class="input-group date datetimepicker" >'+
+                            '<input type="text" class="" name="date_begin[]" required="required" />'+
+                            '<span class="input-group-addon">'+
+                              '<span class="glyphicon glyphicon-calendar"></span>'+
+                            '</span>'+
+                          '</div>'+
+                        '</div>'+
+                     '</td>'+
+                       '<td>'+
+                        '<div class="">'+
+                          '<div class="input-group date datetimepicker" >'+
+                            '<input type="text" class="" name="date_end[]" required="required" />'+
+                            '<span class="input-group-addon">'+
+                              '<span class="glyphicon glyphicon-calendar"></span>'+
+                            '</span>'+
+                          '</div>'+
+                        '</div>'+
+                      '</td>'+
+                       '<td style="text-align: center;">'+
+                        '<button class="delete_discount">'+
+                         '<i class="fa fa-trash"></i>'+
+                       '</button>'+
+                     '</td>'+
+                     '</tr>');
+  });
+
+$('body').on('click', ".delete_discount", function() {
+   $(this).parent().parent().remove();
+});
+
+});
 </script>

@@ -81,7 +81,7 @@ class ActionsController extends AppController
     public function view($id = null)
     {
         $action = $this->Actions->get($id, [
-            'contain' => ['ActionsProducts.Products']
+            'contain' => ['ActionsProducts.Products','ActionsProducts.Products.Discounts']
         ]);
 
        // debug($action);

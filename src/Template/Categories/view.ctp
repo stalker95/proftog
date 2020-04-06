@@ -15,7 +15,7 @@
 </div>
 <section class="propose ">
 	<div class="categories_page background_white container">
-		<?= $this->Form->create($category, ['type' => 'file'] )  ?>
+		<?= $this->Form->create($category, ['type' => 'file','method' => 'get', 'id'=>'product_sort'] )  ?>
 		<div class="row">
 			<div class="col-md-3">
 				<?= $this->element('catalog_categories'); ?>
@@ -42,20 +42,23 @@
 	          				<p><?= $category->title ?></p>
 	          			</div>
 	          			<div class="categories_product_description">
-	          				<p><?= $category->description ?></p>
+	          				<p><?= $category->desription ?></p>
 	          			</div>
 	          		</div>
 	          	</div>
 	          	<div class="products_sort">
 	          		<div class="sort_by">
 	          			Сортувати за 
-	          			<select name="" id="">
-	          				<option value="0">1</option>
+	          			<select name="sort_by" id="sort_by">
+	          				<option value="1">За рейтингом</option>
+	          				<option value="1">За спаданням ціни </option>
+	          				<option value="1">За зростанням ціни </option>
+	          				<option value="1">Акційні</option>
 	          			</select>
 	          		</div>
 	          		<div class="products_show">
 	          			Показати 
-	          			<select name="" id="">
+	          			<select name="вші" id="">
 	          				<option value="0">1</option>
 	          			</select>
 	          		</div>
@@ -96,7 +99,7 @@
 					<?php } ?>
 					</div>
 					<div class="propose_slider_item_price">
-						<p><span class="translate_price"><?= $value['price'] ?></span> грн</p>
+						<?= $this->element('price_product', array("item" => $value)); ?>
 					</div>
 				</a>
 
@@ -105,8 +108,29 @@
 
 	          	</div>
 	          </div>
+	           <?php
+              $params = $this->Paginator->params();
+              if ($params['pageCount'] > 1): ?>
+                <ul class="pagination pagination-sm">
+                    <?= $this->Paginator->first('<< ' . __('first')) ?>
+                    <?= $this->Paginator->prev('< ' . __('previous')) ?>
+                    <?= $this->Paginator->numbers() ?>
+                    <?= $this->Paginator->next(__('next') . ' >') ?>
+                <?= $this->Paginator->last(__('last') . ' >>') ?>
+                </ul>
+          <?php endif; ?>
 			</div>
 		</div>
 		     <?=   $this->Form->end() ?>
 	</div>
 </section>
+
+<script>
+    <?php echo $this->Html->scriptStart(['block' => true]); ?>
+
+    		$("#sort_by").change(function() {
+               $("#product_sort").submit();
+    		});
+
+    <?php echo $this->Html->scriptEnd(); ?>
+</script>

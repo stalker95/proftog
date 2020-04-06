@@ -11,6 +11,9 @@
             <button class="btn delete_form_checked  btn-dangeres save__changes__form__playlist copy_checked" data-toggle="modal" data-target="#mediaGallery" >
                      <i class="fa fa-copy"></i>
           </button>
+           <button class="btn delete_form_checked  btn-dangeres save__changes__form__playlist" data-toggle="modal" data-target="#mediaGallery" >
+                     <i class="fa fa-trash"></i>
+          </button>
          </div>
          
        </div>
@@ -19,9 +22,9 @@
       <div class="box-body table-responsive no-padding">
        <div class="box-header">
         <div class="create__new__user">
-          <button class="btn delete_form_checked  btn-dangeres save__changes__form__playlist" data-toggle="modal" data-target="#mediaGallery" >
+         <!-- <button class="btn delete_form_checked  btn-dangeres save__changes__form__playlist" data-toggle="modal" data-target="#mediaGallery" >
                      Delete
-          </button>
+          </button> -->
           <!--<?php   echo  $this->Html->link('Додати ',['action'=>'add'],['class'=>'btn btn-primary create__new__user']); ?> -->
            <?php /*   <div class="search-form-find">
                <?= $this->Form->create('Search',['url'   => array(
@@ -62,7 +65,7 @@
                     </label>
                     </td>
                     <td>
-                      <img style="max-width: 90px; max-height: 90px;" src="<?= $this->Url->build('/products/'.$product->image, ['fullBase' => true]) ?>" alt="" class="img-fluid">
+                      <img style="max-width: 75px; max-height: 70px;" src="<?= $this->Url->build('/products/'.$product->image, ['fullBase' => true]) ?>" alt="" class="img-fluid">
                     </td>
                     <td><?= $product['title'] ?></td>
                     <td><?= $product['amount'] ?></td>
@@ -74,7 +77,7 @@
                     <td class='table__flex'>
                       <?php
                         echo   $this->Html->link('<i class="fa fa-pencil"></i>', ['action' => 'edit', $product->id], ['class'=>'btn change__user','escape' => false]);
-                         echo   $this->Html->link('<i class="fa fa-copy"></i>', ['action' => 'copy', $product->id], ['class'=>'btn copy_product','escape' => false]);
+                         echo   $this->Html->link('<i class="fa fa-copy"></i>', ['action' => 'copy-element', $product->id], ['class'=>'btn copy_product','escape' => false]);
                         echo  $this->Form->postLink('<i class="fa fa-trash"></i>', ['action' => 'delete', $product->id], ['class'=>'btn  delete__user','escape' => false,'confirm' => __('Ви справді хочете видалити категорію # {0}?', $product->id)]);  ?>
                     </td>
                     </tr>

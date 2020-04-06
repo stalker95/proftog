@@ -89,14 +89,7 @@
 					<?php } ?>
 					</div>
 					<div class="propose_slider_item_price">
-						<?php if ($value['product']['price_new'] > 0) { ?>
-							<p><span class="translate_price" data-currency="<?= $value['product']['currency_id'] ?>"><?= $value['product']['price_new'] ?></span> грн</p>
-						<p class="slider_item_price_old"><span class="translate_price" data-currency="<?= $value['product']['currency_id'] ?>"><?= $value['product']['price'] ?></span> грн</p>
-						<p class="slider_item_discount"> -11%</p>
-
-					    <?php }  else { ?>
-						<p><span class="translate_price" data-currency="<?= $value['product']['currency_id'] ?>"><?= $value['product']['price'] ?></span> грн</p>
-					    <?php } ?>
+						<?= $this->element('price_product', array("item" => $value['product'])); ?>
 					</div>
 				</div>
 

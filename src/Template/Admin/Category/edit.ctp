@@ -61,7 +61,17 @@
     </div>
   </div>
 </div>
+<div class="playlist__managment--item">
+  <div class="playlist__managment--item__left">
+    <p>Опис</p>
+  </div>
+  <div class="playlist__managment--item__right">
+    <div class="playlist--item--sub">
+    <?=  $this->Form->control('desription',array('type'=>'textarea','label' => 'First Name','class'=>'form-control','required'=>'required'));?>
 
+    </div>
+  </div>
+</div>
        <div class="playlist__managment--item">
   <div class="playlist__managment--item__left">
     <p>Keywords</p>

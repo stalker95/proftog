@@ -207,6 +207,73 @@ class Product extends Entity
                 }
               }
     }
+    public function saveDiscounts($prices, $begin_data, $end_data, $product_id) 
+    {
+      $this->Discounts = TableRegistry::get('discounts');
+      
+      $discounts = $this->Discounts->find()->where(['product_id' => $product_id])->toArray();
+      
+      if (!empty($prices)) {
+      foreach ($discounts as $key => $value) {
+        $discount = $this->Discounts->get($value['id']);
+        $this->Discounts->delete($discount);
+      }
+      
+
+       foreach ($prices as $key => $value) {
+                    $discounts = $this->Discounts->newEntity();
+                    $discounts->price = $value;
+                    $discounts->start_data =  date("Y-m-d H:i:s", strtotime($begin_data[$key]));
+                    $discounts->end_data =  date("Y-m-d H:i:s", strtotime($end_data[$key]));
+                    $discounts->product_id = $product_id;
+
+                    $this->Discounts->save($discounts);
+                }
+      }
+    }
+
+    public function copyElement($id = null)
+    {
+       $this->Products = TableRegistry::get('products');
+       $this->AttributesProducts = TableRegistry::get('attributes_products');
+
+       $product = $this->Products->get($id);
+
+       $new_product = $this->Products->newEntity();
+
+       $new_product->title = $product->title;
+       $new_product->slug = $product->slug;
+       $new_product->description = $product->description;
+       $new_product->title_page = $product->title_page;
+       $new_product->price = $product->price;
+       $new_product->keywords = $product->keywords;
+       $new_product->page_description = $product->page_description;
+       $new_product->amount = $product->amount;
+       $new_product->created = time();
+       $new_product->status = $product->status;
+       $new_product->image = $product->image;
+       $new_product->category_id = $product->category_id;
+       $new_product->producer_id = $product->producer_id;
+       $new_product->video = $product->video;
+       $new_product->cod = $product->cod;
+       $new_product->currency_id = $product->currency_id;
+       $new_product->hit = $product->hit;
+
+       $this->Products->save($new_product);
+
+       $old_attributes = $this->AttributesProducts->find()->where(['product_id' => $id])->toArray();
+
+       foreach ($old_attributes as $key => $value) {
+         $new_attribute = $this->AttributesProducts->newEntity();
+         $new_attribute->product_id = $new_product->id;
+         $new_attribute->attribute_id = $value['attribute_id'];
+         $new_attribute->value = $value['value'];
+         $this->AttributesProducts->save($new_attribute); 
+
+       }
+       
+    }
+
     public function deleteAllData($id_product)
     {
 
