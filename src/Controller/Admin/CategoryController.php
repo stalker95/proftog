@@ -160,8 +160,8 @@ class CategoryController   extends AppController
                         $ext = pathinfo($img['name'], PATHINFO_EXTENSION);
                         $filename = md5(microtime(true)) . '.' . $ext;
                         move_uploaded_file($img['tmp_name'], $target_path . $filename);
-                        $product->picture=$filename;
-                        $this->Products->updateAll(['picture' => $filename], ['id' => $category->id]);
+                        $category->picture=$filename;
+                        $this->Categories->updateAll(['picture' => $filename], ['id' => $category->id]);
                     }
                 }
                 

@@ -1,0 +1,125 @@
+ <section class="content">
+  <div class="row">
+   <div class="col-xs-12">
+     <h1 class="blog__title">Швидкі покупки </h1>
+     <div class="box">
+      <div class="box-body table-responsive no-padding">
+       <div class="box-header">
+        <div class="create__new__user">
+          <button class="btn delete_form_checked  btn-dangeres save__changes__form__playlist" data-toggle="modal" data-target="#mediaGallery" >
+                     Delete
+          </button>
+          <?php   echo  $this->Html->link('Додати ',['action'=>'add'],['class'=>'btn btn-primary create__new__user']); ?>
+              <div class="search-form-find">
+               <?= $this->Form->create('Search',['url'   => array(
+               'controller' => 'category','action' => 'search'
+                 )]);
+                echo  $this->Form->control('name',array('label' => false,'class'=>'form-control','min'=>6));
+                echo  $this->Form->end(); 
+             ?>
+               <p class="search-form-find-title"> Пошук </p>
+            </div>
+            </div>
+              
+           </div>
+              <table class="table table-bordered table-striped" id="example1">
+                 <thead>
+                <tr>
+                  <th class="first-check"> <label class="custom-checkbox">
+                          <input type="checkbox" id="delete-all">
+                          <span class="checkmark"></span>
+                    </label></th>
+                  <th>Ім'я</th>
+                  <th>Телефон</th>
+                  <th>Товар</th>
+                  <th>Статус</th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php   foreach ($quickOrders as $quickOrder): ?>
+                  <tr>
+                    <td class="first-check"> <label class="custom-checkbox">
+                          <input type="checkbox" id="delete-all" value="<?= $quickOrder->id ?>" class='delete_item'>
+                          <span class="checkmark"></span>
+                    </label></td>
+                    <td><?= $quickOrder->username ?></td>
+                    <td><?= $quickOrder->phone ?></td>
+                    <td><?= $quickOrder->product->title ?></td>
+                    <td>
+                      <?php if ($quickOrder->status == 0): ?>
+                        <button class="btn btn-success confirm_status" data-record="<?= $quickOrder->id ?>">Підтвердити</button>
+                      <?php endif; ?>
+                       <?php if ($quickOrder->status != 0): ?>
+                        Підтверджено
+                       <?php endif; ?>
+                    </td>
+                   
+                    </tr>
+                <?php endforeach; ?>
+              </tbody>
+              </table>
+            </div>
+             <?php
+              $params = $this->Paginator->params();
+              if ($params['pageCount'] > 1): ?>
+                <ul class="pagination pagination-sm">
+                    <?= $this->Paginator->first('<< ' . __('Перша')) ?>
+                    <?= $this->Paginator->prev('< ' . __('Попередня')) ?>
+                    <?= $this->Paginator->numbers() ?>
+                    <?= $this->Paginator->next(__('Далі') . ' >') ?>
+                <?= $this->Paginator->last(__('Остання') . ' >>') ?>
+                </ul>
+          <?php endif; ?>
+          </div>
+        </div>
+      </div>
+
+<div class="modal fade" id="mediaGallery" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabels" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="gallery-box form__inline" style="text-align: center;">
+          <h2 style="text-align: center;">Ви хочете видалити категорії ?</h2>
+          <button class="close_modal_form close__modal" >Ні</button>
+           <?= $this->Form->create('Delete',['url'   => array(
+               'controller' => 'category','action' => 'deletechecked'
+           )])  ?>
+           <div class="delete_form_checked_inputs"> </div>
+           <?=  $this->Form->submit('Так ',['class'=>'btn  btn-dangeres save__changes__form__playlist','style'=>'margin-top:0px;margin-left:auto;margin-right:auto;']); ?>
+           <?=   $this->Form->end() ?>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    </section>
+  <script>
+
+<?php $this->Html->script('admin/jquery.dataTables.min.js', ['block' => 'scriptBottom']); ?>
+<?php $this->Html->script('admin/dataTables.bootstrap.min.js', ['block' => 'scriptBottom']); ?>
+<?php echo $this->Html->scriptStart(['block' => true]); ?>
+   
+   $(".confirm_status").click(function() {
+
+     var id_product = $(this).attr("data-record");
+     var element = $(this);
+
+   $.ajax({
+        url: '<?= $this->Url->build(['controller' => 'quick-orders', 'action' => 'check-order', '_full' => true]) ?>',
+        method: 'POST',
+        data: { "id_product": id_product},
+        success: function(data){ 
+          if (data.status == "true") {
+            element.parent().html("Підтверджено");
+          }
+        }
+    });
+
+   });
+<?php echo $this->Html->scriptEnd(); ?>
+</script>

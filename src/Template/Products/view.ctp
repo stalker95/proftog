@@ -1,4 +1,6 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-modal/2.2.6/js/bootstrap-modal.min.js"></script>
 <div class="breadcrums">
 	<div class="breadcrums_list">
 		<div class="breadcrums_list_item">
@@ -43,14 +45,12 @@
 						</div>
 					</div>
 					<div class="product_price">
-						<?php if ($product->currency_id == 2) { ?>
-						<p><span class="translate_price"><?= $product->price ?></span> грн</p>
-						<?php } else { ?>
-							<p><?= $product->price ?> грн</p>
-						<?php } ?>
+						
+							<p><?= $this->element('price_product', array("item" => $product)); ?> </p>
+						
 					</div>
 					<div class="product_description">
-						<p><?= $product->description ?></p>
+						<?php echo htmlspecialchars_decode($product->description) ?>
 					</div>
 					<div class="product_shop">
 						<div class="product_shop_counter">
@@ -61,6 +61,12 @@
 						<div class="product_shop_buy">
 							<img src="<?= $this->Url->build('/img/back.svg', ['fullBase' => true]) ?>" alt="">
 							<p>Купити</p>
+						</div>
+						<div class="products_quick_buy"  data-toggle="modal" data-target="#exampleModal">
+							<div class="products_quick_buy_left">
+								<i class="fa fa-dollar"></i>
+							</div>
+							<p>Швидке замовлення</p>
 						</div>
 					</div>
 					<div class="product_buttons"  data-product="2">
@@ -250,10 +256,57 @@
 	</div>
 </div>
 </div>
+
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog  modal-dialog-centered" role="document">
+    <div class="modal-content quick_buy_modal">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Швидке замовлення</h5> 
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body quick_buy_form">
+        <form action="" class="quick_buy_form_submit">
+        	<p class="quick_buy_form_title">Заповніть данні і наш менеджер звяжеться з вами</p>
+        	<input type="text" name="user_name" placeholder="Ваше ім'я" required="true">
+        	<input type="text" name="user_phone" placeholder="Ваш номер телефону" required="true">
+        	<input type="hidden" name="product_id" value="<?= $product->id  ?>">
+        	<div class="quick_buy_form_bottom">
+        		<!-- 2 -->
+				<div class="loader loader--style2 " title="1">
+  					<svg version="1.1" id="loader-1" class="auth_loader" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+     				width="40px" height="40px" viewBox="0 0 50 50" style="enable-background:new 0 0 50 50;" xml:space="preserve">
+  					<path fill="#fff" d="M25.251,6.461c-10.318,0-18.683,8.365-18.683,18.683h4.068c0-8.071,6.543-14.615,14.615-14.615V6.461z">
+    				<animateTransform attributeType="xml"
+      									attributeName="transform"
+      									type="rotate"
+     									 from="0 25 25"
+      									to="360 25 25"
+      									dur="0.6s"
+      									repeatCount="indefinite"/>
+    				</path>
+  					</svg>
+				</div>
+                <input type="submit" value="Підтвердити" class="quick_submit">
+        	</div>
+        	<div class="message_submit_quick_order"></div>
+        </form>
+      </div>
+      <!--<div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div> --> 
+    </div>
+  </div>
+</div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
 <script>
     <?php echo $this->Html->scriptStart(['block' => true]); ?>
+
 $(document).ready(function() {
 
     var id_product = <?= $product->id ?>;
@@ -473,5 +526,39 @@ $(".add_product_to_wishlist").click(function() {
 
 });
 
+$(document).ready(function() {
+    $(".quick_buy_form_submit").submit(function() {
+       event.preventDefault(); 
+       $('.auth_loader').css("display","inline-block");
+       $(".quick_submit").css("display","none");
+       $.ajax({
+        url: '<?= $this->Url->build(['controller' => 'quick-orders', 'action' => 'quick-order', '_full' => true]) ?>',
+        type: 'POST',
+        data: $(this).serialize(),
+        success: function(data){ 
+          $(".message_submit_quick_order").html("");
+          console.log()
+
+          if (data.status == "true")
+           {
+
+            setTimeout(function() {
+               $(".message_submit_quick_order").html('<div class="message_submit_quick_order_message">'+
+                ''+
+                '<strong>Увага!</strong> Ваше замовлення прийнято'+
+                '</div>');
+
+               $('.auth_loader').css("display","none");
+       		   $(".quick_submit").css("display","block");
+       		   $(".quick_buy_form_submit input[type='text']").val("");
+       		   $(".quick_buy_form_submit input[type='number']").val("");
+             },1000); 
+           }
+
+           
+        }
+     });
+    }); 
+});
 	<?php echo $this->Html->scriptEnd(); ?>
 </script>

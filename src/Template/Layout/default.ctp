@@ -28,6 +28,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
     <!--    JQuery  -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
 <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet">
 
 
@@ -38,7 +39,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
     <?= $this->fetch('meta') ?>
     <?= $this->fetch('css') ?>
 </head>
-<body id="homepage">
+<body >
 
 <?= $this->element('header'); ?>
 
@@ -47,6 +48,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
 <?= $this->fetch('content') ?>
 
 <?= $this->element('footer'); ?>
+
 <script>
     var currency_url = '<?= $baseUrl ?>';
 </script>

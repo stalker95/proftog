@@ -24,6 +24,12 @@
                 <i class="fa fa-list-ul"></i> <span><?php echo __('Користувачі'); ?></span>
             </a>
         </li> 
+
+        <li class="<?= $nav_['users'] ? 'active' : '' ?>">
+            <a href="<?php echo $this->Url->build(['controller' => 'quick-orders', 'action' => 'index', '_full' => true, 'prefix' => 'admin', 'plugin' => false]); ?>">
+                <i class="fa fa-list-ul"></i> <span><?php echo __('Швидкі замовлення'); ?></span>
+            </a>
+        </li> 
          
 <?php endif; ?>
       <li class="<?= $nav_['products'] ? 'active' : '' ?>">

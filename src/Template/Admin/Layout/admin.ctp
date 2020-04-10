@@ -379,6 +379,18 @@ var flickerAPI = "https://api.privatbank.ua/p24api/pubinfo?json&exchange&coursid
       }
         $(this).css("opacity","1");
     });
+
+     $(".translate_price_two").each(function() {
+        var price= parseInt($(this).text());
+        if ($(this).attr('data-currency') == 2) {
+        $(this).text((price * global_curs).toFixed(2));
+      }
+      if ($(this).attr('data-currency') == 3) {
+        $(this).text((price * global_curs_dollar).toFixed(2));
+      }
+        $(this).css("opacity","1");
+    });
+
   })
 }, 500);
 

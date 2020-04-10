@@ -108,7 +108,7 @@ class ProductsTable extends Table
             ->requirePresence('title_page', 'create')
             ->allowEmptyString('title_page', false);
 
-        $validator
+      /*  $validator
             ->scalar('keywords')
             ->requirePresence('keywords', 'create')
             ->allowEmptyString('keywords', false);
@@ -117,6 +117,7 @@ class ProductsTable extends Table
             ->scalar('page_description')
             ->requirePresence('page_description', 'create')
             ->allowEmptyString('page_description', false);
+            */
 
         $validator
             ->numeric('price')

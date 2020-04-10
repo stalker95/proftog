@@ -1,4 +1,5 @@
-<div class="filter_container">
+ 
+ <div class="filter_container">
 	<div class="filter_container_title">
 		<p>Фільтрувати за ціною</p>
 	</div>
@@ -20,7 +21,12 @@
  		 	<?php 	foreach ($attributes_to_view as $key => $value) :?>
  		 		<?php if (!empty($value)): ?>
  		 		<div class="filter_elements_items_item">
- 		 			<p class="filter_elements_items_item_title"><?= $key ?></p>
+          <div class="filter_elements_items_item_top">
+            <p class="filter_elements_items_item_title"><?= $key ?></p>
+            <div class="filter_elements_items_item_close "><i class="fa fa-plus"></i></div>
+          </div>
+ 		 			
+          <div class="filter_elements_items_item_bottom" style="display: none;">
  		 			<?php 	foreach ($value as $keys => $item):  ?>
                     <input id="checkbox_<?= $item['name'] ?>_<?= $item['attribute_id'] ?>" 
                            name="checkbox_<?= $item['name'] ?>_<?= $item['attribute_id'] ?>" 
@@ -31,6 +37,7 @@
                            >
  		 			<label for="checkbox_<?= $item['name'] ?>_<?= $item['attribute_id'] ?>"><?= $item['name'] ?> (<?= $item['count'] ?>)</label>
  		 			<?php 	endforeach; ?>
+          </div>
  		 		</div>
  		 	<?php endif;	endforeach; ?>
 

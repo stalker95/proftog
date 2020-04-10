@@ -151,13 +151,13 @@
                 <div class="choose_currency_title"><p>Виберіть валюту</p></div>
 
                 <label for="first_currency">Гривня
-                  <input type="radio" name="currency_id" value="1" <?php if ($product['currency_id'] == 1){ ?> checked="checked" <?php } ?>>
+                  <input type="radio" name="currency_id" class="change__currency" value="1" <?php if ($product['currency_id'] == 1){ ?> checked="checked" <?php } ?>>
                 </label>
                 <label for="first_currency">Євро
-                  <input type="radio" name="currency_id"  value="2"<?php if ($product->currency_id == 2){ ?> checked="checked"  <?php } ?>>
+                  <input type="radio" name="currency_id" class="change__currency"  value="2"<?php if ($product->currency_id == 2){ ?> checked="checked"  <?php } ?>>
                 </label>
                 <label for="first_currency">Доллари
-                  <input type="radio" name="currency_id" value="3" <?php if ($product->currency_id == 3){ ?> checked="checked"    <?php } ?>>
+                  <input type="radio" name="currency_id" class="change__currency" value="3" <?php if ($product->currency_id == 3){ ?> checked="checked"    <?php } ?>>
                 </label>
               </div>
             </div>
@@ -212,7 +212,17 @@
                <div class="discounts_container">
                  <table>
                    <thead>
-                     <th>Ціна</th>
+                     <th>Ціна, <span class="selected_currency">
+                      <?php   if ($product->currency_id == 1): ?>
+                                Гривні
+                      <?php   endif; ?>
+                      <?php   if ($product->currency_id == 2): ?>
+                                Євро
+                      <?php   endif; ?>
+                      <?php   if ($product->currency_id == 3): ?>
+                                Доллари
+                      <?php   endif; ?>
+                   </span></th>
                      <th>Початок знижки</th>
                      <th>Кінець знижки</th>
                      <th>Дія</th>
@@ -666,5 +676,21 @@ $('body').on('click', ".delete_discount", function() {
   
   $(".selected_options_products_item:last-child").addClass('selected_options_products_item_active');
   $(".product_options_right_list_item:last-child").css("display","block");
+
+
+  $(".change__currency").change(function() {
+  
+  var currency_value = "";
+  if ($(this).val() == 1) {
+    currency_value = "Гривні";
+  } 
+  if ($(this).val() == 2 ) {
+    currency_value = "Євро";
+  }
+  if ($(this).val() == 3 ) {
+    currency_value = "Доллари";
+}
+ $(".selected_currency").text(currency_value);
+});
 });
 </script>

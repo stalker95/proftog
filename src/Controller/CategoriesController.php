@@ -21,6 +21,7 @@ class CategoriesController extends AppController
         $this->loadModel('Attributes');
         $this->loadModel('Producers');
         $this->loadModel('AttributesProducts');
+        $this->loadModel('ActionsProducts');
         $this->loadModel('AttributesItems');
         $this->loadModel('Currency');
         $this->nav_['users'] = true;
@@ -73,14 +74,17 @@ class CategoriesController extends AppController
         $current_value_min = 0;
         $selected_values = [];
        
+       $this->paginate = [
+                'limit' => '9'
+            ];
 
         $products = $this->Paginate(
                     $this->Products
                          ->find()
-                         ->contain(['Actions','Producers','Discounts'])
+                         ->contain(['ActionsProducts','Producers','Discounts','Rewiev'])
                          ->where(['category_id' => $category->id]))
                          ->toArray();
-                       //  debug($products);
+                    //     debug($products);
 
         $max_price = $this->Products->find('all',[
                     'fields' => array('amount' => 'MAX(Products.price)')])->toArray();
@@ -95,14 +99,15 @@ class CategoriesController extends AppController
         if ($this->request->is(['get'])) {
             //    die();
         }
-        if ($this->request->is(['get'])  AND $this->request['?']['_method'] == 'PUT') {
-            debug($this->request);
+        if ($this->request->is(['get']) AND isset($this->request['?']['_method'])  AND $this->request['?']['_method'] == 'PUT' ) {
+           // debug($this->request['?']);
             
             $attibutes_items = [];
             $attributes_names = [];
             $producers = [];
-            foreach ($this->request->getData() as $key => $value) {
+            foreach ($this->request['?'] as $key => $value) {
                 if (stristr($key, 'checkbox')) {
+                    debug($key);
                     $item_checkbox = explode('_', $key);
                     array_push($attibutes_items, $item_checkbox[2]);
                     array_push($attributes_names, $item_checkbox[1]);
@@ -116,6 +121,8 @@ class CategoriesController extends AppController
             $products_attributes = [];        
 
             if (!empty($attibutes_items) AND !empty($attributes_names)) {
+                debug($attibutes_items);
+                debug($attributes_names);
             $products_attributes = $this->AttributesProducts
                                         ->find()
                                         ->select(['product_id'])
@@ -128,8 +135,8 @@ class CategoriesController extends AppController
                                         ->find()
                                         ->contain(['Actions','Discounts'])
                                         ->where(['category_id' => $category->id])
-                                        ->where(['price * 30 >=' => $this->request->getData('start_price')])
-                                        ->where(['price * 30 <=' => $this->request->getData('end_price')]);
+                                        ->where(['price * 30 >=' => $this->request['?']['start_price']])
+                                        ->where(['price * 30 <=' => $this->request['?']['end_price']]);
 
             if (!empty($products_attributes)) {
                 $query_for_products = $query_for_products->where(['id IN ' => array_column($products_attributes,'product_id')]);
@@ -138,20 +145,43 @@ class CategoriesController extends AppController
              if (!empty($producers)) {
                 $query_for_products = $query_for_products->where(['producer_id  IN ' => $producers]);
             }
+            $this->paginate = [
+                'limit' => $this->request['?']['count_display']
+            ];
+
+            if ($this->request['?']['sort_by'] == "За спаданням ціни") {
+                $products = $this->Paginate($query_for_products->order('price DESC'))->toArray();
+            }
+
+            if ($this->request['?']['sort_by'] == "За зростанням ціни") {
+                $products = $this->Paginate($query_for_products->order('price ASC'))->toArray();
+            }
+
+            if ($this->request['?']['sort_by'] == "Акційні") {
+                $products_actions = $this->ActionsProducts->find()->toArray();
+                $id_products_actions = array_column($products_actions, 'products_id');
+                
+                $this->set('actions', true);
+                $products = $this->Paginate($query_for_products->where(['id IN ' => $id_products_actions]))
+                ->toArray();
+            }
+            //debug($products);
 
             $products = $this->Paginate($query_for_products)->toArray();
 
           $data = $this->request->getData();
-          $selected_values = $this->request->getData();
+          $selected_values = $this->request['?'];
         //  debug($attibutes_items);
 
           
 
-          $min_value  = $this->request->getData('start_price');
-          $max_value  = $this->request->getData('end_price');
+          $min_value  = $this->request['?']['start_price'];
+          $max_value  = $this->request['?']['end_price'];
           $this->set('min_price', $min_value);
           $this->set('max_price', $max_value);
           $this->set('selected_values', $selected_values);
+          $this->set('count_display', $this->request['?']['count_display']);
+           $this->set('sort_by', $this->request['?']['sort_by']);
         }
         else {
         $this->set('selected_values', $selected_values);

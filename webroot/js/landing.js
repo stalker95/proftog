@@ -213,5 +213,22 @@ $(".sales_categories_item").click(function() {
 
 });
 
+$(".filter_elements_items_item_close").click(function() {
+   
+   $(this).toggleClass('filter_elements_items_item_close_closed');
+
+   if ($(this).hasClass('filter_elements_items_item_close_closed')) {
+     $(this).find('.fa').removeClass('fa-plus');
+     $(this).find('.fa').addClass('fa-minus');
+
+   }
+   else {
+     $(this).find('.fa').removeClass('fa-minus');
+     $(this).find('.fa').addClass('fa-plus');
+   }
+   
+   $(this).parent().parent().find('.filter_elements_items_item_bottom').slideToggle();
+});
+
 });
 

@@ -31,7 +31,8 @@ class ProductsController extends AppController
     public function view($slug = null)
     {
 
-        $product = $this->Products->find()->contain(['AttributesProducts','Categories','Rewiev'])->where(['Products.slug' => $slug])->first();
+        $product = $this->Products->find()->contain(['AttributesProducts','Categories','Rewiev','Discounts'])->where(['Products.slug' => $slug])->first();
+
 
          
         $attributes_products = $this->AttributesProducts->find()->contain(['AttributesItems'])->where(['product_id' => $product->id])->toArray();

@@ -103,7 +103,7 @@
             </div>
             <div class="playlist__managment--item__right">
               <div class="playlist--item--sub">
-                  <?=  $this->Form->control('page_description',array('label' => 'First Name','type'=>'textarea','class'=>'form-control'));?>    
+                  <?=  $this->Form->control('page_description',array('label' => 'First Name','type'=>'textarea','class'=>'form-control','required'=>false));?>    
               </div>
             </div>
         </div>      
@@ -114,7 +114,7 @@
             </div>
             <div class="playlist__managment--item__right">
               <div class="playlist--item--sub">
-                  <?=  $this->Form->control('keywords',array('label' => 'First Name','type'=>'textarea','class'=>'form-control'));?>    
+                  <?=  $this->Form->control('keywords',array('label' => 'First Name','type'=>'textarea','class'=>'form-control','required' => false));?>    
               </div>
             </div>
         </div>
@@ -150,13 +150,13 @@
               <div class="choose_currency">
                 <div class="choose_currency_title"><p>Виберіть валюту</p></div>
                 <label for="first_currency">Гривня
-                  <input type="radio" name="currency_id" value="1" checked="checked">
+                  <input type="radio" name="currency_id" value="1" checked="checked" class="change__currency">
                 </label>
                 <label for="first_currency">Євро
-                  <input type="radio" name="currency_id" value="2">
+                  <input type="radio" name="currency_id" value="2" class="change__currency">
                 </label>
                 <label for="first_currency">Доллари
-                  <input type="radio" name="currency_id" value="3">
+                  <input type="radio" name="currency_id" value="3" class="change__currency">
                 </label>
               </div>
             </div>
@@ -209,7 +209,7 @@
                <div class="discounts_container">
                  <table>
                    <thead>
-                     <th>Ціна</th>
+                     <th>Ціна, <span class="selected_currency">Гривні</span></th>
                      <th>Початок знижки</th>
                      <th>Кінець знижки</th>
                      <th>Дія</th>
@@ -575,6 +575,22 @@ $(document).ready(function() {
 
 $('body').on('click', ".delete_discount", function() {
    $(this).parent().parent().remove();
+});
+
+
+$(".change__currency").change(function() {
+  
+  var currency_value = "";
+  if ($(this).val() == 1) {
+    currency_value = "Гривні";
+  } 
+  if ($(this).val() == 2 ) {
+    currency_value = "Євро";
+  }
+  if ($(this).val() == 3 ) {
+    currency_value = "Доллари";
+}
+ $(".selected_currency").text(currency_value);
 });
 
 });

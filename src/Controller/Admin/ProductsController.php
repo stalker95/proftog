@@ -89,6 +89,9 @@ class ProductsController extends AppController
                 $uploadFile = $uploadPath.$fileName;
 
             $product = $this->Products->patchEntity($product, $this->request->getData());
+            $product->slug = str_replace(" ", "-", $product->slug);
+            $product->slug = str_replace(" ", "-", $this->request->getData('slug'));
+            $product->slug = strtolower($product->slug);
             $product->image = $fileName;
             $product->status = 0;
 
@@ -101,7 +104,8 @@ class ProductsController extends AppController
                 $discounts_price = $this->request->getData('discount_price');
                 $discounts_start_date = $this->request->getData('date_begin');
                 $discounts_end_date = $this->request->getData('date_end');
-
+              
+              if (!empty($discounts_price)) {
                 foreach ($discounts_price as $key => $value) {
                     $discounts = $this->Discounts->newEntity();
                     $discounts->price = $value;
@@ -111,6 +115,7 @@ class ProductsController extends AppController
 
                     $this->Discounts->save($discounts);
                 }
+              }
 
     $product->saveOptions($this->request->getData(), $product->id);
     $product->saveAttributes($this->request->getData('attributes'), $this->request->getData('attributes_values'), $product->id);
@@ -185,6 +190,11 @@ class ProductsController extends AppController
            $discounts_price = $this->request->getData('discount_price');
                 $discounts_start_date = $this->request->getData('date_begin');
                 $discounts_end_date = $this->request->getData('date_end');
+
+                $product->slug = str_replace(" ", "-", $product->slug);
+            $product->slug = str_replace(" ", "-", $this->request->getData('slug'));
+            $product->slug = strtolower($product->slug);
+            
             if ($this->Products->save($product)) {
                   $product->saveOptions($this->request->getData(), $product->id);
                   $product->saveAttributes($this->request->getData('attributes'), $this->request->getData('attributes_values'), $product->id);

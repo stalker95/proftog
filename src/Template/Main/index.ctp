@@ -113,21 +113,7 @@
 						<img src="<?= $this->Url->build('/products/'.$value['product']['image'], ['fullBase' => true]) ?> " alt="">
 					</a>
 					<div class="propose_slider_item_stars">
-						<div class="product-star-item">
-							<img src="<?= $this->Url->build('/img/iconfinder_star_yellow.svg', ['fullBase' => true]) ?> " alt=""> 	
-						</div>
-						<div class="product-star-item">
-							<img src="<?= $this->Url->build('/img/iconfinder_star_yellow.svg', ['fullBase' => true]) ?> " alt=""> 	
-						</div>
-						<div class="product-star-item">
-							<img src="<?= $this->Url->build('/img/iconfinder_star_yellow.svg', ['fullBase' => true]) ?> " alt=""> 	
-						</div>
-						<div class="product-star-item">
-							<img src="<?= $this->Url->build('/img/iconfinder_star_yellow.svg', ['fullBase' => true]) ?> " alt=""> 	
-						</div>
-						<div class="product-star-item">
-							<img src="<?= $this->Url->build('/img/gray_star.svg', ['fullBase' => true]) ?> " alt=""> 	
-						</div>
+						<?= $this->element('rating_product', array("item" => $value['product'])); ?>
 					</div>
 					<div class="propose_slider_item_title">
 						<p><?= $value['product']['title'] ?></p>
@@ -215,21 +201,7 @@
 						<img src="<?= $this->Url->build('/products/'.$item['image'], ['fullBase' => true]) ?> " alt="">
 					</a>
 					<div class="propose_slider_item_stars">
-						<div class="product-star-item">
-							<img src="<?= $this->Url->build('/img/iconfinder_star_yellow.svg', ['fullBase' => true]) ?> " alt=""> 	
-						</div>
-						<div class="product-star-item">
-							<img src="<?= $this->Url->build('/img/iconfinder_star_yellow.svg', ['fullBase' => true]) ?> " alt=""> 	
-						</div>
-						<div class="product-star-item">
-							<img src="<?= $this->Url->build('/img/iconfinder_star_yellow.svg', ['fullBase' => true]) ?> " alt=""> 	
-						</div>
-						<div class="product-star-item">
-							<img src="<?= $this->Url->build('/img/iconfinder_star_yellow.svg', ['fullBase' => true]) ?> " alt=""> 	
-						</div>
-						<div class="product-star-item">
-							<img src="<?= $this->Url->build('/img/gray_star.svg', ['fullBase' => true]) ?> " alt=""> 	
-						</div>
+						<?= $this->element('rating_product', array("item" => $item)); ?>
 					</div>
 					<div class="propose_slider_item_title">
 						<p><?= $item['title'] ?></p>
