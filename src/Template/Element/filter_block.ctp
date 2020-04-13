@@ -28,16 +28,25 @@
  		 			
           <div class="filter_elements_items_item_bottom" style="display: none;">
  		 			<?php 	foreach ($value as $keys => $item):  ?>
-                    <input id="checkbox_<?= $item['name'] ?>_<?= $item['attribute_id'] ?>" 
-                           name="checkbox_<?= $item['name'] ?>_<?= $item['attribute_id'] ?>" 
-                           type="checkbox" 
-                           <?php if (isset($selected_values["checkbox_".$item['name']."_".$item['attribute_id'].""])): ?>
+            <?php $checkbox_name = str_replace('.', '--', $item['name']);  
+            $checkbox_name = str_replace(' ', '-', $checkbox_name);
+             ?>
+                    <input id="checkbox_<?php echo str_replace(' ', '-', $checkbox_name) ?>_<?= $item['attribute_id'] ?>" 
+                           name="checkbox_<?php echo str_replace(' ', '-', $checkbox_name) ?>_<?= $item['attribute_id'] ?>" 
+                           type="checkbox"
+
+                            <?php
+                           if (isset($selected_values["checkbox_".$checkbox_name."_".$item['attribute_id'].""])): ?>
                            	checked
                            <?php endif; ?>
                            >
- 		 			<label for="checkbox_<?= $item['name'] ?>_<?= $item['attribute_id'] ?>"><?= $item['name'] ?> (<?= $item['count'] ?>)</label>
+ 		 			<label for="checkbox_<?php echo str_replace(' ', '-', $checkbox_name) ?>_<?= $item['attribute_id'] ?>"><?= $item['name'] ?> (<?= $item['count'] ?>)</label>
  		 			<?php 	endforeach; ?>
+          <div class="filter_button">
+            <button class="button_filter">Застосувати фільтр</button>
           </div>
+          </div>
+          
  		 		</div>
  		 	<?php endif;	endforeach; ?>
 
@@ -53,6 +62,9 @@
                            >
  		 			<label for="producer_<?= $item['name'] ?>_<?= $item['id'] ?>"><?= $item['name'] ?> (<?= $item['count'] ?>)</label>
  		 			<?php 	endforeach; ?>
+          <div class="filter_button">
+            <button class="button_filter">Застосувати фільтр</button>
+          </div>
  		 		</div>
                <!--<div class="filter_elements_items_item">
  		 		<p class="filter_elements_items_item_title">Потужність</p>

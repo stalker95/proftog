@@ -95,6 +95,7 @@ class CategoriesController extends AppController
         $id_products = array_column($products, 'id');
        
         $attributes_to_view = $attributes_items->getListAttributesBeforeFilter($id);
+       // debug($attributes_to_view);
 
         if ($this->request->is(['get'])) {
             //    die();
@@ -106,11 +107,14 @@ class CategoriesController extends AppController
             $attributes_names = [];
             $producers = [];
             foreach ($this->request['?'] as $key => $value) {
+              //  debug($key);
                 if (stristr($key, 'checkbox')) {
-                    debug($key);
+                    
                     $item_checkbox = explode('_', $key);
+                    $item_checkbox = str_replace('--', '.', $item_checkbox);
+                   // debug($item_checkbox);
                     array_push($attibutes_items, $item_checkbox[2]);
-                    array_push($attributes_names, $item_checkbox[1]);
+                    array_push($attributes_names, str_replace('-', ' ', $item_checkbox[1]));
                 }
 
                 if (stristr($key, 'producer')) {
@@ -121,19 +125,27 @@ class CategoriesController extends AppController
             $products_attributes = [];        
 
             if (!empty($attibutes_items) AND !empty($attributes_names)) {
-                debug($attibutes_items);
-                debug($attributes_names);
+              //  debug($attibutes_items);
+              //  debug($attributes_names);
             $products_attributes = $this->AttributesProducts
                                         ->find()
                                         ->select(['product_id'])
                                         ->where(['attribute_id IN' => $attibutes_items])
                                         ->where(['value IN' => $attributes_names])
                                         ->toArray();
+                                       // debug($products_attributes);
+            $products_attributes_before_filter_first = array_column($products_attributes,'product_id');
+            $products_attributes_before_filter_second = array_column($products_attributes,'product_id');
+
+            $same_arrays  = array_intersect_assoc($products_attributes_before_filter_first,$products_attributes_before_filter_second);
+            debug($same_arrays);
             }
+
+            
             
             $query_for_products = $this->Products
                                         ->find()
-                                        ->contain(['Actions','Discounts'])
+                                        ->contain(['Actions','Discounts','Rewiev'])
                                         ->where(['category_id' => $category->id])
                                         ->where(['price * 30 >=' => $this->request['?']['start_price']])
                                         ->where(['price * 30 <=' => $this->request['?']['end_price']]);

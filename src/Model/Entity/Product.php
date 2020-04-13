@@ -50,6 +50,7 @@ class Product extends Entity
         'status' => true,
         'image' => true,
         'category_id' => true,
+        'in_orders' => true,
         'category' => true
     ];
 
@@ -108,7 +109,7 @@ class Product extends Entity
                 $attribute_product = $this->AttributesProducts->newEntity();
                 $attribute_product->product_id = $product_id;
                 $attribute_product->attribute_id = (int)$value;
-                $attribute_product->value = $attributes_values[$key];
+                $attribute_product->value = trim($attributes_values[$key]);
                 if (!empty($attributes_values[$key])) {
                 $this->AttributesProducts->save($attribute_product);
               }

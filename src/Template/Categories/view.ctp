@@ -48,7 +48,7 @@
 	          	</div>
 	          	<div class="products_sort">
 	          		<div class="sort_by">
-	          			Сортувати за 
+	          			<!--Сортувати за 
 	          			<select name="sort_by" id="sort_by">
 	          				<? if (isset($sort_by)): ?>
 	          					<option value="<?= $sort_by ?>"><?= $sort_by ?></option>
@@ -57,7 +57,20 @@
 	          				<option value="За спаданням ціни">За спаданням ціни </option>
 	          				<option value="За зростанням ціни">За зростанням ціни </option>
 	          				<option value="Акційні">Акційні</option>
-	          			</select>
+	          			</select> -->
+	          			<div class="center">
+	          				<p class="sorter_title">Сортувати</p>
+  								<select name="sort_by" id="sort_by" class="custom-select custom-select-two sources"
+  								 <? if (isset($sort_by)){ ?> placeholder="<?= $sort_by ?>"  
+  								 <?php 	} else { ?>
+  								 	placeholder="За рейтингом"
+  								 <?php } ?>>
+    								<option value="За рейтингом">За рейтингом</option>
+	          				<option value="За спаданням ціни">За спаданням ціни</option>
+	          				<option value="За зростанням ціни">За зростанням ціни</option>
+	          				<option value="Акційні">Акційні</option>
+ 								 </select>
+						</div>
 	          		</div>
 	          		<div class="products_show">
 	          			Показати 
@@ -90,8 +103,11 @@
 						<p>Код товару <span class="item_kod"><?= $value['cod'] ?></span></p>
 					</div>
 					<div class="propose_slider_item_status">
-						<?php if ($value['amoun'] > 0) { ?>
+						<?php if ($value['amount'] > 0) { ?>
 						<p class="on_sklad">На складі</p>
+					<?php } ?>
+					<?php if ($value['in_orders'] == true) { ?>
+						<p class="in_orders">Під замовлення</p>
 					<?php } ?>
 					</div>
 					<div class="propose_slider_item_price">
@@ -103,18 +119,19 @@
 
 
 	          	</div>
-	          </div>
-	           <?php
+	          	 <?php
               $params = $this->Paginator->params();
               if ($params['pageCount'] > 1): ?>
                 <ul class="pagination pagination-sm">
-                    <?= $this->Paginator->first('<< ' . __('Перша')) ?>
-                    <?= $this->Paginator->prev('< ' . __('Попередня')) ?>
+                    <?= $this->Paginator->first('<< ') ?>
+                    <?= $this->Paginator->prev('< ' ) ?>
                     <?= $this->Paginator->numbers() ?>
-                    <?= $this->Paginator->next(__('Далі') . ' >') ?>
-                <?= $this->Paginator->last(__('Остання') . ' >>') ?>
+                    <?= $this->Paginator->next(' >') ?>
+                <?= $this->Paginator->last(' >>') ?>
                 </ul>
           <?php endif; ?>
+	          </div>
+	          
 			</div>
 		</div>
 		     <?=   $this->Form->end() ?>

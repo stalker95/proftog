@@ -44,10 +44,21 @@
 							<img src="<?= $this->Url->build('/img/gray_star.svg', ['fullBase' => true]) ?> " alt=""> 	
 						</div>
 					</div>
+					<div class="propose_slider_item_kod">
+						<p>Код товару <span class="item_kod"><?= $product->cod ?></span></p>
+					</div>
 					<div class="product_price">
 						
 							<p><?= $this->element('price_product', array("item" => $product)); ?> </p>
 						
+					</div>
+					<div class="product_status">
+						<?php 	if ($product->amount > 0 ) { ?>
+							<p class="on_sklad">На складі</p>
+						<?php 	} ?>
+						<?php if ($product->in_orders == true) { ?>
+						<p class="in_orders">Під замовлення</p>
+					<?php } ?>
 					</div>
 					<div class="product_description">
 						<?php echo htmlspecialchars_decode($product->description) ?>
