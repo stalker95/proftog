@@ -10,7 +10,7 @@ use App\Controller\AppController;
  *
  * @method \App\Model\Entity\Seo[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
-class SeoController extends AppController
+class SeosController extends AppController
 {
     public function initialize()
      {
@@ -28,11 +28,13 @@ class SeoController extends AppController
      *
      * @return \Cake\Http\Response|void
      */
-    public function edit()
+    public function index()
     {
         $seo = $this->Seo->find('all')->first();
 
         if ($this->request->is('post')) {
+            debug('regerg');
+
             $seo = $this->Seo->patchEntity($seo, $this->request->getData());
             if ($this->Seo->save($seo)) {
                 $this->Flash->admin_success(__('Налаштування збережено'));
@@ -45,6 +47,21 @@ class SeoController extends AppController
         $this->nav_['seo'] = true;
 
         $this->set(compact('seo'));
+    }
+
+    public function edit($id = null)
+    {
+        $this->autoRender = false;
+       $seo = $this->Seo->find('all')->first();
+
+            $seo = $this->Seo->patchEntity($seo, $this->request->getData());
+            if ($this->Seo->save($seo)) {
+                $this->Flash->admin_success(__('Налаштування збережено'));
+
+                return $this->redirect(['action' => 'index']);
+            }
+            $this->Flash->admin_error(__('Налаштування не збережено'));
+        
     }
 
   

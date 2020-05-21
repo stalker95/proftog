@@ -37,6 +37,7 @@ class AttributesItemsController extends AppController
             'contain' => ['ParentAttributesItems']
         ];
         $attributesItems = $this->paginate($this->AttributesItems->find()->order('AttributesItems.id DESC'));
+         $this->nav_['attributes_item'] = true; 
 
         $this->set(compact('attributesItems'));
     }
@@ -78,6 +79,7 @@ class AttributesItemsController extends AppController
             }
             $this->Flash->admin_error(__('Атрибут не може бути збережений. Спробуйте пізніше'));
         }
+        $this->nav_['attributes_item'] = true; 
         $attributesList = $this->Attributes->find('all')->toArray();
         $this->set(compact('attributesItem', 'attributesList'));
     }

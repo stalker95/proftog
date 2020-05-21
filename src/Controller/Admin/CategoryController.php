@@ -196,6 +196,7 @@ class CategoryController   extends AppController
         $this->request->allowMethod(['post', 'delete']);
         $category = $this->Categories->get($id);
         if ($this->Categories->delete($category)) {
+            if ($category->picture != "") {
            $mm_dir = new Folder(WWW_ROOT  . DS . 'categories', true, 0777);
             $target_path = $mm_dir->pwd() . DS;
             $oldfile = $target_path . $category->picture;
@@ -203,6 +204,7 @@ class CategoryController   extends AppController
             if (file_exists($oldfile)) {
                 unlink($oldfile);
              }
+         }
             $this->Flash->admin_success(__('Категорію видалено'));
         } else {
             $this->Flash->admin_error(__('Категорію не видалено . Спробуйте ще раз'));

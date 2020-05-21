@@ -29,7 +29,7 @@ class OptionsController extends AppController
     public function index()
     {
         $options = $this->paginate($this->Options->find()->order('Options.position DESC'))->toArray();
-        $this->nav_['options'] = true;
+        $this->nav_['options_group'] = true;
         $this->set(compact('options'));
     }
 
@@ -68,7 +68,7 @@ class OptionsController extends AppController
             }
             $this->Flash->admin_error(__('Опцію не додано. Спробуйте пізніше'));
         }
-        $this->nav_['options'] = true;
+        $this->nav_['options_group'] = true;
         $this->set(compact('option'));
     }
 
@@ -97,7 +97,7 @@ class OptionsController extends AppController
             }
             $this->Flash->admin_error(__('Зміни не збережено'));
         }
-        $this->nav_['options'] = true;
+        $this->nav_['options_group'] = true;
         $this->set(compact('option','options_items'));
     }
 

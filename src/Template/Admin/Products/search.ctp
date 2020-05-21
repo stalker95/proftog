@@ -1,42 +1,56 @@
-    <!-- Main content -->
-    <section class="content">
-      <div class="row">
-        <div class="col-xs-12">
-          <h1 class="blog__title">Товари</h1>
-          <div class="box">
-            
-            <!-- /.box-header -->
-            <div class="box-body table-responsive no-padding">
-           <div class="box-header">
-            <div class="create__new__user">
-               <button class="btn delete_form_checked  btn-dangeres save__changes__form__playlist" style="display: none;margin-top: 0px;
-    background: #ffeaef;
-    margin-top: 0px;
-    color: red;
-    padding: 6px 30px;"  data-toggle="modal" data-target="#mediaGallery" >
+ <section class="content white_background products_container">
+  <div class="row">
+   <div class="col-xs-12">
+     <div class="products_container_top">
+       <p class="products_container_title">Результати пошуку</p>
+       <div class="product_container_buttons">
+         
+         <div class="create__new__user">
+            <button class="btn delete_form_checked  btn-dangeres save__changes__form__playlist copy_checked" data-toggle="modal" data-target="#mediaGallery" >
+                     <i class="fa fa-copy"></i>
+          </button>
+           <button class="btn delete_form_checked  btn-dangeres save__changes__form__playlist" data-toggle="modal" data-target="#mediaGallery" >
+                     <i class="fa fa-trash"></i>
+          </button>
+         </div>
+         
+       </div>
+     </div>
+     <div class="box">
+      <div class="box-body table-responsive no-padding">
+       <div class="box-header">
+        <div class="create__new__user">
+         <!-- <button class="btn delete_form_checked  btn-dangeres save__changes__form__playlist" data-toggle="modal" data-target="#mediaGallery" >
                      Delete
-                   </button>
-              <?php   echo  $this->Html->link('Додати',['action'=>'add'],['class'=>'btn btn-primary create__new__user']); ?>
-              <div class="search-form-find">
-                <?= $this->Form->create('Search',['url'   => array(
+          </button> -->
+          <!--<?php   echo  $this->Html->link('Додати ',['action'=>'add'],['class'=>'btn btn-primary create__new__user']); ?> -->
+           <?php /*   <div class="search-form-find">
+               <?= $this->Form->create('Search',['url'   => array(
                'controller' => 'products','action' => 'search'
                  )]);
                 echo  $this->Form->control('name',array('label' => false,'class'=>'form-control','min'=>6));
                 echo  $this->Form->end(); 
              ?>
-               <p class="search-form-find-title">Товари</p>
-            </div>
+               <p class="search-form-find-title"> Пошук </p>
+            </div> */ ?>
             </div>
               
            </div>
-
               <table class="table table-bordered table-striped" id="example1">
                  <thead>
                 <tr>
-                  <th><input type="checkbox" id="delete-all"></th>
-                  <th>ID</th>
-                  <th>Name</th>
-                  <th>Action</th>
+                  <th class="first-check" >
+                    <label class="custom-checkbox">
+                          <input type="checkbox" id="delete-all">
+                          <span class="checkmark"></span>
+                    </label>
+                  </th>
+                  <th>Зображення</th>
+                  <th>Найменування товару </th>
+                  <th>Кількість</th>
+                  <th>Категорія</th>
+                  <th>Ціна на сайті</th>
+                  <th>Дії</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -48,16 +62,20 @@
                           <span class="checkmark"></span>
                     </label>
                     </td>
-                    <td><?= $product['id'] ?></td>
-                    <td><?= $product['title'] ?></td>
                     <td>
-                      <img style="max-width: 100px; max-height: 100px;" src="<?= $this->Url->build('/products/'.$product->image, ['fullBase' => true]) ?>" alt="" class="img-fluid">
+                      <img style="max-width: 75px; max-height: 70px;" src="<?= $this->Url->build('/products/'.$product->image, ['fullBase' => true]) ?>" alt="" class="img-fluid">
                     </td>
+                    <td><?= $product['title'] ?></td>
+                    <td><?= $product['amount'] ?></td>
+                    
                     <td><?= $product->category->name ?></td>
-                    <td><?= $product->price ?></td>
+                    <td>
+                      <span class="translate_price_two" data-currency="<?= $product->currency_id ?>"><?= $product->price ?></span>
+                   грн</td>
                     <td class='table__flex'>
                       <?php
                         echo   $this->Html->link('<i class="fa fa-pencil"></i>', ['action' => 'edit', $product->id], ['class'=>'btn change__user','escape' => false]);
+                         echo   $this->Html->link('<i class="fa fa-copy"></i>', ['action' => 'copy-element', $product->id], ['class'=>'btn copy_product','escape' => false]);
                         echo  $this->Form->postLink('<i class="fa fa-trash"></i>', ['action' => 'delete', $product->id], ['class'=>'btn  delete__user','escape' => false,'confirm' => __('Ви справді хочете видалити категорію # {0}?', $product->id)]);  ?>
                     </td>
                     </tr>
@@ -65,14 +83,23 @@
               </tbody>
               </table>
             </div>
-             <!--<?php  echo $this->Paginator->numbers(); echo $this->Paginator->counter(); ?> -->
-
-            <!-- /.box-body -->
+             <?php
+              $params = $this->Paginator->params();
+              if (isset($params['pageCount'])){
+              if ($params['pageCount'] > 1): ?>
+                <ul class="pagination pagination-sm">
+                    <?= $this->Paginator->first('<< ' . __('first')) ?>
+                    <?= $this->Paginator->prev('< ' . __('previous')) ?>
+                    <?= $this->Paginator->numbers() ?>
+                    <?= $this->Paginator->next(__('next') . ' >') ?>
+                <?= $this->Paginator->last(__('last') . ' >>') ?>
+                </ul>
+          <?php  endif;  } ?>
           </div>
-          <!-- /.box -->
         </div>
       </div>
-                <div class="modal fade" id="mediaGallery" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabels" aria-hidden="true">
+
+<div class="modal fade" id="mediaGallery" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabels" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -82,16 +109,14 @@
       </div>
       <div class="modal-body">
         <div class="gallery-box form__inline" style="text-align: center;">
-          <h2 style="text-align: center;">Do you want to delete categories ?</h2>
-         
-                   <button class="close_modal_form close__modal" >No</button>
-                    <?= $this->Form->create('Delete',['url'   => array(
-               'controller' => 'category','action' => 'deletechecked'
+          <h2 style="text-align: center;">Ви хочете видалити товари ?</h2>
+          <button class="close_modal_form close__modal" >Ні</button>
+           <?= $this->Form->create('Delete',['url'   => array(
+               'controller' => 'products','action' => 'deletechecked'
            )])  ?>
-                   <div class="delete_form_checked_inputs"> </div>
-                   <?=  $this->Form->submit('Yes ',['class'=>'btn  btn-dangeres save__changes__form__playlist','style'=>'margin-top:0px;margin-left:auto;margin-right:auto;']); ?>
-                  
-                   <?=   $this->Form->end() ?>
+           <div class="delete_form_checked_inputs"> </div>
+           <?=  $this->Form->submit('Так ',['class'=>'btn  btn-dangeres save__changes__form__playlist','style'=>'margin-top:0px;margin-left:auto;margin-right:auto;']); ?>
+           <?=   $this->Form->end() ?>
         </div>
       </div>
     </div>
@@ -103,17 +128,6 @@
 <?php $this->Html->script('admin/jquery.dataTables.min.js', ['block' => 'scriptBottom']); ?>
 <?php $this->Html->script('admin/dataTables.bootstrap.min.js', ['block' => 'scriptBottom']); ?>
 <?php echo $this->Html->scriptStart(['block' => true]); ?>
-  
-  $(function () {
-   
-    $('#example1').DataTable({
-      'paging'      : true,
-      'lengthChange': false,
-      'searching'   : false,
-      'ordering'    : false,
-      'info'        : false,
-      'autoWidth'   : false
-    })
-  })
+ 
 <?php echo $this->Html->scriptEnd(); ?>
 </script>

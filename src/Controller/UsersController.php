@@ -19,7 +19,7 @@ class UsersController extends AppController
     {
         
         parent::initialize();
-        $this->Auth->allow(['forgot','resetpassword','logout','login','registerAjax','authAjax']);
+        $this->Auth->allow(['forgot','resetpassword','logout','login','registerAjax','authAjax', 'remember', 'rememberPassword']);
         $this->nav_['users'] = true;
     }
 
@@ -213,14 +213,14 @@ class UsersController extends AppController
 
         $this->autoRender = false;
         if ($email == null OR $email == "") {
-            $this->response->body(json_encode(array('status'=>false, 'message' => 'Неверный логин или пароль, попробуйте еще раз')));
+            $this->response->body(json_encode(array('status'=>false, 'message' => 'Неправильний логін або пароль. Спробуйте ще раз')));
              return $this->response; 
         }
 
         $_user = $this->Users->find()->where(['mail' => $email])->first();
         
         if ($_user == false) {
-            $this->response->body(json_encode(array('status'=>false, 'message' => 'Неверный логин или пароль, попробуйте еще раз')));
+            $this->response->body(json_encode(array('status'=>false, 'message' => 'Неправильний логін або пароль. Спробуйте ще раз')));
             return $this->response;
         }
 
@@ -229,12 +229,86 @@ class UsersController extends AppController
         }
         
         if ($_user == false) {
-            $this->response->body(json_encode(array('status'=>false, 'message' => 'Неверный логин или пароль, попробуйте еще раз')));
+            $this->response->body(json_encode(array('status'=>false, 'message' => 'Неправильний логін або пароль. Спробуйте ще раз')));
             return $this->response;
         }
 
             $this->Auth->setUser($_user);
-             $this->response->body(json_encode(array('status'=>true, 'message' => 'Неверный логин или пароль, попробуйте еще раз')));
+             $this->response->body(json_encode(array('status'=>true, 'message' => 'Неправильний логін або пароль. Спробуйте ще раз')));
             return $this->response;
     }
+
+    public function changePassword()
+    {
+      $this->autoRender = false;
+       $this->RequestHandler->renderAs($this, 'json');  
+       $this->response->disableCache();
+       $this->response->type('application/json');
+       $data = $this->request->getData();
+
+       $id = $this->Auth->user('id');
+
+       $_user = $this->Users->get($id);
+      
+      if ((new \Cake\Auth\DefaultPasswordHasher)->check($data['old_password'], $_user->password) == false) {
+
+        $this->response->body(json_encode(array('status'=>false, 'message' => 'Неправильний логін або пароль. Спробуйте ще раз')));
+        return $this->response;
+
+      }
+
+      if (strlen($data['new_password']) < 6 OR strlen($data['confirm_new_password']) < 6) {
+        $this->response->body(json_encode(array('status'=>false, 'message' => 'Паролі менше шести символів')));
+        return $this->response;
+      }
+      
+      if ($data['new_password'] !=  $data['confirm_new_password'] ) {
+
+        $this->response->body(json_encode(array('status'=>false, 'message' => 'Паролі не співпадають')));
+        return $this->response;
+
+      }
+      $_user->password = $data['new_password'];
+
+      $this->Users->save($_user);
+      $this->response->body(json_encode(array('status' => true, 'message' => 'Пароль змінено')));
+        return $this->response;
+    }
+
+    public function remember()
+    {
+
+    }
+
+    public function rememberPassword()
+    {
+      $this->loadModel('Users');
+      $this->autoRender = false;
+
+       $this->RequestHandler->renderAs($this, 'json');  
+       $this->response->disableCache();
+       $this->response->type('application/json'); 
+
+       $data = $this->request->getData();
+
+       $_user = $this->Users->find()->where(['mail' => $data['email']])->first();
+
+       if (empty($_user)) {
+        $this->response->body(json_encode(array('status' => false, 'message' => 'Користувача за заданий email адресом не знайдено. ')));
+        return $this->response;
+       } else {
+          
+         $pass  = md5(md5(substr(md5(time()), 0, 10)).time());
+         $_user->password = $pass;
+         $this->Users->save($_user);
+         $subject = "Новий пароль в інтернет магазині Профторг";
+            $text = "Ваш новий пароль : ".$pass;
+            $this->sendEmail($_user->mail, $subject, $text);
+
+            $this->response->body(json_encode(array('status' => true, 'message' => 'Новий пароль надіслано на пошту. ')));
+        return $this->response;
+
+       }
+    }
+
 }

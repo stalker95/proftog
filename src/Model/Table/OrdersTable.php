@@ -9,6 +9,10 @@ use Cake\Validation\Validator;
 /**
  * Orders Model
  *
+ * @property |\Cake\ORM\Association\BelongsTo $Users
+ * @property |\Cake\ORM\Association\BelongsTo $Deliveries
+ * @property |\Cake\ORM\Association\BelongsTo $Oplatas
+ *
  * @method \App\Model\Entity\Order get($primaryKey, $options = [])
  * @method \App\Model\Entity\Order newEntity($data = null, array $options = [])
  * @method \App\Model\Entity\Order[] newEntities(array $data, array $options = [])
@@ -17,6 +21,8 @@ use Cake\Validation\Validator;
  * @method \App\Model\Entity\Order patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
  * @method \App\Model\Entity\Order[] patchEntities($entities, array $data, array $options = [])
  * @method \App\Model\Entity\Order findOrCreate($search, callable $callback = null, $options = [])
+ *
+ * @mixin \Cake\ORM\Behavior\TimestampBehavior
  */
 class OrdersTable extends Table
 {
@@ -33,6 +39,15 @@ class OrdersTable extends Table
         $this->setTable('orders');
         $this->setDisplayField('id');
         $this->setPrimaryKey('id');
+
+        $this->addBehavior('Timestamp');
+
+        $this->hasMany('OrdersItems', [
+            'foreignKey' => 'order_id',
+            'joinType' => 'INNER'
+        ]);
+
+        
     }
 
     /**
@@ -48,9 +63,9 @@ class OrdersTable extends Table
             ->allowEmptyString('id', 'create');
 
         $validator
-            ->scalar('username')
-            ->requirePresence('username', 'create')
-            ->allowEmptyString('username', false);
+            ->scalar('firstname')
+            ->requirePresence('firstname', 'create')
+            ->allowEmptyString('firstname', false);
 
         $validator
             ->scalar('phone')
@@ -58,9 +73,19 @@ class OrdersTable extends Table
             ->allowEmptyString('phone', false);
 
         $validator
-            ->scalar('products')
-            ->requirePresence('products', 'create')
-            ->allowEmptyString('products', false);
+            ->email('email')
+            ->requirePresence('email', 'create')
+            ->allowEmptyString('email', false);
+
+        $validator
+            ->scalar('city')
+            ->requirePresence('city', 'create')
+            ->allowEmptyString('city', false);
+
+        $validator
+            ->scalar('lastname')
+            ->requirePresence('lastname', 'create')
+            ->allowEmptyString('lastname', false);
 
         return $validator;
     }
@@ -74,7 +99,10 @@ class OrdersTable extends Table
      */
     public function buildRules(RulesChecker $rules)
     {
-        $rules->add($rules->isUnique(['username']));
+        //$rules->add($rules->isUnique(['email']));
+        //$rules->add($rules->existsIn(['user_id'], 'Users'));
+        //$rules->add($rules->existsIn(['delivery_id'], 'Deliveries'));
+        //$rules->add($rules->existsIn(['oplata_id'], 'Oplatas'));
 
         return $rules;
     }

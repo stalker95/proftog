@@ -24,8 +24,12 @@
                 <input type="password" name="password" class="login_input"  required="required">
                 
                 <div class="user_form_checkbox">
-                    <input type="checkbox"> Запаматати мене
+                    <input type="checkbox"> Запамятати мене
                 </div>
+                <div class="user_form_checkbox">
+                  <a href="<?= $this->Url->build(['controller' => 'users','action'    =>  'remember']) ?>">Забули пароль?</a>
+                </div>
+
 
  <button class="login_submit">
                       <svg class="loader_svg" version="1.1" id="loader-1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
@@ -92,14 +96,14 @@
         type: 'POST',
         data: $(this).serialize(),
         success: function(data){ 
-          $(element).parent().parent().find('.hide_submit').css("display",'block');
-          $(element).parent().parent().find(".loader_svg").css('display','none');
+          $(element).parent().find('.hide_submit').css("display",'block');
+          $(element).parent().find(".loader_svg").css('display','none');
 
           if (data.status == "false" ) {
-            $(element).parent().parent().find('.display_message_register').html('<p class="display_message_register_alert btn-danger"><strong>Увага</strong> '+data.message+'</p>');
+            $(element).parent().find('.display_message_register').html('<p class="display_message_register_alert btn-danger"><strong>Увага</strong> '+data.message+'</p>');
           }
            if (data.status == "true" ) {
-            $(element).parent().parent().find('.display_message_register').html('<p class="display_message_register_alert btn-success"><strong>Увага</strong> '+data.message+'</p>');
+            $(element).parent().find('.display_message_register').html('<p class="display_message_register_alert btn-success"><strong>Увага</strong> '+data.message+'</p>');
           }
 
         }

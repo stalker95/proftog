@@ -21,9 +21,10 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
     <?= $this->Html->charset() ?>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>
-        <?= $cakeDescription ?>:
-        <?= $this->fetch('title') ?>
+        <?= $seo->title ?>     
     </title>
+    <meta name="description" content="<?= $seo->description ?>">
+    <meta name="keywords" content="<?= $seo->keywords ?>">
     <?= $this->Html->meta('icon') ?>
     <!--    JQuery  -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -35,12 +36,12 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
   
     <?= $this->Html->css('bootstrap.min.css') ?>
     <?= $this->Html->css('style.css') ?>
-  <?=  $this->Html->script('bootstrap/dist/js/bootstrap.min.js'); ?>
+
     <?= $this->fetch('meta') ?>
     <?= $this->fetch('css') ?>
 </head>
 <body >
-
+<div class="background_grey"></div>
 <?= $this->element('header'); ?>
 
 <?= $this->Flash->render() ?>
@@ -48,11 +49,21 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
 <?= $this->fetch('content') ?>
 
 <?= $this->element('footer'); ?>
-
+<?= $this->element('bascket'); ?>
 <script>
     var currency_url = '<?= $baseUrl ?>';
+    //console.log("erg");
+    <?php  if (isset($_SESSION['cart'])){  ?>
+        var cart = <?= json_encode($_SESSION['cart']); ?>;
+        console.log(cart);
+    <?php   } else { ?>
+        var cart;
+    <?php   }  ?>        
 </script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+
 <?= $this->Html->script('landing.js?v=123'); ?>
+
     <?= $this->fetch('script') ?>
 
 </body>

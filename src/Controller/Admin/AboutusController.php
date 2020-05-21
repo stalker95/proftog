@@ -23,13 +23,13 @@ class AboutusController extends AppController
          if ($this->request->is(['patch', 'post', 'put'])) {
             $aboutus = $this->Aboutus->patchEntity($aboutus, $this->request->getData());
             if ($this->Aboutus->save($aboutus)) {
-                $this->Flash->success(__('Зміни збережено'));
+                $this->Flash->admin_success(__('Зміни збережено'));
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('Зміни не збережено. Спробуйте пізніше'));
+            $this->Flash->admin_error(__('Зміни не збережено. Спробуйте пізніше'));
         }
-        $this->nav_['content'] = true;
+        $this->nav_['aboutus'] = true;
         $this->set(compact('aboutus'));
     }
 

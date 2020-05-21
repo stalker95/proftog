@@ -78,6 +78,14 @@
       </a>
       <!-- Navbar Right Menu -->
       <div class="navbar-custom-menu">
+        <div class="search_product"> 
+          <?= $this->Form->create('',['url'   => array(
+               'controller' => 'products','action' => 'search','method' => 'post'
+           )])  ?>
+           <i class="fa fa-search">  </i>
+           <input type="text" name="name">
+            <?=   $this->Form->end() ?>
+         </div>
         <div class="currency_curs">
           <div class="currency_curs_title">
             курс валют

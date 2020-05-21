@@ -1,3 +1,4 @@
+
 <?php $count = 0; ?>
 <?php foreach ($item['rewiev'] as $key => $value): 
    $count = $count + $value['rating'];

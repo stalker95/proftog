@@ -23,13 +23,13 @@ class RulesController extends AppController
         if ($this->request->is(['patch', 'post', 'put'])) {
             $rules = $this->Rules->patchEntity($rules, $this->request->getData());
             if ($this->Rules->save($rules)) {
-                $this->Flash->success(__('Зміни збережено'));
+                $this->Flash->admin_success(__('Зміни збережено'));
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('Зміни не збережено. Спробуйте пізніше'));
+            $this->Flash->admin_error(__('Зміни не збережено. Спробуйте пізніше'));
         }
-        $this->nav_['content'] = true;
+        $this->nav_['rules'] = true;
         $this->set(compact('rules'));
     }
 

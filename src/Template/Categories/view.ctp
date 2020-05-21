@@ -9,6 +9,16 @@
 			<span> / </span>
 			<a href="<?= $this->Url->build(['controller' => 'categories','action'    =>  'index/'], ['fullBase' => true]) ?>">Категорії</a>
 			<span> / </span>
+
+			<?php if (!empty($category['parent_category']['parent_category'])): ?>
+				<a href="<?= $this->Url->build(['controller' => 'categories','action'    =>  'view/'.$category['parent_category']['parent_category']['slug']]) ?>"><?= $category['parent_category']['parent_category']['name'] ?></a>
+							<span> / </span>
+			<?php endif; ?>
+
+			<?php if (!empty($category['parent_category'])): ?>
+				<a href="<?= $this->Url->build(['controller' => 'categories','action'    =>  'view/'.$category['parent_category']['slug']]) ?>"><?= $category['parent_category']['name'] ?></a>
+							<span> / </span>
+			<?php endif; ?>
 			<a href="<?= $this->Url->build(['controller' => 'categories','action'    =>  'view/'.$category->slug]) ?>"><?= $category->title ?></a>
 		</div>
 	</div>
@@ -19,6 +29,7 @@
 		<div class="row">
 			<div class="col-md-3">
 				<?= $this->element('catalog_categories'); ?>
+				<?php if ($category->parent_id != 0 ): ?>
 				<?= $this->element('filter_block', 
 						   array('max_price'         => $max_price, 
 				      			 'min_price'         => $min_price, 
@@ -29,23 +40,56 @@
 				                 'producers_list'    => $producers_list
 				  ));
 
-				       ?>
+				?>
+			<?php endif; ?>
 			</div>
 			<div class="col-md-9">
 	          <div class="categories_product">
 	          	<div class="categories_product_top clearfix">
+	          		<?php if (strlen($category->image) > 3): ?>
 	          		<div class="categories_product_image">
 	          			<?= $category->image ?>
 	          		</div>
+	          	<?php endif; ?>
 	          		<div class="categories_product_description">
 	          			<div class="categories_product_title">
 	          				<p><?= $category->title ?></p>
 	          			</div>
 	          			<div class="categories_product_description">
-	          				<p><?= $category->desription ?></p>
+	          				<p></p>
+	          				<?php if (strlen($category->desription) > 548){ ?>
+	          				<span class="short_category_description"><?= substr($category->desription, 0, 548);
+	          				echo "<span class='thre_comas'>...</span>"; ?></span>
+	          				<span class="all_description all_description_dispayed"><?= substr($category->desription, 548) ?></span>
+	          				<div class="display_all">Розгорнути <i class="fa fa-caret-down"></i></div>
+	          			<?php } else { ?>
+	          				<?= $category->desription ?>
+	          			<?php } ?>
 	          			</div>
 	          		</div>
 	          	</div>
+
+	          	<?php if ($category->parent_id == 0 ): ?>
+	          		<div class="categories_child_list">
+	          				<?php foreach ($child_categories as $key => $value): ?>
+	          					<div class="categories_child_list_item">
+	          						 <div class="categories_child_list_item_image">
+	          							<img src="<?= $this->Url->build('/categories/'.$value['picture'], ['fullBase' => true]) ?>" alt="">
+	          						 </div>
+	          						<div class="categories_child_list_item_description">
+	          							<a href="<?php echo $this->Url->build(['controller' => 'categories','action'=>'view/'.$value['slug']]) ?>" class="categories_child_list_item_description_first"><?= $value['title'] ?></a>
+	          							<div class="categories_child_list_item_description_bottom">
+	          								<?php foreach ($value['child_categories'] as $keys => $item): ?>
+	          									<a href="<?php echo $this->Url->build(['controller' => 'categories','action'=>'view/'.$item['slug']]) ?>"><?= $item['title'] ?></a>
+	          								<?php 	endforeach; ?>
+	          							</div>
+	          						</div>
+	          					</div>
+	          				<?php 	endforeach; ?>
+	          		</div>
+	            <?php endif; ?>
+
+	          	<?php if ($category->parent_id != 0 ): ?>
 	          	<div class="products_sort">
 	          		<div class="sort_by">
 	          			<!--Сортувати за 
@@ -86,18 +130,21 @@
 	          		<div class="products_display"></div>
 	          	</div>
 	          	<div class="products_list">
+	          		<?php 	if (empty($products)): ?>
+	          			<p class="empty_products">Товарів по даній категорії не має</p>
+	          		<?php 	endif; ?>
 	          		<?php foreach ($products as $key => $value): ?>
 
-	          		<a href="<?php echo $this->Url->build(['controller' => 'products','action'=>'view/'.$value['slug']]) ?>" class="propose_slider_item <?php if (!empty($value['actions_products']) OR isset($actions)): ?> propose_slider_item_show_action <?php endif; ?>">
+	          		<div href="<?php echo $this->Url->build(['controller' => 'products','action'=>'view/'.$value['slug']]) ?>" class="propose_slider_item <?= $this->element('action_product', array("item" => $value['actions_products'])); ?>">
 	          			<div class="propose_slider_item_action"><p>Акція</p></div>
-					<div class="propose_slider_item_image">
-						<img src="<?= $this->Url->build('/products/'.$value->image, ['fullBase' => true]) ?> " alt="">
-					</div>
+					<a href="<?= $this->Url->build(['controller' => 'products','action'=>'view/'.$value['slug']]) ?>" class="propose_slider_item_image">
+						<img src="<?= $this->Url->build('/products/'.$value['image'], ['fullBase' => true]) ?> " alt="">
+					</a>
 					<div class="propose_slider_item_stars">
 						<?= $this->element('rating_product', array("item" => $value)); ?>
 					</div>
 					<div class="propose_slider_item_title">
-						<p><?= $value['title'] ?></p>
+						<p><a href="<?= $this->Url->build(['controller' => 'products','action'=>'view/'.$value['slug']]) ?>"><?= $value['title'] ?></a></p>
 					</div>
 					<div class="propose_slider_item_kod">
 						<p>Код товару <span class="item_kod"><?= $value['cod'] ?></span></p>
@@ -113,12 +160,28 @@
 					<div class="propose_slider_item_price">
 						<?= $this->element('price_product', array("item" => $value)); ?>
 					</div>
-				</a>
+					<div class="product_buttons">
+						<button type="button" class="product_buttons_item add_product_to_bascket" data-product="<?= $value['id'] ?>">
+							<img src="<?= $this->Url->build('/img/back.svg', ['fullBase' => true]) ?>" alt="">
+						</button>
+						<a href="<?= $this->Url->build(['controller' => 'products','action'=>'view/'.$value['slug']]) ?>" class="product_buttons_item" >
+							<i class="fa fa-eye"></i>
+						</a>
+						<button type="button" class="product_buttons_item add_product_to_wishlist" data-product="<?= $value['id'] ?>">
+							<img src="<?= $this->Url->build('/img/favorite.svg', ['fullBase' => true]) ?>" alt="">
+						</button>
+						<button type="button" class="product_buttons_item">
+							<i class="fa fa-exchange"></i>
+						</button>
+					</div>
+				</div>
 
 			<?php endforeach; ?>
 
 
 	          	</div>
+	          <?php endif; ?>
+	          <?php if ($category->parent_id != 0 ): ?>
 	          	 <?php
               $params = $this->Paginator->params();
               if ($params['pageCount'] > 1): ?>
@@ -130,6 +193,7 @@
                 <?= $this->Paginator->last(' >>') ?>
                 </ul>
           <?php endif; ?>
+      <?php endif; ?>
 	          </div>
 	          
 			</div>

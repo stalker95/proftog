@@ -2,7 +2,50 @@
 	background: transparent;
 	padding: 0px;
 }
-
+.login_images {
+    text-align: center;
+    margin-bottom: 10px;
+}
+.login_images img {
+    max-width: 100%;
+}
+.login_to_admin {
+    background: #FCDB38;
+    font-size: 11px
+    border: none!important;
+}
+.login-box, .register-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 70%;
+    margin-top: 
+}
+.login-box-body.flip-container {
+    width: 100%;
+}
+.login_to_admin:visited {
+    border: none!important;
+}
+.login-box, .register-box {
+        margin: auto;
+}
+.login-box-msg {
+    text-align: left;
+    font-size: 11px;
+    padding: 0px;
+    padding-bottom: 35px;
+}
+.has-feedback .form-control {
+    font-size: 11px;
+}
+.icheckbox_square-blue {
+    margin-right: 10px;
+}
+.checkbox.icheck {
+    margin-top: 0px;
+    font-size: 11px;
+}
 .login-box-body.flip-container{
 	height: 250px;
     /*margin-top: 115px;*/

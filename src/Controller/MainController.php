@@ -21,6 +21,7 @@ class MainController extends AppController
         $this->loadModel('Actions');
         $this->loadModel('Proposes');
         $this->loadModel('Producers');
+        $this->loadModel('Seo');
         
     }
     /**
@@ -30,22 +31,23 @@ class MainController extends AppController
      */
     public function index()
     {
+        $seo = $this->Seo->find()->first();
         $categories = $this->Categories->find()->contain(['ChildCategories'])->order('Categories.position ASC')->toArray();
         
         $data = date("Y-m-d H:i:s");
         $actions = $this->Actions->find()->order('Actions.position ASC')->toArray();
-        $proposes = $this->Proposes->find()->contain(['Products','Products.ActionsProducts','Products.Discounts','Products.Rewiev'])->order('Proposes.position ASC')->toArray();
+        $proposes = $this->Proposes->find()->contain(['Products','Products.ActionsProducts','Products.ActionsProducts.Actions','Products.Discounts','Products.Rewiev'])->order('Proposes.position ASC')->toArray();
+       // debug($proposes);
 
 
 
-        $products = $this->Categories->find()->contain(['Products'=> [
-                                                                     'conditions' => [
-                                                                       'Products.hit' => 1
-            ]
-        ],'Products.ActionsProducts','Products.Discounts','Products.Rewiev'])->where(['Categories.parent_id' => 0])->toArray();
+      
       //  debug($products);
+        $category = $this->Categories->newEntity();
+        $products = $category->getAllHits();
+
         $producers = $this->Producers->find()->toArray();
-        $this->set(compact('categories','actions', 'proposes','products','producers'));
+        $this->set(compact('categories','actions', 'proposes','products','producers', 'seo'));
     }
 
     /**

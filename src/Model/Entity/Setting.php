@@ -29,6 +29,7 @@ class Setting extends Entity
      * @var array
      */
     protected $_accessible = [
+        '*'    => true,
         'name' => true,
         'logo' => true,
         'description_page' => true,

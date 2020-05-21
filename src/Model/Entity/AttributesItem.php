@@ -66,6 +66,7 @@ class AttributesItem extends Entity
                 }
             }
         }
+        
         return $attributes_to_view;
     }
 

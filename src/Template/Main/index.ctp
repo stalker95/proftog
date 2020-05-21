@@ -1,7 +1,12 @@
 
 <style>
 	header .propose_list {
-		display: block!important;
+		display: block;
+	}
+	@media (max-width: 768px) {
+		header .propose_list {
+			display: none;
+		}
 	}
 </style>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick.min.css">
@@ -23,7 +28,7 @@
 						</div>
 						<div class="advantages_item">
 							<div class="advantages_item_left">
-								<img src="<?= $this->Url->build('/img/delivery.svg', ['fullBase' => true]) ?>" alt="">
+								<img src="<?= $this->Url->build('/img/manager.svg', ['fullBase' => true]) ?>" alt="">
 							</div>
 							<div class="advantages_item_right">
 								<p>Професійне консультування</p>
@@ -31,7 +36,7 @@
 						</div>
 						<div class="advantages_item">
 							<div class="advantages_item_left">
-								<img src="<?= $this->Url->build('/img/delivery.svg', ['fullBase' => true]) ?>" alt="">
+								<img src="<?= $this->Url->build('/img/garanted.svg', ['fullBase' => true]) ?>" alt="">
 							</div>
 							<div class="advantages_item_right">
 								<p>Гарантія на весь товар</p>
@@ -92,6 +97,7 @@
 	</div>
 </div>
 </section>
+<?php if (!empty($proposes)): ?>
 <div class="propose">
 			<div class=" propose_top container">
 		<p class="propose_title">Пропозиція дня</p>
@@ -107,7 +113,7 @@
 	<div class="propose_container container">
 		<div class="propose_slider">
 			<?php foreach ($proposes as $key => $value): ?>
-				<div class="propose_slider_item <?php if (!empty($value['product']['actions_products'])): ?> propose_slider_item_show_action <?php endif; ?>">
+				<div class="propose_slider_item <?= $this->element('action_product', array("item" => $value['product']['actions_products'])); ?> ">
 					<div class="propose_slider_item_action"><p>Акція</p></div>
 					<a href="<?= $this->Url->build(['controller' => 'products','action'=>'view/'.$value['product']['slug']]) ?>" class="propose_slider_item_image">
 						<img src="<?= $this->Url->build('/products/'.$value['product']['image'], ['fullBase' => true]) ?> " alt="">
@@ -116,7 +122,7 @@
 						<?= $this->element('rating_product', array("item" => $value['product'])); ?>
 					</div>
 					<div class="propose_slider_item_title">
-						<p><?= $value['product']['title'] ?></p>
+						<p><a href="<?= $this->Url->build(['controller' => 'products','action'=>'view/'.$value['product']['slug']]) ?>"><?= $value['product']['title'] ?></a></p>
 					</div>
 					<div class="propose_slider_item_kod">
 						<p>Код товару <span class="item_kod"><?= $value['product']['cod'] ?></span></p>
@@ -128,20 +134,20 @@
 						<?= $this->element('price_product', array("item" => $value['product'])); ?>
 					</div>
 
-					<?php /* <div class="product_buttons">
-						<button class="product_buttons_item">
+					<div class="product_buttons">
+						<button class="product_buttons_item add_product_to_bascket" data-product="<?= $value['product']['id'] ?>">
 							<img src="<?= $this->Url->build('/img/back.svg', ['fullBase' => true]) ?>" alt="">
 						</button>
-						<button class="product_buttons_item">
-							<img src="<?= $this->Url->build('/img/back.svg', ['fullBase' => true]) ?>" alt="">
-						</button>
+						<a href="<?= $this->Url->build(['controller' => 'products','action'=>'view/'.$value['product']['slug']]) ?>" class="product_buttons_item" >
+							<i class="fa fa-eye"></i>
+						</a>
 						<button class="product_buttons_item add_product_to_wishlist" data-product="<?= $value['product']['id'] ?>">
 							<img src="<?= $this->Url->build('/img/favorite.svg', ['fullBase' => true]) ?>" alt="">
 						</button>
 						<button class="product_buttons_item">
-							<img src="<?= $this->Url->build('/img/back.svg', ['fullBase' => true]) ?>" alt="">
+							<i class="fa fa-exchange"></i>
 						</button>
-					</div> */ ?> 
+					</div>
 				</div>
 			<?php endforeach; ?>
 			
@@ -149,6 +155,7 @@
 		</div>
 	</div>
 </div>
+<?php endif; ?>
 <section class="about">
 		<div class=" about_container container">
 			<div class="about_top">
@@ -160,6 +167,7 @@
 	</div>
 </section>
 
+<?php if (!empty($products)): ?>
 <section class="sales">
 	<div class="section_inside container">
 		<div class="section_top">
@@ -167,7 +175,7 @@
 				<p>Хіти продаж</p>				
 			</div>
             <div class="section_title">
-            	<a href="">Переглянути усі категорії</a>
+            	<a href="<?= $this->Url->build(['controller' => 'categories','action'=>'index/']) ?>" target="_blanck">Переглянути усі категорії</a>
             </div>
 		</div>
 		<div class="row">
@@ -175,16 +183,15 @@
 		
 		<div class="col-sm-4 col-md-3">
 			<div class="sales_categories">
-               <?php foreach ($products as $key => $value): if (!empty($value['products'])): ?>
+               <?php foreach ($products as $key => $value): ?>
 				<div class="sales_categories_item">
 					<div class="sales_categories_item_image">
 						<?= $value['image'] ?>
 					</div>
 					<div class="sales_categories_item_title">
-						<p><?= $value['title'] ?></p>
+						<p><?= $key ?></p>
 					</div>
 				</div>
-			<?php endif; ?>
 		<?php endforeach; ?>
 
 				
@@ -204,7 +211,7 @@
 						<?= $this->element('rating_product', array("item" => $item)); ?>
 					</div>
 					<div class="propose_slider_item_title">
-						<p><?= $item['title'] ?></p>
+						<p><a href="<?= $this->Url->build(['controller' => 'products','action'=>'view/'.$item['slug']]) ?>"><?= $item['title'] ?></a></p>
 					</div>
 					<div class="propose_slider_item_kod">
 						<p>Код товару <span class="item_kod"><?= $item['cod'] ?></span></p>
@@ -216,6 +223,20 @@
 						<?= $this->element('price_product', array("item" => $item)); ?>
 						
 					</div>
+					<div class="product_buttons">
+						<button class="product_buttons_item add_product_to_bascket" data-product="<?= $item['id'] ?>">
+							<img src="<?= $this->Url->build('/img/back.svg', ['fullBase' => true]) ?>" alt="">
+						</button>
+						<a href="<?= $this->Url->build(['controller' => 'products','action'=>'view/'.$item['slug']]) ?>" class="product_buttons_item" >
+							<i class="fa fa-eye"></i>
+						</a>
+						<button class="product_buttons_item add_product_to_wishlist" data-product="<?= $item['id'] ?>">
+							<img src="<?= $this->Url->build('/img/favorite.svg', ['fullBase' => true]) ?>" alt="">
+						</button>
+						<button class="product_buttons_item">
+							<i class="fa fa-exchange"></i>
+						</button>
+					</div>
 				</div>	
 					<?php endforeach; ?>
 				</div>
@@ -226,6 +247,7 @@
 		</div>
 	</div>
 </section>
+<?php endif; ?>
 
 <section class="news">
 	<div class="section_inside container">
@@ -337,6 +359,11 @@
 
 <script>
     <?php echo $this->Html->scriptStart(['block' => true]); ?>
+    
+    if ($(window).width() > 768) {
+    	$(".propose_left").addClass('propose_left_active');
+	}
+	
 	$('.slider_inialize').slick({
   infinite: true,
   slidesToShow: 1,
@@ -350,16 +377,16 @@ $('.products_slider').slick({
   slidesToScroll: 6,
   responsive: [
   {
-    breakpoint: 993,
-    settings: {
-        slidesToShow: 5,
-        slidesToScroll: 5,
-    },
-    breakpoint: 768,
+  	breakpoint: 768,
     settings: {
         slidesToShow: 1,
         slidesToScroll: 1,
-    }
+    },
+    breakpoint: 993,
+    settings: {
+        slidesToShow: 1,
+        slidesToScroll: 1,
+    },
   }]
 });  
 
@@ -372,7 +399,7 @@ $('.propose_slider').slick({
     breakpoint: 993,
     settings: {
         slidesToShow: 2,
-        slidesToScroll: 1,
+        slidesToScroll: 2,
     },
     breakpoint: 768,
     settings: {

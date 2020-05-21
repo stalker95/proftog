@@ -28,7 +28,7 @@ class ContactsController extends AppController
             }
             $this->Flash->admin_error(__('Зміни не збережено. Спробуйте пізніше'));
         }
-        $this->nav_['content'] = true;
+        $this->nav_['contacts'] = true;
         $this->set(compact('contacts'));
     }
 

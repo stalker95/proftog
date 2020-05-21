@@ -116,6 +116,10 @@ class QuickOrdersController extends AppController
     }
     public function quickOrder()
     {
+        $this->loadModel('Settings');
+        $this->loadModel('Products');
+        $settings = $this->Settings->find()->first();
+
         $this->autoRender = false;
       $this->RequestHandler->renderAs($this, 'json');
       $this->response->disableCache();
@@ -128,10 +132,22 @@ class QuickOrdersController extends AppController
 
       $quick_order->username = $data['user_name'];
       $quick_order->phone = $data['user_phone'];
-      $quick_order->product_id = $data['product_id'];
+      $quick_order->product_id = (int)$data['product_id'];
+      $quick_order->date = date("Y-m-d H:i:s");
+      $quick_order->status = 0; 
+
+      $product = $this->Products->get($data['product_id']);
+
+       $subject = "Швидке замовлення на сайті http://www.proftorg.in.ua/";
+        $text = "Ім'я: ".$data['user_name']." \n Телефон: ".$data['user_phone']." Товар: $product->title";
+         $this->sendEmail($settings->email, $subject, $text);
 
       $this->QuickOrders->save($quick_order);
 
+       if ($this->QuickOrders->save($quick_order)) {
         $this->response->body(json_encode(array('status' => 'true')));
+       } else {
+       $this->response->body(json_encode(array('status' => $this->QuickOrders->save($quick_order))));
+        }
     }
 }

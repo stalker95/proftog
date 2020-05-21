@@ -39,11 +39,13 @@
 				<div class="footer_links">
 					<p class="footer_links_title footer-title">Інформація</p>
 					<div class="footer_links_container">
-						<a href="" class="footer_link"><span>></span>Про нас </a>
-						<a href="" class="footer_link"><span>></span>Обмін та повернення</a>
-						<a href="" class="footer_link"><span>></span>Доставка </a>
-						<a href="" class="footer_link"><span>></span>Оплата</a>
-						<a href="" class="footer_link"><span>></span>Контакти</a>
+						<a href="<?= $this->Url->build(['controller' => 'about','action'   =>  'index']) ?>" class="footer_link"><span>></span>Про нас </a>
+						<a href="<?= $this->Url->build(['controller' => 'change','action'   =>  'index']) ?>" class="footer_link"><span>></span>Обмін та повернення</a>
+
+						<a href="<?= $this->Url->build(['controller' => 'delivery','action'   =>  'index']) ?>" class="footer_link"><span>></span>Доставка </a>
+						<a href="<?= $this->Url->build(['controller' => 'payments','action'   =>  'index']) ?>" class="footer_link"><span>></span>Оплата</a>
+						<a href="<?= $this->Url->build(['controller' => 'public-offerta','action'   =>  'index']) ?>" class="footer_link"><span>></span>Публічна оферта</a>
+						<a href="<?= $this->Url->build(['controller' => 'contacts','action'   =>  'index']) ?>" class="footer_link"><span>></span>Контакти</a>
 					</div>
 				</div>
 			</div>
@@ -58,7 +60,7 @@
 							<i class="fa fa-map-marker"></i>
 						</div>
 						<div class="footer_contacts_title">
-							<p>м.Львів вул Шевченка 134A оф 350</p>
+							<p><?= $settings->address ?></p>
 						</div>
 					</div>
 					<div class="footer_contacts_item">
@@ -66,7 +68,7 @@
 							<i class="fa fa-phone"></i>
 						</div>
 						<div class="footer_contacts_title">
-							<p>(093) 456 25 25 <br> (093) 000 00 26</p>
+							<p><?= $settings->phones ?></p>
 						</div>
 					</div>
 					<div class="footer_contacts_item">
@@ -74,7 +76,7 @@
 							<i class="fa fa-envelope"></i>
 						</div>
 						<div class="footer_contacts_title">
-							<a href="mailto:proftorg@urk.net">proftorg@urk.net</a>
+							<a href="mailto:<?= $settings->email ?>"><?= $settings->email ?></a>
 						</div>
 					</div>
 					<div class="footer_contacts_item">
@@ -82,7 +84,7 @@
 							<i class="fa fa-clock"></i>
 						</div>
 						<div class="footer_contacts_title">
-							<p>Пн-Пт 9 9:00 до 19:00 </p>
+							<p><?= $settings->time ?></p>
 						</div>
 					</div>
 					 </div>
@@ -92,18 +94,16 @@
 				<div class="social_links">
 					<p class="social_links_title footer-title">Ми в соц мережах</p>
 					<div class="social_links_container">
-						<div class="social_links_item">
-							<a href="/"><img src="<?= $this->Url->build('/img/fb.png', ['fullBase' => true]) ?>" alt=""></a>
-						</div>
-						<div class="social_links_item">
-							<a href="/"><img src="<?= $this->Url->build('/img/ig.png', ['fullBase' => true]) ?>" alt=""></a>
-						</div>
-						<div class="social_links_item">
-							<a href="/"><img src="<?= $this->Url->build('/img/tg.png', ['fullBase' => true]) ?>" alt=""></a>
-						</div>
-						<div class="social_links_item">
-							<a href="/"><img src="<?= $this->Url->build('/img/vb.png', ['fullBase' => true]) ?>" alt=""></a>
-						</div>
+
+						<?php foreach ($socials as $key => $value):?>
+							<?php if (!empty($value['url'])): ?>
+							<div class="social_links_item">
+								<a href="<?= $value['url'] ?>"><img src="<?= $this->Url->build('/img/'.$value['image'].'', ['fullBase' => true]) ?>" alt=""></a>
+							</div>
+						<?php endif; ?>
+						<?php endforeach; ?>
+
+						
 					</div>
 					<div class="payment_methods">	
 						<p class="social_links_title footer-title">Способи оплати</p>
@@ -124,4 +124,12 @@
 			</div>
 		</div>
 	</div>
+<!--	<div class="wrap__call" data-toggle="modal" data-target="#get_mobile">
+  <div></div>
+  <div></div>
+  <span>
+    <i class="fa fa-phone fa-3x" aria-hidden="true"></i>
+  </span>
+</div> -->
 </footer>
+<!--<script>var telerWdWidgetId="02ee9277-5994-4b5c-8054-ac205af24931";var telerWdDomain="proftorg.phonet.com.ua";</script> <script src="//proftorg.phonet.com.ua/public/widget/call-catcher/lib-v3.js"></script> -->

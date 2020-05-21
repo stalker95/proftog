@@ -19,7 +19,10 @@
           <p class="products_container_title">Редагування товару</p>
           <div class="product_container_buttons">
          
-        
+        <a class="display_product" href="/products/view/<?= $product->slug  ?>" class="propose_slider_item_image" target="_blanck"
+          >
+          <i class="fa fa-eye"></i>
+          </a>
         <button class="btn-primary">
           <i class="fa fa-save"></i>
         </button>
@@ -367,7 +370,7 @@
                                   <td>
                                     <?php foreach ($item['products_options'] as $key => $item_value): ?>
                                       <?php if ($item_value['product_id'] == $id) { ?>
-                                    <input type="number" name="amount_option[]" value="<?= $item_value['value'] ?>">
+                                    <input type="number" name="amount_option[]" value="<?= $item_value['value'] ?>" step="0.01">
 
                                       <?php } ?>
 
@@ -549,7 +552,8 @@ $('body').on('change', ".upload_gallery_item", function() {
                 var dataURL = e.target.result;
                 var mimeType = dataURL.split(",")[0].split(":")[1].split(";")[0];
 
-                if ((mimeType != 'image/jpeg') && (mimeType != 'image/jpg') && (mimeType != 'image/png')) {
+          if ((mimeType != 'image/jpeg') && (mimeType != 'image/jpg') && (mimeType != 'image/png') && (mimeType != 'image/webp')) {
+
                     // not support format
                     inp = $("#fileimgMeal");
                     inp.replaceWith(inp.val('').clone(true));

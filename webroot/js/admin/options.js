@@ -52,7 +52,7 @@ setTimeout(function() {
                          '</select>'+
                        '</td>'+
                        '<td>'+
-                         '<input type="number" name="amount_option[]">'+
+                         '<input type="number" name="amount_option[]" step="0.01">'+
                        '</td>'+
                        '<td style="text-align: center;">'+
                          '<button class="delete_item_option">'+
@@ -116,7 +116,7 @@ $('body').on('click', ".add_new_edit", function() {
                          '</select>'+
                        '</td>'+
                        '<td>'+
-                         '<input type="number" name="amount_option[]">'+
+                         '<input type="number" name="amount_option[]" step="0.01">'+
                        '</td>'+
                        '<td style="text-align: center;">'+
                          '<button class="delete_item_option">'+

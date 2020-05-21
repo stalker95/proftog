@@ -297,3 +297,15 @@ jQuery.fn.pickify = function() {
 $('.picker').pickify();
 
 });
+
+
+$(document).ready(function() {
+$(".products_add_tabs_item").click(function() {
+  $(".products_add_tabs_item").removeClass('active_add_tabs_item');
+  var index = $(this).index();
+
+  $(".product_container_item").css("display","none");
+  $(".product_container_item").eq(index).css("display", "block");
+ $(this).addClass("active_add_tabs_item")
+});
+});

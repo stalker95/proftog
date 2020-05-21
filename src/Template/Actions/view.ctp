@@ -18,7 +18,6 @@
 		<div class="row">
 			<div class="col-md-3">
 				<?= $this->element('catalog_categories'); ?>
-				<?= $this->element('filter_block'); ?>
 			</div>
 			<div class="col-md-9">
 	          <div class="categories_product">
@@ -39,11 +38,30 @@
 						
 						</div>
 	          	<div class="products_sort">
-	          		<div class="sort_by">
-	          			Сортувати за 
-	          			<select name="" id="">
-	          				<option value="0">За релевантністю</option>
-	          			</select>
+	          			          		<div class="sort_by">
+	          			<!--Сортувати за 
+	          			<select name="sort_by" id="sort_by">
+	          				<? if (isset($sort_by)): ?>
+	          					<option value="<?= $sort_by ?>"><?= $sort_by ?></option>
+	          				<?php 	endif; ?>
+	          				<option value="За рейтингом">За рейтингом</option>
+	          				<option value="За спаданням ціни">За спаданням ціни </option>
+	          				<option value="За зростанням ціни">За зростанням ціни </option>
+	          				<option value="Акційні">Акційні</option>
+	          			</select> -->
+	          			<div class="center">
+	          				<p class="sorter_title">Сортувати</p>
+  								<select name="sort_by" id="sort_by" class="custom-select custom-select-two sources"
+  								 <? if (isset($sort_by)){ ?> placeholder="<?= $sort_by ?>"  
+  								 <?php 	} else { ?>
+  								 	placeholder="За рейтингом"
+  								 <?php } ?>>
+    								<option value="За рейтингом">За рейтингом</option>
+	          				<option value="За спаданням ціни">За спаданням ціни</option>
+	          				<option value="За зростанням ціни">За зростанням ціни</option>
+	          				<option value="Акційні">Акційні</option>
+ 								 </select>
+						</div>
 	          		</div>
 	          		<div class="products_show">
 	          			Показати 
@@ -90,6 +108,20 @@
 					</div>
 					<div class="propose_slider_item_price">
 						<?= $this->element('price_product', array("item" => $value['product'])); ?>
+					</div>
+					<div class="product_buttons">
+						<button class="product_buttons_item add_product_to_bascket" data-product="<?= $value['product']['id'] ?>">
+							<img src="<?= $this->Url->build('/img/back.svg', ['fullBase' => true]) ?>" alt="">
+						</button>
+						<a href="<?= $this->Url->build(['controller' => 'products','action'=>'view/'.$value['product']['slug']]) ?>" class="product_buttons_item" >
+							<i class="fa fa-eye"></i>
+						</a>
+						<button class="product_buttons_item add_product_to_wishlist" data-product="<?= $value['product']['id'] ?>">
+							<img src="<?= $this->Url->build('/img/favorite.svg', ['fullBase' => true]) ?>" alt="">
+						</button>
+						<button class="product_buttons_item">
+							<i class="fa fa-exchange"></i>
+						</button>
 					</div>
 				</div>
 

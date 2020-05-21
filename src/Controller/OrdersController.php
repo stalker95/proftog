@@ -16,7 +16,7 @@ class OrdersController extends AppController
     public function beforeFilter(Event $event)
     {
         parent::beforeFilter($event);
-        $this->Auth->allow(['index','add','quickOrder']);
+        $this->Auth->allow(['index','add','quickOrder', 'search', 'authAjax']);
     }
     /**
      * Index method
@@ -25,9 +25,15 @@ class OrdersController extends AppController
      */
     public function index()
     {
-        $orders = $this->paginate($this->Orders);
+      if ($this->Auth->user('id')) {
+        $id = $this->Auth->user('id');
 
-        $this->set(compact('orders'));
+       $_user = $this->Users->get($id);
+      
+      if (!empty($_user)) {
+       $this->set(compact('_user'));
+      }
+    }
     }
 
     /**
@@ -53,17 +59,172 @@ class OrdersController extends AppController
      */
     public function add()
     {
-        $order = $this->Orders->newEntity();
-        if ($this->request->is('post')) {
-            $order = $this->Orders->patchEntity($order, $this->request->getData());
-            if ($this->Orders->save($order)) {
-                $this->Flash->success(__('The order has been saved.'));
+        $this->loadModel('Settings');
+        $this->loadModel('Orders');
+        $this->loadModel('OrdersItems');
+        $settings = $this->Settings->find()->first();
+      $this->autoRender = false;
+      $this->RequestHandler->renderAs($this, 'json');
+      $this->response->disableCache();
+      $this->response->type('application/json');
+      $datas = $this->request->getData();
+      $subject = "Замовлення";
 
-                return $this->redirect(['action' => 'index']);
-            }
-            $this->Flash->error(__('The order could not be saved. Please, try again.'));
+      $_user = $this->Users->find()->where(['mail' => $datas['user_email']])->first();
+      
+      $dostavka = "";
+      if ($datas['type_delivery'] == 1) {
+        $dostavka = "Самовивіз";
+      }
+
+      if ($datas['type_delivery'] == 2) {
+        $dostavka = "Нова пошта: ". $datas['adress_delivery'];
+      }
+
+      if ($datas['type_delivery'] == 3) {
+        $dostavka = "МІстЕкспрес: ". $datas['adress_delivery'];
+      }
+
+      if ($datas['type_delivery'] == 4) {
+        $dostavka = "Інтайм: ". $datas['adress_delivery'];
+      }
+
+      if ($datas['type_delivery'] == 5) {
+        $dostavka = "Делівері: ". $datas['adress_delivery'];
+      }
+
+      if ($datas['type_radio'] == 1) {
+        $oplata = "Готівкою";
+      }
+      if ($datas['type_radio'] == 2) {
+        $oplata = "Visa або MasterCard";
+      }
+      if ($datas['type_radio'] == 3) {
+        $oplata = "LiqPay";
+      }
+
+      if ($datas['type_radio'] == 4) {
+        $oplata = "Наложений платіж";
+      }
+
+       
+      $otrumuvach = "";
+      if ($datas['type_user_delivery'] != 1) {
+        $otrumuvach = "Ім'я: ". $datas['user_delivery_name']."<br>".
+                      "Прізвище: ". $datas['user_delivery_phone']."<br>".
+                      "Телефон: ". $datas['user_delivery_surname']."<br>".
+                      "По батькові: ". $datas['user_delivery_second'];
+      }
+
+      $baseUrl = \Cake\Routing\Router::url('/', true);
+      $baseUrl = rtrim($baseUrl, '/').'/';
+
+      $str = file_get_contents($baseUrl.'/currency/get-type-currency');
+      $json = json_decode($str, true);
+     //debug($json['result']);
+
+      $kurs_dollar = 1;
+      $kusr_euro;
+
+      if ($json['result']['type'] == 1) {
+        $str = file_get_contents('https://api.privatbank.ua/p24api/pubinfo?json&exchange&coursid=5');
+         $data = json_decode($str, true);
+         $kurs_dollar = $data[0]['buy'];
+         $kusr_euro = $data[1]['buy'];
+      }
+       if ($json['result']['type'] == 2) {
+         $kurs_dollar = $json['result']['value_dollar'];
+         $kusr_euro = $json['result']['value'];
+       }
+
+       //debug($kurs_dollar);
+      // debug($kusr_euro);
+
+      $order = $this->Orders->newEntity();
+      $order->firstname = $datas['user_name'];
+      $order->phone = $datas['user_mobile'];
+      $order->email = $datas['user_email'];
+      $order->created = date("Y-m-d H:i:s");
+
+      if (!empty($_user)) {
+        $order->user_id = $_user->id;
+      }
+      $order->oplata_id = $datas['type_radio'];
+      $order->delivery_id = $datas['type_delivery'];
+      $order->city = $datas['user_city'];
+      $array_count = array_column($_SESSION['cart'], 'count');
+    //  debug(array_sum($array_count));
+      $order->amount = array_sum($array_count);
+      $this->Orders->save($order);
+      
+      $textfirst = 
+            "Ім'я: ".$datas['user_name']."<br>
+             Email:".$datas['user_email']."<br>
+             Телефон:".$datas['user_mobile']."<br>
+             Місто:".$datas['user_city']."<br>
+             Оплата:".$oplata."<br>
+             Доставка:".$dostavka."<br>
+             Отримувач:".$otrumuvach."<br>
+      ";
+     // debug($data);
+
+      $table = "<table style='width:100%;border:1px solid #000;text-align:center;'>
+                 <thead style='border:1px solid #000;'>
+                  <th style='border-right:1px solid #000; border-bottom:1px solid #000;'>Товар</th>
+                  <th style='border-bottom:1px solid #000; border-bottom:1px solid #000;'>Кількість</th>
+                  <th style='border-bottom:1px solid #000; border-bottom:1px solid #000;'>Опції</th>
+                  <th style='border-bottom:1px solid #000; border-bottom:1px solid #000;'>Ціна</th>
+                 </thead>
+                 <tbody style='border:1px solid #000;'>
+      ";
+      
+      $total = 0;
+      foreach ($_SESSION['cart'] as $key => $value) {
+        $price = 0;
+        if ($value['product']['currency_id'] == 2) {
+            $price = (($value['count'] * $value['product']['price']) + (array_sum($value['array_option_value']) * $value['count'])) * $kusr_euro;
+        } if  ($value['product']['currency_id'] == 3) {
+             $price = (($value['count'] * $value['product']['price']) + (array_sum($value['array_option_value']) * $value['count'])) * $kurs_dollar;
+         } if  ($value['product']['currency_id'] == 1) {
+            $price = (($value['count'] * $value['product']['price']) + (array_sum($value['array_option_value']) * $value['count']));
         }
-        $this->set(compact('order'));
+
+        $options = ""; 
+        
+        if (!empty($value['array_options_name'])) :
+
+         foreach ($value['array_options_name'] as $key => $item) {
+           $options = $options.$item.": ".$value['array_option_value'][$key].";";
+         }
+
+        endif;
+
+        $ordersItems = $this->OrdersItems->newEntity();
+        $ordersItems->order_id = $order->id;
+        $ordersItems->options = implode(' ', $value['array_options_name']);
+        $ordersItems->amount = $value['count'];
+
+         $ordersItems->summa = $price;
+        //$ordersItems->summa = ($value['count'] * $value['product']['price']) + (array_sum($value['array_option_value']) * $value['count']);
+        $ordersItems->currency_id = $value['product']['currency_id'];
+        $ordersItems->product_id = $value['product']['id'];
+        $this->OrdersItems->save($ordersItems);
+         $table  = $table."<tr><td style='border-right:1px solid #000;'>".$value['product']['title']."</td>
+         <td>".$value['count']."</td>
+         <td>".$options."</td>
+         <td>".$price."</td></tr>";
+        
+        $total = $total + $price;
+        
+      }
+
+      $table = $table."</tbody></table><br>". "
+                          <p style='text-align: right;'>Підсумок : <strong>".$total."</strong></p>
+                       ";
+       
+       $final = $textfirst.$table;
+     $this->sendEmail($settings->email, $subject, $final);
+      $this->response->body(json_encode(array('status' => 'true')));
     }
 
     /**
@@ -121,4 +282,62 @@ class OrdersController extends AppController
 
         $this->response->body(json_encode(array('status' => 'true')));
     }
+
+    public function search()
+    {
+      $this->loadModel('Users');
+      $this->autoRender = false;
+      $this->RequestHandler->renderAs($this, 'json');
+      $this->response->disableCache();
+      $this->response->type('application/json');
+      $data = $this->request->getData();
+
+      $user = $this->Users->find('all')->where(['mail' => $data['email']])->first();
+
+      if (empty($user)) {
+        $this->response->body(json_encode(array('status' => 'false')));
+      } else {
+        $this->response->body(json_encode(array('status' => 'true')));
+      }
+      return $this->response;
+
+    }
+        public function authAjax()
+    {  
+       $this->autoRender = false;
+       $this->RequestHandler->renderAs($this, 'json');  
+       $this->response->disableCache();
+       $this->response->type('application/json');
+       
+        $data = $this->request->getData();
+        $email = $data['email'];
+        $password = $data['password'];
+
+        $this->autoRender = false;
+        if ($email == null OR $email == "") {
+            $this->response->body(json_encode(array('status'=>false, 'message' => 'Неправильний логін або пароль. Спробуйте ще раз')));
+             return $this->response; 
+        }
+
+        $_user = $this->Users->find()->where(['mail' => $email])->first();
+        
+        if ($_user == false) {
+            $this->response->body(json_encode(array('status'=>false, 'message' => 'Неправильний логін або пароль. Спробуйте ще раз')));
+            return $this->response;
+        }
+
+        if ((new \Cake\Auth\DefaultPasswordHasher)->check($password, $_user->password) == false) {
+            $_user = false;
+        }
+        
+        if ($_user == false) {
+            $this->response->body(json_encode(array('status'=>false, 'message' => 'Неправильний логін або пароль. Спробуйте ще раз')));
+            return $this->response;
+        }
+
+            $this->Auth->setUser($_user);
+             $this->response->body(json_encode(array('status'=>true, 'message' => 'Неправильний логін або пароль. Спробуйте ще раз', 'user' => $_user)));
+            return $this->response;
+    }
+
 }

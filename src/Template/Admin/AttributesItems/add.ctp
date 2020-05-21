@@ -1,10 +1,27 @@
-    <!-- Main content -->
-    <section class="content">
-    <div class="row">
-      <div class="col-md-6">
-      	<h1 class="blog__title">Додавання  атрибута</h1>
-        <div class="playlist__managment__item">
+
+ <section class="content white_background products_container">
+  <div class="row">
+   <div class="col-xs-12">
     <?= $this->Form->create($attributesItem); ?>
+         <div class="products_container_top">
+       <p class="products_container_title">Додавання атрибута</p>
+       <div class="product_container_buttons">
+         <button class="btn-primary" type="submit">
+          <i class="fa fa-save"></i>
+        </button>
+         <div class="create__new__user">
+            <button class="btn delete_form_checked  btn-dangeres save__changes__form__playlist copy_checked" data-toggle="modal" data-target="#mediaGallery" >
+                     <i class="fa fa-copy"></i>
+          </button>
+           <button class="btn delete_form_checked  btn-dangeres save__changes__form__playlist" data-toggle="modal" data-target="#mediaGallery" >
+                     <i class="fa fa-trash"></i>
+          </button>
+         </div>
+         
+       </div>
+     </div>
+
+        <div class="playlist__managment__item">
        <div class="playlist__managment--item">
   <div class="playlist__managment--item__left">
     <p>Назва</p>
@@ -34,7 +51,6 @@
 </div>
 
 
-<?=  $this->Form->submit('Додати',['class'=>'btn  btn-primary save__changes__form']); ?>
      <?=   $this->Form->end() ?>
         </div>
       </div>

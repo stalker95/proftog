@@ -76,7 +76,6 @@ class QuickOrdersTable extends Table
      */
     public function buildRules(RulesChecker $rules)
     {
-        $rules->add($rules->isUnique(['username']));
         $rules->add($rules->existsIn(['product_id'], 'Products'));
 
         return $rules;

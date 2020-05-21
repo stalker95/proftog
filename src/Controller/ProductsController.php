@@ -31,11 +31,38 @@ class ProductsController extends AppController
     public function view($slug = null)
     {
 
-        $product = $this->Products->find()->contain(['AttributesProducts','Categories','Rewiev','Discounts'])->where(['Products.slug' => $slug])->first();
+        if (!isset($_SESSION['visits'])) {
+            $_SESSION['visits'] = [];
+        }
 
 
-         
-        $attributes_products = $this->AttributesProducts->find()->contain(['AttributesItems'])->where(['product_id' => $product->id])->toArray();
+
+        $product = $this->Products->find()->contain(['AttributesProducts','Categories','Categories.ParentCategories','Categories.ParentCategories.ParentCategories','Rewiev','Producers','Discounts','ProductsGallery'])->where(['Products.slug' => $slug])->first();
+
+        if (!in_array($product->id, $_SESSION['visits'])) {
+            array_push($_SESSION['visits'], $product->id);
+        }
+
+
+
+        $attributes_products = $this->AttributesProducts->find()->contain(['AttributesItems'  => [
+                                                                     'conditions' => [
+                                                                       'AttributesItems.parent_id' => 8
+                                    ]]])->where(['AttributesProducts.product_id' => $product->id])->toArray();
+
+        $main_attributes =  $this->AttributesProducts
+                                    ->find()
+                                    ->contain(['AttributesItems','AttributesItems.ParentAttributesItems' => [
+                                                                     'conditions' => [
+                                                                       'ParentAttributesItems.id' => 8
+                                    ]],
+                                        'AttributesItems.AttributesProducts' => [
+                                                                     'conditions' => [
+                                                                       'AttributesProducts.product_id' => $product->id
+                                    ]]])
+                                    ->where(['AttributesProducts.product_id' => $product->id])
+                                    
+                                    ->toArray();
 
         $option_group = $product->getOptionsGroup($product->id);
         $option_group_json = json_encode($option_group);
@@ -43,6 +70,7 @@ class ProductsController extends AppController
         $products = $this->Products
                          ->find('all')
                          ->limit(10)
+                         ->contain(['ActionsProducts','ActionsProducts.Actions', 'Discounts', 'Rewiev'])
                          ->where(['category_id' => $product->category_id])
                          ->where(['id !=' => $product->id])
                          ->toArray();
@@ -53,7 +81,7 @@ class ProductsController extends AppController
         }
       
         $this->set('product', $product);
-        $this->set(compact('attributes_products','option_group','option_group_json', 'products'));
+        $this->set(compact('attributes_products','option_group','option_group_json', 'products', 'main_attributes'));
     }
 
 }

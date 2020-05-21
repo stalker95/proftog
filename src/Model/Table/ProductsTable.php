@@ -54,6 +54,11 @@ class ProductsTable extends Table
             'joinType' => 'INNER'
         ]);
 
+        $this->hasMany('ProductsGallery', [
+            'foreignKey' => 'product_id',
+            'joinType' => 'INNER'
+        ]);
+
         $this->hasMany('Rewiev', [
             'foreignKey' => 'product_id',
             'joinType' => 'INNER'
@@ -70,6 +75,11 @@ class ProductsTable extends Table
         ]);
 
         $this->hasMany('Discounts', [
+            'foreignKey' => 'product_id',
+            'joinType' => 'INNER'
+        ]);
+
+        $this->hasMany('Wishlists', [
             'foreignKey' => 'product_id',
             'joinType' => 'INNER'
         ]);

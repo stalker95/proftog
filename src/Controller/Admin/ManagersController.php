@@ -21,6 +21,8 @@ class ManagersController extends AppController
        $this->loadModel('Users');
 
        $users  = $this->paginate($this->Users->find()->where(['is_admin' => 1]))->toArray();
+               $this->nav_['managers'] = true; 
+
        $this->set(compact('users'));
     }
 
@@ -42,8 +44,9 @@ class ManagersController extends AppController
             return $this->redirect(['action' => 'index']);
             
          }
+         
      }
-
+        $this->nav_['managers'] = true;
         $this->set(compact('_user'));
     }
 
@@ -64,6 +67,7 @@ class ManagersController extends AppController
             $this->Flash->admin_error(__('Данні не змінено. Спробуйте пізніше'));
         }
         $this->set('_user',$_user);
+        $this->nav_['managers'] = true; 
     }
 
 

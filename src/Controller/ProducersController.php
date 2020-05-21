@@ -41,6 +41,9 @@ class ProducersController extends AppController
      */
     public function view($id = null)
     {
+         $this->paginate = [
+                'limit' => '9'
+            ];
         $data_today = date('Y-m-d H:i:s');
         $new_date = date('Y-m-d H:i:s', strtotime($data_today));
 
@@ -50,11 +53,11 @@ class ProducersController extends AppController
         $description = $producer->description_page;
         $keywords = $producer->keywords;
 
-        $products = $this->Products->find()->contain(['Actions' => [
+        $products = $this->Paginate($this->Products->find()->contain(['Actions' => [
                                                                      'conditions' => [
                                                                        'Actions.date_end >' => $new_date
             ]]
-        ])->where(['producer_id' => $producer->id])->toArray();
+        ])->where(['producer_id' => $producer->id]))->toArray();
 
         //debug($products);
 

@@ -1,15 +1,27 @@
- <section class="content">
+ <section class="content white_background products_container">
   <div class="row">
    <div class="col-xs-12">
-     <h1 class="blog__title">Пропозиції</h1>
+     <div class="products_container_top">
+       <p class="products_container_title">Пропозицї</p>
+       <div class="product_container_buttons">
+                  <a href="<?= $this->Url->build(['controller' => 'proposes','action'=>'add']) ?>" class="product_container_buttons_add btn-primary">
+           <i class="fa fa-plus"></i>
+         </a>
+
+         <div class="create__new__user">
+           
+           <button class="btn delete_form_checked  btn-dangeres save__changes__form__playlist" data-toggle="modal" data-target="#mediaGallery" >
+                     <i class="fa fa-trash"></i>
+          </button>
+         </div>
+         
+       </div>
+     </div>
      <div class="box">
       <div class="box-body table-responsive no-padding">
        <div class="box-header">
         <div class="create__new__user">
-          <button class="btn delete_form_checked  btn-dangeres save__changes__form__playlist" data-toggle="modal" data-target="#mediaGallery" >
-                     Delete
-          </button>
-          <?php   echo  $this->Html->link('Додати ',['action'=>'add'],['class'=>'btn btn-primary create__new__user']); ?>
+
              
             </div>
               

@@ -1,62 +1,160 @@
+$(document).ready(function() {
+
+setTimeout(function(){ 
+    $('header .propose_item').eq(2).find('.propose_item_list_item_float').eq(2).css('top','33%');
+    $('main .propose_item').eq(2).find('.propose_item_list_item_float').eq(2).css('top','33%');
+
+}, 500);
+
+});
 
 var global_curs = 1;
 var global_curs_dollar = 1;
 var x, i, j, selElmnt, a, b, c;
 
 
-$(document).ready(function() {
-
- $(".product_tabs_top_item").click(function() {
-   
-   var index = $(this).index();
-
-   $(".product_tabs_top_item").removeClass("product_tabs_top_item_active");
-   $(this).addClass("product_tabs_top_item_active");
-   $(".product_tabs_item").css("display","none");
-   $(".product_tabs_item").eq(index).css("display","block");
-
- });
-
- $(".header_mobile_top").click(function() {
-   $('.header_mobile_list').slideToggle();
- });
-
- $(".propose_left_top").click(function() {
-   $(this).parent().parent().find('.propose_list').slideToggle();
- });
- 
- $(".header_search").click(function() {
-  $(".haeder_search_popup").css("display","block");
- });
-
- $(".close_search_form").click(function() {
-  $(".haeder_search_popup").css("display","none");
- });
-
- $(".header_bascet_top").click(function() {
-   $(".header_bascket_list").slideToggle();
- });
-
-$(".header_menu").click(function() {
-  $(".mobile_menu").animate({
-    right: "+=320",
-  }, 500, function() {
-    // Animation complete.
-  });
-});
-
-
-$(".mobile_menu_close").click(function() {
-  $(".mobile_menu").animate({
-    right: "-=320",
-  }, 500, function() {
-    // Animation complete.
-  });
-});
-
 var type_currency = 1;
 var custom_currency;
 var custom_currency_dollar;
+
+
+
+
+  function update_count_cart() 
+  {
+    setTimeout(function(){
+  current_count = parseInt($('.bascket_item').length);
+  
+  $(".count_of_bascket").text(current_count);
+    }, 400);
+
+
+}
+function update_bascket_list() {
+  $.ajax({
+        url: ''+currency_url+'/carts/list',
+        type: 'POST',
+        success: function(data){ 
+             console.log(data.products);   
+              var html = "";
+          
+          console.log(data.products.length);
+          for (i = 0; i < data.products.length; i++) {
+           // html  = html + data.products[i];
+           console.log(data.products[i]);
+            html  = html +'<div class="bascket_item">'+
+            '<button class="bascket_delete">'+
+              '<i class="fa fa-trash display_bascket_popup"></i>'+
+              '<div class="popup_bascket_item">'+
+                '<div class="popup_bascket_item_top">'+
+                  '<div class="popup_bascket_item_wishlist add_product_to_wishlist" data-product="'+data.products[i]['product']['id']+'">'+
+                    '<div class="popup_bascket_item_icon">'+
+                      '<i class="fa fa-heart"></i>'+
+                    '</div>'+
+                    '<div class="popup_bascket_item_description">'+
+                      '<p>Перемістити до списку бажань </p>'+
+                    '</div>'+
+                  '</div>'+
+                  '<div class="popup_bascket_item_delete " data-product="'+data.products[i]['product']['id']+'">'+
+                    '<div class="popup_bascket_item_icon">'+
+                      '<i class="fa fa-trash"></i>'+
+                    '</div>'+
+                    '<div class="popup_bascket_item_description">'+
+                      '<p>Видалити без збереження</p>'+
+                    '</div>'+
+                  '</div>'+
+                  '</div>'+
+                  '<div class="popup_bascket_item_bottom">'+
+                    '<p>Скасувати</p>'+
+                  '</div>'+
+              '</div>'+
+            '</button>'+
+             '<div class="bascket_item_left">'+
+               '<img src="'+currency_url+'/products/'+data.products[i]['product']['image']+'" alt="">'+
+             '</div>'+
+             '<div class="bascket_item_right">'+
+               '<div class="bascket_item_right_title">'+
+                 '<p>'+data.products[i]['product']['title']+'</p>'+
+               '</div>'+
+               '<div class="bascket_item_right_prices">'+
+                 '<div class="bascket_item_price">'+
+                   '<p><span class="translate_price_search" data-currency="'+data.products[i]['product']['currency_id']+'">'+data.products[i]['product']['price']+'</span> грн</p>'+
+                 '</div>'+
+                 '<div class="bascket_item_buttons">'+
+                   '<div class="bascket_item_buttons_inside">'+
+                     '<div class="bascket_item_buttons_minus">'+
+                       '<i class="fa fa-minus"></i>'+
+                     '</div>'+
+                     '<output class="bascket_item_buttons_output">'+data.products[i]['count']+'</output>'+
+                     '<div class="bascket_item_buttons_plus">'+
+                       '<i class="fa fa-plus"></i>'+
+                     '</div>'+
+                   '</div>'+
+                 '</div>'+
+                 '<div class="bascket_item_price_total">'+
+                   '<p><span class="translate_price_search total_basket" data-currency="'+data.products[i]['product']['currency_id']+'">'+data.products[i]['total_sum']+'</span> грн</p>'+
+                 '</div>'+
+               '</div>'+
+             '</div>'+
+           '</div>';
+          } 
+          $(".bascket_container").html(html);
+          $(".bascket_container_empty").html(html);
+          setTimeout(function(){
+        change_currency();
+          }, 600);
+
+          setTimeout(function(){
+        update_bascket();
+          }, 1000);
+        }
+     });
+}
+
+function update_bascket() {
+  setTimeout(function() {
+  var total_basket_new = 0;
+
+  $(".total_basket").each(function() {
+     total_basket_new =  total_basket_new + parseInt($(this).text());
+  });
+  
+  $(".total_of_bascket").text(total_basket_new);
+  $(".total_of_bascket").css('opacity', 1);
+}, 600);
+}
+
+function update_cart() {
+
+    $.ajax({
+        url: ''+currency_url+'/carts/cart',
+        type: 'POST',
+        success: function(data){ 
+           
+
+             cart = data;
+           
+        }
+    });
+
+}
+
+$(".background_grey").click(function() {
+  $(this).fadeOut('fast');
+  $('header .propose_list').slideUp('fast');
+  $('header .propose_left').removeClass('propose_left_active');
+});
+
+ $("body").on("click",'.bascket_delete', function() {
+
+   $(this).find('.popup_bascket_item').css('display', 'block');
+});
+
+ $("body").on("click",'.popup_bascket_item_bottom', function() {
+
+    $(this).parent().hide();
+});
+
 $.ajax({
         url: ''+currency_url+'/currency/get-type-currency',
         type: 'POST',
@@ -91,6 +189,7 @@ var flickerAPI = "https://api.privatbank.ua/p24api/pubinfo?json&exchange&coursid
         $(this).css("opacity","1");
     });
   })
+
 }, 500);
   } else {
     global_curs = custom_currency;
@@ -107,9 +206,132 @@ var flickerAPI = "https://api.privatbank.ua/p24api/pubinfo?json&exchange&coursid
     });
 
   }
+},500);
 
-},600);
 
+
+function change_currency() {
+  var type_currency = 1;
+var custom_currency;
+var custom_currency_dollar;
+$.ajax({
+        url: ''+currency_url+'/currency/get-type-currency',
+        type: 'POST',
+        data: $(this).serialize(),
+        success: function(data){ 
+                   type_currency = data.result.type;
+                   custom_currency = data.result.value;
+                   custom_currency_dollar = data.result.value_dollar;
+        }
+     });
+  if (type_currency == 1) {
+    setTimeout(function() {
+var flickerAPI = "https://api.privatbank.ua/p24api/pubinfo?json&exchange&coursid=5";
+  $.getJSON( flickerAPI, {
+    tags: "mount rainier",
+    tagmode: "any",
+    format: "json"
+  })
+  .done(function(data) {
+    global_curs = data[1]['buy'];
+    global_curs_dollar = data[0]['buy'];
+    console.log(data);
+   $(".translate_price_search").each(function() {
+        var price= parseInt($(this).text());
+        if ($(this).attr('data-currency') == 2) {
+        $(this).text(Math.floor(price * global_curs));
+      }
+      if ($(this).attr('data-currency') == 3) {
+        $(this).text(Math.floor(price * global_curs_dollar));
+      }
+      $(this).removeClass('translate_price_search');
+        $(this).css("opacity","1");
+    });
+  })
+}, 500);
+  } else {
+    global_curs = custom_currency;
+    $(".translate_price_search").each(function() {
+        var price= parseInt($(this).text());
+        if ($(this).attr('data-currency') == 2) {
+        $(this).text(Math.floor(price * custom_currency));
+        }
+
+        if ($(this).attr('data-currency') == 3) {
+        $(this).text(Math.floor(price * custom_currency_dollar));
+        }
+        $(this).removeClass('translate_price_search');
+        $(this).css("opacity","1");
+    });
+
+  }
+
+
+}
+
+$(document).ready(function() {
+
+ $(".product_tabs_top_item").click(function() {
+   
+   var index = $(this).index();
+
+   $(".product_tabs_top_item").removeClass("product_tabs_top_item_active");
+   $(this).addClass("product_tabs_top_item_active");
+   $(".product_tabs_item").css("display","none");
+   $(".product_tabs_item").eq(index).css("display","block");
+
+ });
+
+
+ $(".header_mobile_top").click(function() {
+   $('.header_mobile_list').slideToggle();
+ });
+
+ $("header .propose_left_top").click(function() {
+   if (!$(this).parent().hasClass('propose_left_active')) {
+     $(this).parent().addClass('propose_left_active');
+     $(".background_grey").fadeIn('fast');
+     $(this).parent().parent().find('.propose_list').addClass('propose_list_active');
+   } else {
+     $(this).parent().removeClass('propose_left_active');
+     $(this).parent().parent().find('.propose_list').removeClass('propose_list_active');
+     $(".background_grey").fadeOut('fast');
+   }
+
+ });
+ 
+  $("body .propose_left_top").click(function() {
+    $(this).parent().parent().find('.propose_list').slideToggle();
+  });
+
+ $(".header_search").click(function() {
+  $(".haeder_search_popup").css("display","block");
+ });
+
+ $(".close_search_form").click(function() {
+  $(".haeder_search_popup").css("display","none");
+ });
+
+ $(".header_bascet_top").click(function() {
+   $(".header_bascket_list").slideToggle();
+ });
+
+$(".header_menu").click(function() {
+  $(".mobile_menu").animate({
+    right: "+=320",
+  }, 500, function() {
+    // Animation complete.
+  });
+});
+
+
+$(".mobile_menu_close").click(function() {
+  $(".mobile_menu").animate({
+    right: "-=320",
+  }, 500, function() {
+    // Animation complete.
+  });
+});
 
 $(".propose_item_list_two").each(function(i) {
   if ($(this).find('a').length > 0 ) {
@@ -126,6 +348,19 @@ var top = 20;
   top = top + 150;
   });
   
+});
+
+$("boby .propose_list").hover(function() {
+ $(this).addClass('propose_list_active');
+// $(".background_grey").fadeIn('fast');
+
+});
+
+$("body .propose_list").mouseleave(function() {
+ 
+ $(this).removeClass('propose_list_active');
+// $(".background_grey").fadeOut('fast');
+
 });
 
 $(".sales_list_item").eq(0).css('display', 'flex');
@@ -198,3 +433,310 @@ $(".custom-option").on("click", function() {
    $("#product_sort").submit();
 });
 });
+
+$(document).ready(function() {
+ 
+  $(".header_center_text").keyup(function() {
+    $(".header_search_products").html("");
+    if ($(this).val() != "") {
+
+      $(".header_search_block").css("display", "block");
+      $(".hide_search").css("display", "block");
+      $(".loader.loader--style3").css("display", "block");
+
+
+
+
+
+      $.ajax({
+        url: ''+global_url+'search/search',
+        type: 'POST',
+        data: {"search": $(this).val()},
+        success: function(data){ 
+          $(".loader.loader--style3").css("display", "none");
+
+          var html = "";
+          
+          console.log(data);
+          if (data.products.length > 1) {
+          for (i = 0; i < data.products.length; i++) {
+           // html  = html + data.products[i];
+            html  = html +'<div class="header_search_product">'+
+                              '<a class="header_search_product_image">'+
+                                '<img src="'+global_url+'products/'+data.products[i]['image']+'">'+
+                              '</a>'+
+                              '<div class="header_search_product_description">'+
+                                '<p class="header_search_product_title">'+data.products[i]['title']+'</p>'+
+                                '<p class="header_search_product_price"><span class="translate_price_search" data-currency='+data.products[i]['currency_id']+'>'+data.products[i]['price']+'</span> грн</p>'+
+                                '<a href="'+global_url+'/products/view/'+data.products[i]['slug']+'" class="header_search_product_link">Перейти</a>'+
+                              '</div>'+
+                            '</div>';
+          } 
+          $(".header_search_products").html(html);
+        } else {
+          $(".header_search_products").html("<p class='products_not_found'>Товарів за вашим запитом не знайдено.</p>");
+        }
+          setTimeout(function() {
+        
+change_currency();
+          }, 500);
+          
+        }
+     });
+    } else {
+      $(".header_search_block").css("display", "none");
+      $(".hide_search").css("display", "none");
+       $(".loader.loader--style3").css("display", "none");
+    }
+
+  });
+
+
+
+ 
+  $(".hide_search").click(function() {
+    $(".header_search_block").css("display", "none");
+    $(".header_center_text").val("");
+    $(this).css('display', 'none');
+  });
+
+});
+
+$('#modalPopup').modal();
+
+
+
+$(document).ready(function() {
+setTimeout(function() {
+  update_bascket();
+
+ /* var total = 0;
+  $(".total_basket").each(function(i) {
+      total = total + parseInt($(this).text());
+
+  });
+  $(".total_of_bascket").text(total); */
+}, 1500);
+
+ $("body").on("click",'.bascket_item_buttons_plus', function() {
+     
+
+     var index = $(this).parent().parent().parent().parent().parent().index();
+     console.log(cart.length);
+     var keys = Object.keys(cart);
+     
+     console.log(cart);
+     var new_count = parseInt(cart[keys[index]]['count']) + 1;
+     cart[keys[index]]['count'] = new_count;
+
+     $(this).parent().find('.bascket_item_buttons_output').text(cart[keys[index]]['count']);
+     
+     set_new_price_tovar($(this), cart[keys[index]], cart[keys[index]]['count']);
+     save_count_bascket(new_count, keys[index]);
+     update_bascket();
+       
+ });
+
+ $("body").on("click",'.bascket_item_buttons_minus', function() {
+
+    $.ajax({
+        url: ''+currency_url+'/carts/list',
+        type: 'POST',
+        success: function(data){ 
+         var  cart = data.products;
+        }
+        });
+      
+     var index = $(this).parent().parent().parent().parent().parent().index();
+     console.log(cart.length);
+     var keys = Object.keys(cart);
+     
+     var new_count = parseInt(cart[keys[index]]['count']) - 1;
+     cart[keys[index]]['count'] = new_count;
+
+     $(this).parent().find('.bascket_item_buttons_output').text(cart[keys[index]]['count']);
+     
+     set_new_price_tovar($(this), cart[keys[index]], cart[keys[index]]['count']);
+     save_count_bascket(new_count, keys[index]);
+     update_bascket();
+       
+ });
+
+function save_count_bascket(count, key) {
+  $.ajax({
+        url: currency_url+'/carts/change',
+        method: 'POST',
+      data: { "count": count, "key": key},
+      success: function(data){ 
+        alert("Змінено");
+        }
+    });
+
+}
+
+function set_new_price_tovar(element, product, new_count) {
+  console.log(product);
+  const reducer = (accumulator, currentValue) => accumulator + currentValue;
+   var value_of_options = 0;
+   if (product['array_option_value'].length > 0) {
+     var value_of_options = product['array_option_value'].reduce(reducer);
+     console.log(product['array_option_value'].reduce(reducer));
+   }
+   
+   
+   price_product = product['product']['price'];
+
+   if (product['product']['currency_id'] == 2) {
+
+      price_product =  price_product * global_curs;
+      value_of_options = value_of_options * global_curs;
+   } 
+
+   if (product['product']['currency_id'] == 3) {
+      price_product = price_product * global_curs_dollar;
+      value_of_options = value_of_options * global_curs_dollar;
+   } 
+   
+   console.log(product['product']['currency_id']);
+   console.log(global_curs_dollar); 
+   console.log(global_curs);
+   console.log(value_of_options);
+   console.log(price_product);
+   
+   if (value_of_options == "undefined" || value_of_options == "NaN") {
+       value_of_options = 0;
+   }
+
+   var final_price = (price_product + value_of_options) * new_count;
+
+   $(element).parent().parent().parent().find('.total_basket').text(parseInt(final_price));
+}
+
+
+});
+
+$(document).ready(function() {
+
+ $("body").on("click",'.add_product_to_wishlist', function() {
+
+   
+   var id_product = $(this).attr("data-product");
+
+   $.ajax({ 
+        url: currency_url+'/wishlist/add',
+        method: 'POST',
+        data: { "id_product": id_product},
+        success: function(data){ 
+          alert("Додано");
+        }
+    });
+     $(this).parent().parent().parent().parent().remove();
+     update_bascket();
+
+});
+
+ $("body").on("click",'.popup_bascket_item_delete', function() {
+  var id_product = $(this).attr("data-product");
+
+   $.ajax({ 
+        url: currency_url+'/carts/delete',
+        method: 'POST',
+        data: { "id_product": id_product},
+        success: function(data){ 
+          alert("Додано");
+        }
+    });
+     $(this).parent().parent().parent().parent().remove();
+
+     update_bascket();
+});
+
+
+});
+
+$(document).ready(function() {
+
+ $('.display_all').click(function() {
+   $(this).parent().find('.all_description').toggleClass('all_description_dispayed');
+   $(this).parent().find('.thre_comas').toggleClass('all_description_dispayed');
+   if ($(this).parent().find('.all_description').hasClass('all_description_dispayed')) {
+      $(this).html('Розгорнути <i class="fa fa-caret-down"></i>');
+    
+   } else {
+           $(this).html('Згорнути <i class="fa fa-caret-up"></i>');
+
+   }
+ })
+});
+
+
+$(document).ready(function() {
+   
+   $(".add_product_to_bascket").click(function() {
+
+       var id_product = $(this).attr('data-product');
+
+           $.ajax({
+        url: currency_url+'/carts/add',
+        method: 'POST',
+      data: { "product_id": id_product,  "count_id_bascket":1  },
+      success: function(data){ 
+        //alert("Додано");
+        $("#basket").modal({
+              show: true
+            }); 
+
+update_bascket_list();
+update_cart();
+update_count_cart();
+        }
+    });
+   });
+
+  $(".product_shop_buy").click(function() {
+    setTimeout(function() {
+update_bascket_list();
+update_cart();
+update_count_cart();
+    }, 100);
+
+  });
+});
+
+
+$(document).ready(function() {
+    $(".get_call_form").submit(function() {
+       event.preventDefault(); 
+       $('.auth_loader').css("display","inline-block");
+       $(".quick_submit").css("display","none");
+       $.ajax({
+        url: currency_url+'calls/add',
+        type: 'POST',
+        data: $(this).serialize(),
+        success: function(data){ 
+          $(".message_submit_quick_order").html("");
+          console.log()
+
+          if (data.status == "true")
+           {
+
+            setTimeout(function() {
+               $(".message_submit_quick_order").html('<div class="message_submit_quick_order_message">'+
+                ''+
+                '<strong>Увага!</strong> Вашу заяку прийнято'+
+                '</div>');
+
+               $('.auth_loader').css("display","none");
+              $(".quick_submit").css("display","block");
+              $(".get_call_form input[type='text']").val("");
+              $(".get_call_form input[type='number']").val("");
+             },1000); 
+           }
+
+           
+        }
+     });
+    }); 
+});
+
+

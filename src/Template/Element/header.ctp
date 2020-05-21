@@ -18,12 +18,12 @@
         <div class="header_top_right">
             <div class="header_top-item">
                 <a href=".">
-                    <i class="fa fa-exchange"></i>
-                    м.Львів вул Зелена 15
+                    <i class="fa fa-map-marker"></i>
+                    <?= $settings->address ?>  
                 </a>
                 <a href="tel:093 000 000">
-                    <i class="fa fa-exchange"></i>
-                    093 000 000 
+                   <i class="fa fa-phone"></i>
+                    <?= str_replace('<br>', ' ', $settings->phones) ?>  
                 </a>     
             </div>
         </div>
@@ -38,7 +38,7 @@
                         <i class="fa fa-heart"></i>
                     </div>
                     <div class="header_mobile_list_title">
-                        Список бажань (<?= count($_SESSION['wishlist']); ?>) 
+                        Список бажань (<?php if (isset($_SESSION['wishlist'])  AND is_array($_SESSION['wishlist'])) {echo count($_SESSION['wishlist']);} else { echo "0"; } ?>) 
                     </div>
                 </div>
                 <div class="header_mobile_list_item">
@@ -79,29 +79,55 @@
                     </div>
                     <div class="header_center_form hide_mobile">
                         <form action="">
-                            <div class="custom-select" >
+                           <!-- <div class="custom-select" >
                                 <select name="category" >
                                     <?php foreach ($categories as $key => $value): if ($value['parent_id']): ?>
                                     <option value="<?= $value['id'] ?>"><?= $value['name'] ?></option>
                                     
                                 <?php endif; endforeach; ?>
                                 </select>
-                            </div>
-                            <input type="text" class="header_center_text outline-none" placeholder="Пошук продуктів ">
+                            </div> -->
+                            <input type="text" class="header_center_text outline-none" placeholder="Пошук продуктів" autocomplete="off" name="search">
                             <label for="submit" class="header_center_submit">
                                 <img src="<?= $this->Url->build('/img/search.svg', ['fullBase' => true]) ?>" alt="">
                                 <input type= "submit" value="Надіслати" name="submit">
                             </label>
+                            <span class="hide_search">
+                              <i class="fa fa-close"></i>
+                            </span>
                         </form>
+                        <div class="header_search_block" >
+                          <div class="header_search_loader">
+                             <!-- 3  -->
+<div class="loader loader--style3" title="2" >
+  <svg version="1.1" id="loader-1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+     width="40px" height="40px" viewBox="0 0 50 50" style="enable-background:new 0 0 50 50;" xml:space="preserve">
+  <path fill="#000" d="M43.935,25.145c0-10.318-8.364-18.683-18.683-18.683c-10.318,0-18.683,8.365-18.683,18.683h4.068c0-8.071,6.543-14.615,14.615-14.615c8.072,0,14.615,6.543,14.615,14.615H43.935z">
+    <animateTransform attributeType="xml"
+      attributeName="transform"
+      type="rotate"
+      from="0 25 25"
+      to="360 25 25"
+      dur="0.6s"
+      repeatCount="indefinite"/>
+    </path>
+  </svg>
+</div>
+
+                          </div>
+                          <div class="header_search_products">
+                           
+                          </div>
+                        </div>
                     </div>
                     <div class="header_center_right hide_mobile">
-                        <a href="" class="header_center-link">
+                        <a  data-toggle="modal" data-target="#basket" class="header_center-link">
                             <div class="header_center-link_circle">
                                 <img src="<?= $this->Url->build('/img/back.svg', ['fullBase' => true]) ?>" alt="">
                             </div>
                             <div class="header_center-link-description">
                                 <p class="header_center-link-title">Корзина</p>
-                                <p class="header_center-link-subtitle">1 товар</p>
+                                <p class="header_center-link-subtitle"><span class="count_of_bascket"><?php if (isset($_SESSION['cart'])  AND is_array($_SESSION['cart'])) {echo count($_SESSION['cart']);} else { echo "0"; } ?></span> товар</p>
                             </div>
                         </a>
                         <a href="<?= $this->Url->build(['controller' => 'cabinet','action'    =>  'index']) ?>" class="header_center-link">
@@ -110,7 +136,7 @@
                             </div>
                             <div class="header_center-link-description">
                                 <p class="header_center-link-title">Кабінет</p>
-                                <p class="header_center-link-subtitle"> <?php   if (isset($user->firstname)) { echo $user->firstname;} ?>  </p>
+                                <p class="header_center-link-subtitle"> <?php   if (isset($user->firstname)) { echo strstr($user->mail, '@', true);;} ?>  </p>
                             </div>      
                         </a>
                 </div>
@@ -156,7 +182,7 @@
                             </ul>
                         </div>
                         <div class="propose_links_call">
-                            <a href="/">Замовити дзвінок</a>
+                            <a  data-toggle="modal" data-target="#get_mobile">Замовити дзвінок</a>
                         </div>
                     </div>
                 </div>
@@ -197,6 +223,50 @@
          </ul> 
      </div>
  </div>
+
+ <div class="modal fade" id="get_mobile" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog  modal-dialog-centered" role="document">
+    <div class="modal-content quick_buy_modal">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Замовити дзвінок</h5> 
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body quick_buy_form">
+        <form action="" class="get_call_form">
+          <p class="quick_buy_form_title">Заповніть данні і наш менеджер звяжеться з вами</p>
+          <input type="text" name="user_name" placeholder="Ваше ім'я" required="true">
+          <input type="text" name="user_phone" placeholder="Ваш номер телефону" required="true">
+          <div class="quick_buy_form_bottom">
+            <!-- 2 -->
+        <div class="loader loader--style2 " title="1">
+            <svg version="1.1" id="loader-1" class="auth_loader" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+            width="40px" height="40px" viewBox="0 0 50 50" style="enable-background:new 0 0 50 50;" xml:space="preserve">
+            <path fill="#fff" d="M25.251,6.461c-10.318,0-18.683,8.365-18.683,18.683h4.068c0-8.071,6.543-14.615,14.615-14.615V6.461z">
+            <animateTransform attributeType="xml"
+                        attributeName="transform"
+                        type="rotate"
+                       from="0 25 25"
+                        to="360 25 25"
+                        dur="0.6s"
+                        repeatCount="indefinite"/>
+            </path>
+            </svg>
+        </div>
+                <input type="submit" value="Підтвердити" class="quick_submit">
+          </div>
+          <div class="message_submit_quick_order"></div>
+        </form>
+      </div>
+      <!--<div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div> --> 
+    </div>
+  </div>
+</div>
+
  <script>
      /*look for any elements with the class "custom-select":*/
 x = document.getElementsByClassName("custom-select");
@@ -269,5 +339,7 @@ function closeAllSelect(elmnt) {
 /*if the user clicks anywhere outside the select box,
 then close all select boxes:*/
 document.addEventListener("click", closeAllSelect);
+
+var global_url  = '<?= $baseUrl ?>';
  </script>
 <main>

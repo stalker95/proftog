@@ -38,6 +38,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
     <?= $this->fetch('css') ?>
 </head>
 <body id="homepage">
+<div class="background_grey"></div>
 
 <?= $this->element('header'); ?>
 

@@ -7,9 +7,15 @@ use Cake\ORM\Entity;
  * Order Entity
  *
  * @property int $id
- * @property string $username
+ * @property string $firstname
  * @property string $phone
- * @property string $products
+ * @property string $email
+ * @property int $user_id
+ * @property \Cake\I18n\FrozenTime $created
+ * @property int $delivery_id
+ * @property int $oplata_id
+ * @property string $city
+ * @property string $lastname
  */
 class Order extends Entity
 {
@@ -23,8 +29,14 @@ class Order extends Entity
      * @var array
      */
     protected $_accessible = [
-        'username' => true,
+        'firstname' => true,
         'phone' => true,
-        'products' => true
+        'email' => true,
+        'user_id' => true,
+        'created' => true,
+        'delivery_id' => true,
+        'oplata_id' => true,
+        'city' => true,
+        'lastname' => true
     ];
 }

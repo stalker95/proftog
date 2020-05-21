@@ -72,21 +72,53 @@
 	          				<p><?= $producer->title ?></p>
 	          			</div>
 	          			<div class="categories_product_description">
-	          				<p><?= $producer->description ?></p>
+	          				<p></p>
+	          				<?php if (strlen($producer->description) > 545){ ?>
+	          				<span class="short_category_description"><?= substr($producer->description, 0, 545);
+	          				echo "<span class='thre_comas'>...</span>"; ?></span>
+	          				<span class="all_description all_description_dispayed"><?= substr($producer->description, 545) ?></span>
+	          				<div class="display_all">Розгорнути <i class="fa fa-caret-down"></i></div>
+	          			<?php } else { ?>
+	          				<?= $producer->description ?>
+	          			<?php } ?>
 	          			</div>
 	          		</div>
 	          	</div>
-	          	<div class="products_sort">
+	          		          	<div class="products_sort">
 	          		<div class="sort_by">
-	          			Сортувати за 
-	          			<select name="" id="">
-	          				<option value="0">За релевантністю</option>
-	          			</select>
+	          			<!--Сортувати за 
+	          			<select name="sort_by" id="sort_by">
+	          				<? if (isset($sort_by)): ?>
+	          					<option value="<?= $sort_by ?>"><?= $sort_by ?></option>
+	          				<?php 	endif; ?>
+	          				<option value="За рейтингом">За рейтингом</option>
+	          				<option value="За спаданням ціни">За спаданням ціни </option>
+	          				<option value="За зростанням ціни">За зростанням ціни </option>
+	          				<option value="Акційні">Акційні</option>
+	          			</select> -->
+	          			<div class="center">
+	          				<p class="sorter_title">Сортувати</p>
+  								<select name="sort_by" id="sort_by" class="custom-select custom-select-two sources"
+  								 <? if (isset($sort_by)){ ?> placeholder="<?= $sort_by ?>"  
+  								 <?php 	} else { ?>
+  								 	placeholder="За рейтингом"
+  								 <?php } ?>>
+    								<option value="За рейтингом">За рейтингом</option>
+	          				<option value="За спаданням ціни">За спаданням ціни</option>
+	          				<option value="За зростанням ціни">За зростанням ціни</option>
+	          				<option value="Акційні">Акційні</option>
+ 								 </select>
+						</div>
 	          		</div>
 	          		<div class="products_show">
 	          			Показати 
-	          			<select name="" id="">
-	          				<option value="0">1</option>
+	          			<select name="count_display" id="count_display">
+	          				<?php if (isset($count_display)): ?>
+	          					<option value="<?= $count_display ?>"><?= $count_display ?></option>
+	          				<?php endif; ?>
+	          				<option value="9">9</option>
+	          				<option value="12">12</option>
+	          				<option value="16">16</option>
 	          			</select>
 	          		</div>
 	          		<div class="products_display"></div>
@@ -116,7 +148,7 @@
 						</div>
 					</div>
 					<div class="propose_slider_item_title">
-						<p><?= $value['title'] ?></p>
+						<p><a href="<?php echo $this->Url->build(['controller' => 'products','action'=>'view/'.$value['slug']]) ?>"><?= $value['title'] ?></a></p>
 					</div>
 					<div class="propose_slider_item_kod">
 						<p>Код товару <span class="item_kod"><?= $value['cod'] ?></span></p>
@@ -136,12 +168,37 @@
 						<p><span class="translate_price" data-currency="<?= $value['currency_id'] ?>"><?= $value['price'] ?></span> грн</p>
 					    <?php } ?>
 					</div>
+					<div class="product_buttons">
+						<button class="product_buttons_item add_product_to_bascket" data-product="<?= $value['id'] ?>">
+							<img src="<?= $this->Url->build('/img/back.svg', ['fullBase' => true]) ?>" alt="">
+						</button>
+						<a href="<?= $this->Url->build(['controller' => 'products','action'=>'view/'.$value['slug']]) ?>" class="product_buttons_item" >
+							<i class="fa fa-eye"></i>
+						</a>
+						<button class="product_buttons_item add_product_to_wishlist" data-product="<?= $value['id'] ?>">
+							<img src="<?= $this->Url->build('/img/favorite.svg', ['fullBase' => true]) ?>" alt="">
+						</button>
+						<button class="product_buttons_item">
+							<i class="fa fa-exchange"></i>
+						</button>
+					</div>
 				</div>
 
 			<?php endforeach; ?>
 
 
 	          	</div>
+	          	 <?php
+              $params = $this->Paginator->params();
+              if ($params['pageCount'] > 1): ?>
+                <ul class="pagination pagination-sm">
+                    <?= $this->Paginator->first('<< ') ?>
+                    <?= $this->Paginator->prev('< ' ) ?>
+                    <?= $this->Paginator->numbers() ?>
+                    <?= $this->Paginator->next(' >') ?>
+                <?= $this->Paginator->last(' >>') ?>
+                </ul>
+          <?php endif; ?>
 	          </div>
 			</div>
 		</div>

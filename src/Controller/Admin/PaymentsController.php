@@ -23,13 +23,13 @@ class PaymentsController extends AppController
          if ($this->request->is(['patch', 'post', 'put'])) {
             $payments = $this->Payments->patchEntity($payments, $this->request->getData());
             if ($this->Payments->save($payments)) {
-                $this->Flash->success(__('Зміни збережено'));
+                $this->Flash->admin_success(__('Зміни збережено'));
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('Зміни не збережено. Спробуйте пізніше'));
+            $this->Flash->admin_error(__('Зміни не збережено. Спробуйте пізніше'));
         }
-        $this->nav_['content'] = true;
+        $this->nav_['payments'] = true;
         $this->set(compact('payments'));
     }
 

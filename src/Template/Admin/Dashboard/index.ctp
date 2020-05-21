@@ -1,5 +1,8 @@
   <!-- Content Wrapper. Contains page content -->
-    <!-- Content Header (Page header) -->
+ <div class="not_ready_page">
+   <p>На даній сторінці ведуться технічні роботи</p>
+ </div>
+ <?php /*   <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
         Dashboard
@@ -835,3 +838,4 @@
     </section>
     <!-- /.content -->
   </div>
+  */ ?>

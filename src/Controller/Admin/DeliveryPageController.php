@@ -23,13 +23,13 @@ class DeliveryPageController extends AppController
         if ($this->request->is(['patch', 'post', 'put'])) {
             $deliveryPage = $this->DeliveryPage->patchEntity($deliveryPage, $this->request->getData());
             if ($this->DeliveryPage->save($deliveryPage)) {
-                $this->Flash->admni_success(__('Зміни збережено'));
+                $this->Flash->admin_success(__('Зміни збережено'));
 
                 return $this->redirect(['action' => 'index']);
             }
             $this->Flash->admin_error(__('Зміни не збережено'));
         }
-        $this->nav_['content'] = true;
+        $this->nav_['delivery'] = true;
         $this->set(compact('deliveryPage'));
     }
 }

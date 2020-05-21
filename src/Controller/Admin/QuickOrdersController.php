@@ -29,6 +29,7 @@ class QuickOrdersController extends AppController
             'contain' => ['Products']
         ];
         $quickOrders = $this->paginate($this->QuickOrders);
+        $this->nav_['quick_orders'] = true;
 
         $this->set(compact('quickOrders'));
     }
@@ -149,5 +150,23 @@ class QuickOrdersController extends AppController
         if ($this->QuickOrders->save($record)) {
            $this->response->body(json_encode(array('status' => 'true')));
         }
+    }
+        public function deletechecked() {
+        if (!$this->user->is_abs()):
+            $this->Flash->admin_error(__('У вас не має прав'));
+             return $this->redirect(['controller'=>'dashboard','action' => 'index']);
+        endif;
+
+     $ids=$this->request->getData('ids');
+     $this->request->allowMethod(['post', 'delete']);
+     
+      foreach ($ids as  $value) {
+        $category = $this->QuickOrders->get($value);
+        $this->QuickOrders->delete($category);      
+         
+      } 
+
+     $this->Flash->admin_success(__('Категорії видалено'));
+     return $this->redirect(['action' => 'index']);
     }
 }

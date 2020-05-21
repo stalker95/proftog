@@ -18,6 +18,7 @@ class DashboardController extends AppController
      */
     public function index()
     {
+        $this->nav_['dashboard'] = true; 
         // $dashboard = $this->paginate($this->Dashboard);
 
         // $this->set(compact('dashboard'));

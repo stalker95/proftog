@@ -28,6 +28,5 @@ class QuickOrder extends Entity
         'product_id' => true,
         'username' => true,
         'phone' => true,
-        'product' => true
     ];
 }

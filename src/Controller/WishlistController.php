@@ -29,9 +29,27 @@ class WishlistController extends AppController
     
     public function add()
     {
+      $this->loadModel('Wishlists');
       $data = $this->request->getData();
       $id_product = $data['id_product'];
-    
+      
+      if ($this->Auth->user()) {
+        $find_wishlist = $this->Wishlists
+                              ->find()->where(['product_id' => $data['id_product'], 'user_id' => $this->Auth->user('id')])
+                              ->first();
+
+        if (empty($find_wishlist)) {
+
+          $wishlist = $this->Wishlists->newEntity();
+          $wishlist->user_id = $this->Auth->user('id');
+          $wishlist->product_id = $data['id_product'];
+          $wishlist->data =  date("Y-m-d H:i:s");
+          $this->Wishlists->save($wishlist);
+          
+        }
+     
+      } 
+
       if (!isset($_SESSION['wishlist'])) {
         $_SESSION['wishlist'] = [];
       }
@@ -44,7 +62,6 @@ class WishlistController extends AppController
     
 
 
-      debug($_SESSION['wishlist']);
 
       $this->autoRender = false;
       $this->RequestHandler->renderAs($this, 'json');

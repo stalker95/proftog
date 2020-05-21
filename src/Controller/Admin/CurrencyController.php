@@ -31,7 +31,7 @@ class CurrencyController extends AppController
             $this->Flash->admin_error(__('Валюти не змінено. Спробуйте пізніше.'));
         }
 
-        $this->nav_['actions'] = true; 
+        $this->nav_['currencys'] = true; 
         $this->set(compact('currency'));
     }
 

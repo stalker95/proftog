@@ -62,7 +62,13 @@ class CategoriesController extends AppController
      */
     public function view($slug = null)
     {
-        $category = $this->Categories->find()->where(['slug' => $slug])->first();
+        $category = $this->Categories->find()->contain(['ParentCategories','ParentCategories.ParentCategories'])->where(['Categories.slug' => $slug])->first();
+        //debug($category);
+
+        if ($category->parent_id == 0) {
+          $child_categories = $this->Categories->find()->contain(['ChildCategories'])->where(['Categories.parent_id' => $category->id])->order(['Categories.position' => 'ASC'])->toArray();
+          $this->set(compact('child_categories'));
+        }
         $id = $category->id;
 
         $attributes_items = $this->AttributesItems->newEntity();
@@ -81,7 +87,7 @@ class CategoriesController extends AppController
         $products = $this->Paginate(
                     $this->Products
                          ->find()
-                         ->contain(['ActionsProducts','Producers','Discounts','Rewiev'])
+                         ->contain(['ActionsProducts','ActionsProducts.Actions','Producers','Discounts','Rewiev'])
                          ->where(['category_id' => $category->id]))
                          ->toArray();
                     //     debug($products);
@@ -125,7 +131,7 @@ class CategoriesController extends AppController
             $products_attributes = [];        
 
             if (!empty($attibutes_items) AND !empty($attributes_names)) {
-              //  debug($attibutes_items);
+                //debug($attibutes_items);
               //  debug($attributes_names);
             $products_attributes = $this->AttributesProducts
                                         ->find()
@@ -133,25 +139,37 @@ class CategoriesController extends AppController
                                         ->where(['attribute_id IN' => $attibutes_items])
                                         ->where(['value IN' => $attributes_names])
                                         ->toArray();
-                                       // debug($products_attributes);
-            $products_attributes_before_filter_first = array_column($products_attributes,'product_id');
-            $products_attributes_before_filter_second = array_column($products_attributes,'product_id');
+           // debug(array_column($products_attributes,'product_id'));
 
-            $same_arrays  = array_intersect_assoc($products_attributes_before_filter_first,$products_attributes_before_filter_second);
-            debug($same_arrays);
+            if (count($products_attributes) > 1) {
+                $double_array = array_count_values(array_column($products_attributes,'product_id')); 
+               $products_arrays = [];
+             //  debug($double_array);
+
+               foreach ($double_array as $key => $value) {
+                 if ($value >= 1) {
+                  array_push($products_arrays, $key);
+                 }
+               }
+
+            } else {
+              $products_arrays = array_column($products_attributes,'product_id');
+            }
+           
             }
 
             
             
             $query_for_products = $this->Products
                                         ->find()
-                                        ->contain(['Actions','Discounts','Rewiev'])
+                                        ->contain(['Actions','Discounts','Rewiev','ActionsProducts','ActionsProducts.Actions'])
                                         ->where(['category_id' => $category->id])
                                         ->where(['price * 30 >=' => $this->request['?']['start_price']])
                                         ->where(['price * 30 <=' => $this->request['?']['end_price']]);
-
+         // debug($products_attributes);
             if (!empty($products_attributes)) {
-                $query_for_products = $query_for_products->where(['id IN ' => array_column($products_attributes,'product_id')]);
+            //  debug($products_arrays);
+                $query_for_products = $query_for_products->where(['id IN ' => $products_arrays]);
             }
 
              if (!empty($producers)) {

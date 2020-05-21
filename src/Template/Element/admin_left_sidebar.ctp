@@ -15,86 +15,152 @@
 
         <li class="<?= $nav_['dashboard'] ? 'active' : '' ?>">
             <a href="<?php echo $this->Url->build(['controller' => 'dashboard', 'action' => 'index', '_full' => true, 'prefix' => 'admin', 'plugin' => false]); ?>">
-                <i class="fa fa-pencil"></i> <span><?php echo __('Дошка'); ?></span>
+                <img src="<?= $this->Url->build('/img/dashboard1.svg', ['fullBase' => true]) ?>" alt=""> <span><?php echo __('Панель управління'); ?></span>
             </a>
         </li>  
-<?php   if ($user->is_abs()): ?>
-        <li class="<?= $nav_['users'] ? 'active' : '' ?>">
-            <a href="<?php echo $this->Url->build(['controller' => 'users', 'action' => 'index', '_full' => true, 'prefix' => 'admin', 'plugin' => false]); ?>">
-                <i class="fa fa-list-ul"></i> <span><?php echo __('Користувачі'); ?></span>
-            </a>
-        </li> 
-
-        <li class="<?= $nav_['users'] ? 'active' : '' ?>">
-            <a href="<?php echo $this->Url->build(['controller' => 'quick-orders', 'action' => 'index', '_full' => true, 'prefix' => 'admin', 'plugin' => false]); ?>">
-                <i class="fa fa-list-ul"></i> <span><?php echo __('Швидкі замовлення'); ?></span>
-            </a>
-        </li> 
-         
-<?php endif; ?>
-      <li class="<?= $nav_['products'] ? 'active' : '' ?>">
-            <a href="<?php echo $this->Url->build(['controller' => 'products', 'action' => 'index', '_full' => true, 'prefix' => 'admin', 'plugin' => false]); ?>">
-                <i class="fa fa-list-ul"></i> <span><?php echo __('Товари'); ?></span>
-            </a>
-        </li> 
-<?php   if ($user->is_abs()): ?>
-         
-        <li class="<?= $nav_['category'] ? 'active' : '' ?>">
-            <a href="<?php echo $this->Url->build(['controller' => 'category', 'action' => 'index', '_full' => true, 'prefix' => 'admin', 'plugin' => false]); ?>">
-                <i class="fa fa-list-ul"></i> <span><?php echo __('Категорії'); ?></span>
-            </a>
-        </li> 
-
-        <li class="<?= $nav_['actions'] ? 'active' : '' ?>">
-            <a href="<?php echo $this->Url->build(['controller' => 'actions', 'action' => 'index', '_full' => true, 'prefix' => 'admin', 'plugin' => false]); ?>">
-                <i class="fa fa-list-ul"></i> <span><?php echo __('Акції'); ?></span>
-            </a>
-        </li> 
-
-        <li class="<?= $nav_['proposes'] ? 'active' : '' ?>">
-            <a href="<?php echo $this->Url->build(['controller' => 'proposes', 'action' => 'index', '_full' => true, 'prefix' => 'admin', 'plugin' => false]); ?>">
-                <i class="fa fa-list-ul"></i> <span><?php echo __('Пропозиції'); ?></span>
-            </a>
-        </li> 
-                <li class="<?= $nav_['options'] ? 'active' : '' ?> treeview">
+ <li class="<?php  if($nav_['orders'] OR $nav_['quick_orders'] OR $nav_['actions'] OR $nav_['proposes']){ echo 'active '; } ?> treeview">
           <a href="#">
-            <i class="fa fa-dashboard"></i> <span>Опції</span>
+           <img src="<?= $this->Url->build('/img/shop.svg', ['fullBase' => true]) ?>" alt=""> <span>Продажі</span>
             <span class="pull-right-container">
-              <i class="fa fa-angle-left pull-right"></i>
+              <i class="fa fa-angle-right pull-right"></i>
             </span>
           </a>
           <ul class="treeview-menu">
 
-            <li ><a href="<?php echo $this->Url->build(['controller' => 'options-items', 'action' => 'index', '_full' => true, 'prefix' => 'admin', 'plugin' => false]); ?>">
-                <i class="fa fa-circle-o"></i>Опції</a>
+            <li class="<?= $nav_['orders'] ? 'active' : '' ?>">
+            <a href="<?php echo $this->Url->build(['controller' => 'orders', 'action' => 'index', '_full' => true, 'prefix' => 'admin', 'plugin' => false]); ?>">
+                <i class="fa fa-angle-double-right"></i><span><?php echo __('Замовлення'); ?></span>
+            </a>
+        </li> 
+
+            <li class="<?= $nav_['quick_orders'] ? 'active' : '' ?>">
+            <a href="<?php echo $this->Url->build(['controller' => 'quick-orders', 'action' => 'index', '_full' => true, 'prefix' => 'admin', 'plugin' => false]); ?>">
+                <i class="fa fa-angle-double-right"></i><span><?php echo __('Швидкі замовлення'); ?></span>
+            </a>
+        </li> 
+            <li class="<?= $nav_['actions'] ? 'active' : '' ?>">
+            <a href="<?php echo $this->Url->build(['controller' => 'actions', 'action' => 'index', '_full' => true, 'prefix' => 'admin', 'plugin' => false]); ?>">
+                <i class="fa fa-angle-double-right"></i><span><?php echo __('Акції'); ?></span>
+            </a>
+        </li> 
+        <li class="<?= $nav_['proposes'] ? 'active' : '' ?>">
+            <a href="<?php echo $this->Url->build(['controller' => 'proposes', 'action' => 'index', '_full' => true, 'prefix' => 'admin', 'plugin' => false]); ?>">
+                <i class="fa fa-angle-double-right"></i> <span><?php echo __('Пропозиції'); ?></span>
+            </a>
+        </li> 
+             
+        
+        
+          </ul>
+        </li>
+
+
+          <li class="<?= $nav_['options'] ? 'active' : '' ?> treeview
+             <?php  if($nav_['category'] OR $nav_['products'] OR $nav_['attributes_item'] OR $nav_['options_group'] OR $nav_['producers']  OR $nav_['attributes']){ echo 'active'; } ?>
+  ">
+          <a href="#">
+            <img src="<?= $this->Url->build('/img/katalog.svg', ['fullBase' => true]) ?>" alt=""> <span>Каталог</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-right pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+
+            <li class="<?php  if($nav_['category']){ echo 'active '; } ?>"><a href="<?php echo $this->Url->build(['controller' => 'category', 'action' => 'index', '_full' => true, 'prefix' => 'admin', 'plugin' => false]); ?>" >
+                <i class="fa fa-angle-double-right"></i>Категорії товарів</a>
             </li>
-            <li><a href="<?php echo $this->Url->build(['controller' => 'options', 'action' => 'index', '_full' => true, 'prefix' => 'admin', 'plugin' => false]); ?>">
-                <i class="fa fa-circle-o"></i> Групи опцій</a>
+            <li class="<?php  if($nav_['products']){ echo 'active '; } ?>"><a href="<?php echo $this->Url->build(['controller' => 'products', 'action' => 'index', '_full' => true, 'prefix' => 'admin', 'plugin' => false]); ?>">
+                <i class="fa fa-angle-double-right"></i>Товари</a>
+            </li>
+             <li class="<?php if($nav_['attributes_item'] OR $nav_['attributes']) { echo 'active_element'; } ?> treeview">
+          <a href="#">
+            <i class="fa fa-angle-double-right"></i> <span>Атрибути</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-right pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+
+            <li class="<?php  if($nav_['attributes_item']){ echo 'active '; } ?>"><a href="<?php echo $this->Url->build(['controller' => 'attributes-items', 'action' => 'index', '_full' => true, 'prefix' => 'admin', 'plugin' => false]); ?>">
+                 <i class="fa fa-angle-double-right"></i>Атрибути</a>
+            </li>
+            <li class="<?php  if($nav_['attributes']){ echo 'active '; } ?>"><a href="<?php echo $this->Url->build(['controller' => 'attributes', 'action' => 'index', '_full' => true, 'prefix' => 'admin', 'plugin' => false]); ?>">
+                 <i class="fa fa-angle-double-right"></i>Групи атрибутів</a>
             </li>
 
           </ul>
         </li>
-
-        <li class="<?= $nav_['producers'] ? 'active' : '' ?>">
-            <a href="<?php echo $this->Url->build(['controller' => 'producers', 'action' => 'index', '_full' => true, 'prefix' => 'admin', 'plugin' => false]); ?>">
-                <i class="fa fa-list-ul"></i> <span><?php echo __('Виробники'); ?></span>
-            </a>
-        </li>
-
-        <li class="<?= $nav_['content'] ? 'active' : '' ?> treeview">
+        <li class="<?php if($nav_['options'] OR $nav_['options_group']) { echo 'active_element'; } ?> treeview">
           <a href="#">
-            <i class="fa fa-dashboard"></i> <span>Блог</span>
+            <i class="fa fa-angle-double-right"></i> <span>Опції</span>
             <span class="pull-right-container">
-              <i class="fa fa-angle-left pull-right"></i>
+              <i class="fa fa-angle-right pull-right"></i>
             </span>
           </a>
           <ul class="treeview-menu">
-            <li>
-                <a href="<?php echo $this->Url->build(['controller' => 'BlogCategories', 'action' => 'index', '_full' => true, 'prefix' => 'admin', 'plugin' => false]); ?>"><i class="fa fa-circle-o"></i> Категорії блога</a>
+
+            <li class="<?php  if($nav_['options']){ echo 'active '; } ?>"><a href="<?php echo $this->Url->build(['controller' => 'options-items', 'action' => 'index', '_full' => true, 'prefix' => 'admin', 'plugin' => false]); ?>">
+                <i class="fa fa-angle-double-right"></i>Опції</a>
+            </li>
+            <li class="<?php  if($nav_['options_group']){ echo 'active '; } ?>"><a href="<?php echo $this->Url->build(['controller' => 'options', 'action' => 'index', '_full' => true, 'prefix' => 'admin', 'plugin' => false]); ?>">
+                <i class="fa fa-angle-double-right"></i>Групи опцій</a>
+            </li>
+
+          </ul>
+        </li>
+        <li class="<?= $nav_['producers'] ? 'active' : '' ?>">
+            <a href="<?php echo $this->Url->build(['controller' => 'producers', 'action' => 'index', '_full' => true, 'prefix' => 'admin', 'plugin' => false]); ?>">
+                <i class="fa fa-angle-double-right"></i> <span><?php echo __('Виробники'); ?></span>
+            </a>
+        </li>
+          </ul>
+        </li>
+
+
+ <li class="<?php if ($nav_['rules'] OR $nav_['delivery'] OR $nav_['contacts'] OR $nav_['aboutus'] OR $nav_['payments'] OR $nav_['publics'])  { echo 'active'; } ?> treeview">
+          <a href="#">
+            <img src="<?= $this->Url->build('/img/pages.svg', ['fullBase' => true]) ?>" alt=""> <span>Сторінки</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-right pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+
+            
+             <li class="<?php if ($nav_['rules'])  { echo 'active'; } ?>"><a href="<?php echo $this->Url->build(['controller' => 'rules', 'action' => 'index', '_full' => true, 'prefix' => 'admin', 'plugin' => false]); ?>"><i class="fa fa-angle-double-right"></i> Правила обміну та повернення  v1</a></li>
+            <li class="<?php if ($nav_['delivery'])  { echo 'active'; } ?>"><a href="<?php echo $this->Url->build(['controller' => 'delivery-page', 'action' => 'index', '_full' => true, 'prefix' => 'admin', 'plugin' => false]); ?>"><i class="fa fa-angle-double-right"></i> Доставка</a></li>
+            <li class="<?php if ($nav_['contacts'])  { echo 'active'; } ?>"><a href="<?php echo $this->Url->build(['controller' => 'contacts', 'action' => 'index', '_full' => true, 'prefix' => 'admin', 'plugin' => false]); ?>"><i class="fa fa-angle-double-right"></i> Контакти</a></li>
+            <li class="<?php if ($nav_['aboutus'])  { echo 'active'; } ?>"><a href="<?php echo $this->Url->build(['controller' => 'aboutus', 'action' => 'index', '_full' => true, 'prefix' => 'admin', 'plugin' => false]); ?>"><i class="fa fa-angle-double-right"></i> Про нас</a></li>
+            <li class="<?php if ($nav_['payments'])  { echo 'active'; } ?>"><a href="<?php echo $this->Url->build(['controller' => 'payments', 'action' => 'index', '_full' => true, 'prefix' => 'admin', 'plugin' => false]); ?>"><i class="fa fa-angle-double-right"></i>Оплата</a></li>
+            <li class="<?php if ($nav_['publics'])  { echo 'active'; } ?>"><a href="<?php echo $this->Url->build(['controller' => 'publics', 'action' => 'index', '_full' => true, 'prefix' => 'admin', 'plugin' => false]); ?>"><i class="fa fa-angle-double-right"></i>Публічна офкрта</a></li>
+
+          </ul>
+        </li>
+
+
+
+
+        <li class="<?= $nav_['users'] ? 'active' : '' ?>">
+            <a href="<?php echo $this->Url->build(['controller' => 'users', 'action' => 'index', '_full' => true, 'prefix' => 'admin', 'plugin' => false]); ?>">
+                <img src="<?= $this->Url->build('/img/people.svg', ['fullBase' => true]) ?>" alt="">
+                 <span><?php echo __('Клієнти'); ?></span>
+            </a>
+        </li> 
+
+        <li class="<?php if ($nav_['blogs'] OR $nav_['blog_categories'])  { echo 'active'; } ?> treeview">
+          <a href="#">
+             <img src="<?= $this->Url->build('/img/news.svg', ['fullBase' => true]) ?>" alt=""> <span>Блог</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-right pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li class="<?php if ($nav_['blog_categories'])  { echo 'active'; } ?>">
+                <a href="<?php echo $this->Url->build(['controller' => 'BlogCategories', 'action' => 'index', '_full' => true, 'prefix' => 'admin', 'plugin' => false]); ?>"><i class="fa fa-angle-double-right"></i> Категорії блога</a>
             </li>
             <li class="<?= $nav_['blogs'] ? 'active' : '' ?>">
               <a href="<?php echo $this->Url->build(['controller' => 'blogs', 'action' => 'index', '_full' => true, 'prefix' => 'admin', 'plugin' => false]); ?>">
-                <i class="fa fa-list-ul"></i> <span><?php echo __('Блог'); ?></span>
+                <i class="fa fa-angle-double-right"></i> <span><?php echo __('Блог'); ?></span>
               </a>
              </li> 
            
@@ -102,69 +168,32 @@
         </li>
 
 
-
-        <li class="<?= $nav_['attributes'] ? 'active' : '' ?> treeview">
-          <a href="#">
-            <i class="fa fa-dashboard"></i> <span>Атрибути</span>
-            <span class="pull-right-container">
-              <i class="fa fa-angle-left pull-right"></i>
-            </span>
-          </a>
-          <ul class="treeview-menu">
-
-            <li ><a href="<?php echo $this->Url->build(['controller' => 'attributes-items', 'action' => 'index', '_full' => true, 'prefix' => 'admin', 'plugin' => false]); ?>">
-                <i class="fa fa-circle-o"></i> Атрибути</a>
-            </li>
-            <li><a href="<?php echo $this->Url->build(['controller' => 'attributes', 'action' => 'index', '_full' => true, 'prefix' => 'admin', 'plugin' => false]); ?>">
-                <i class="fa fa-circle-o"></i> Групи атрибутів</a>
-            </li>
-
-          </ul>
-        </li>
-
-          
-        <li class="<?= $nav_['content'] ? 'active' : '' ?> treeview">
-          <a href="#">
-            <i class="fa fa-dashboard"></i> <span>СТорінки</span>
-            <span class="pull-right-container">
-              <i class="fa fa-angle-left pull-right"></i>
-            </span>
-          </a>
-          <ul class="treeview-menu">
-            <li ><a href="<?php echo $this->Url->build(['controller' => 'rules', 'action' => 'index', '_full' => true, 'prefix' => 'admin', 'plugin' => false]); ?>"><i class="fa fa-circle-o"></i> Правила обміну та повернення  v1</a></li>
-            <li><a href="<?php echo $this->Url->build(['controller' => 'delivery-page', 'action' => 'index', '_full' => true, 'prefix' => 'admin', 'plugin' => false]); ?>"><i class="fa fa-circle-o"></i> Доставка</a></li>
-            <li><a href="<?php echo $this->Url->build(['controller' => 'contacts', 'action' => 'index', '_full' => true, 'prefix' => 'admin', 'plugin' => false]); ?>"><i class="fa fa-circle-o"></i> Контакти</a></li>
-            <li><a href="<?php echo $this->Url->build(['controller' => 'aboutus', 'action' => 'index', '_full' => true, 'prefix' => 'admin', 'plugin' => false]); ?>"><i class="fa fa-circle-o"></i> Про нас</a></li>
-            <li><a href="<?php echo $this->Url->build(['controller' => 'payments', 'action' => 'index', '_full' => true, 'prefix' => 'admin', 'plugin' => false]); ?>"><i class="fa fa-circle-o"></i> Оплата</a></li>
-            <li><a href="<?php echo $this->Url->build(['controller' => 'publics', 'action' => 'index', '_full' => true, 'prefix' => 'admin', 'plugin' => false]); ?>"><i class="fa fa-circle-o"></i>Публічна офкрта</a></li>
-          </ul>
-        </li>
-
         <li class="<?= $nav_['seo'] ? 'active' : '' ?>">
-            <a href="<?php echo $this->Url->build(['controller' => 'seo', 'action' => 'edit', '_full' => true, 'prefix' => 'admin', 'plugin' => false]); ?>">
-                <i class="fa fa-list-ul"></i> <span><?php echo __('Seo'); ?></span>
+            <a href="<?php echo $this->Url->build(['controller' => 'seos', 'action' => 'index', '_full' => true, 'prefix' => 'admin', 'plugin' => false]); ?>">
+                 <img src="<?= $this->Url->build('/img/seo_icon.svg', ['fullBase' => true]) ?>" alt=""> <span><?php echo __('Seo'); ?></span>
             </a>
         </li> 
 
         
 
-     <li class="<?= $nav_['content'] ? 'active' : '' ?> treeview">
+     <li class="<?php if ($nav_['settingss'] OR $nav_['currencys'] OR $nav_['managers'] OR $nav_['socials'] )  { echo 'active'; } ?> treeview">
           <a href="#">
-            <i class="fa fa-dashboard"></i> <span>Налаштування</span>
+             <img src="<?= $this->Url->build('/img/new_setting.svg', ['fullBase' => true]) ?>" alt=""> <span>Налаштування</span>
             <span class="pull-right-container">
-              <i class="fa fa-angle-left pull-right"></i>
+              <i class="fa fa-angle-right pull-right"></i>
             </span>
           </a>
           <ul class="treeview-menu">
-            <li >
-                <a href="<?php echo $this->Url->build(['controller' => 'settings', 'action' => 'edit', '_full' => true, 'prefix' => 'admin', 'plugin' => false]); ?>"><i class="fa fa-circle-o"></i>Загальні налаштування </a>
+            <li class="<?php if ($nav_['settingss'])  { echo 'active'; } ?>">
+                <a href="<?php echo $this->Url->build(['controller' => 'settings', 'action' => 'edit', '_full' => true, 'prefix' => 'admin', 'plugin' => false]); ?>"><i class="fa fa-angle-double-right"></i>Загальні налаштування </a>
             </li>
-             <li >
-                <a href="<?php echo $this->Url->build(['controller' => 'managers', 'action' => 'index', '_full' => true, 'prefix' => 'admin', 'plugin' => false]); ?> "><i class="fa fa-circle-o"></i>Менеджери</a>
+           
+             <li class="<?php if ($nav_['managers'])  { echo 'active'; } ?>">
+                <a href="<?php echo $this->Url->build(['controller' => 'managers', 'action' => 'index', '_full' => true, 'prefix' => 'admin', 'plugin' => false]); ?> "><i class="fa fa-angle-double-right"></i>Менеджери</a>
             </li>
-            <li class="<?= $nav_['currency'] ? 'active' : '' ?>">
+            <li class="<?= $nav_['currencys'] ? 'active' : '' ?>">
             <a href="<?php echo $this->Url->build(['controller' => 'currency', 'action' => 'index', '_full' => true, 'prefix' => 'admin', 'plugin' => false]); ?>">
-                <i class="fa fa-list-ul"></i> <span><?php echo __('Валюти'); ?></span>
+                <i class="fa fa-angle-double-right"></i><span><?php echo __('Валюти'); ?></span>
             </a>
         </li> 
             
@@ -172,7 +201,6 @@
         </li>
 
 
-         <?php endif; ?>
 
           <li class="absolute_link" >
             <a href="<?php echo $baseUrl; ?>" target="_blanck">

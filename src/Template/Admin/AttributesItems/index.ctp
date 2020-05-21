@@ -1,27 +1,35 @@
- <section class="content">
+ <section class="content white_background products_container">
   <div class="row">
    <div class="col-xs-12">
-     <h1 class="blog__title">Атрибути</h1>
+     <div class="products_container_top">
+       <p class="products_container_title">Атрибути</p>
+       <div class="product_container_buttons">
+                  <a href="<?= $this->Url->build(['controller' => 'attributes-items','action'=>'add']) ?>" class="product_container_buttons_add btn-primary">
+           <i class="fa fa-plus"></i>
+         </a>
+
+         <div class="create__new__user">
+            
+           <button class="btn delete_form_checked  btn-dangeres save__changes__form__playlist" data-toggle="modal" data-target="#mediaGallery" >
+                     <i class="fa fa-trash"></i>
+          </button>
+         </div>
+         
+       </div>
+     </div>
      <div class="box">
       <div class="box-body table-responsive no-padding">
        <div class="box-header">
-        <div class="create__new__user">
-          <button class="btn delete_form_checked  btn-dangeres save__changes__form__playlist" data-toggle="modal" data-target="#mediaGallery" >
-                     Delete
-          </button>
-          <?php   echo  $this->Html->link('Додати ',['action'=>'add'],['class'=>'btn btn-primary create__new__user']); ?>
-            </div>
+
               
            </div>
               <table class="table table-bordered table-striped" id="example1">
                  <thead>
                 <tr>
-                 <th style="display: flex;align-items: center;justify-content: center;">
-                    <label class="custom-checkbox">
+                 <th class="first-check"> <label class="custom-checkbox">
                           <input type="checkbox" id="delete-all">
                           <span class="checkmark"></span>
-                    </label>
-                  </th>
+                    </label></th>
                   <th>ID</th>
                   <th>Назва</th>
                   <th>Група атрибутів</th>
@@ -31,7 +39,7 @@
                 <tbody>
                 <?php   foreach ($attributesItems as $attributesItem): ?>
                   <tr>
-                     <td style="display: flex;align-items: center;justify-content: center;">
+                     <td class="first-check">
                        <label class="custom-checkbox">
                           <input type="checkbox" id="delete-all" value="<?= $attributesItem->id ?>" class='delete_item'>
                           <span class="checkmark"></span>

@@ -1,13 +1,24 @@
-<div class="row">
-
-      <div class="col-md-6">
-        <div class="playlist__managment__item">
-          <p class="playlist__managment__item__title">
+ <section class="content white_background products_container">
+  <div class="row">
+   <div class="col-xs-12">
+     <?= $this->Form->create($_user,['type' => 'file'])  ?>
+     <div class="products_container_top">
+       <p class="products_container_title">Редагування опції</p>
+       <div class="product_container_buttons">
+         <button class="btn-primary" type="submit">
+          <i class="fa fa-save"></i>
+        </button>
+         <div class="create__new__user">
+            <button class="btn delete_form_checked  btn-dangeres save__changes__form__playlist copy_checked" data-toggle="modal" data-target="#mediaGallery" >
+                     <i class="fa fa-copy"></i>
+          </button>
+           <button class="btn delete_form_checked  btn-dangeres save__changes__form__playlist" data-toggle="modal" data-target="#mediaGallery" >
+                     <i class="fa fa-trash"></i>
+          </button>
+         </div>
          
-            
-            <?= __('Редагування менеджера') ?>
-          </p>
-     <?= $this->Form->create($_user)  ?>
+       </div>
+     </div>
        <div class="playlist__managment--item">
   <div class="playlist__managment--item__left">
     <p>Ім'я </p>
@@ -64,7 +75,6 @@
 </div>  
 
 
-<?=  $this->Form->submit('Save ',['class'=>'btn  btn-primary save__changes__form__playlist']); ?>
      <?=   $this->Form->end() ?>
         </div>
       </div>

@@ -32,6 +32,7 @@ class AppController extends Controller
      */
     protected $employee;
     protected $currency;
+    protected $socials;
 
     /**
      * @var App\Model\Entity\User
@@ -55,18 +56,31 @@ class AppController extends Controller
         'dashboard'       => false,
         'category'        => false,
         'blogs'           => false, 
+        'socials'         => false,
         'products'        => false, 
-        'options'         => false, 
+        'options'         => false,
+        'options_group'   => false, 
         'producers'       => false, 
-        'attributes'      => false, 
+        'pages'           => false,
+        'attributes'      => false,
+        'attributes_item' => false, 
         'content'         => false, 
         'seo'             => false, 
         'blog_categories' => false,
         'actions'         => false,
         'managers'        => false,
-        'currency'        => false,
-        'users'         => false,
-        'proposes'         => false,
+        'currencys'        => false,
+        'users'           => false,
+        'orders'          => false,
+        'quick_orders'    => false,
+        'rules'           => false,
+        'delivery'        => false,
+        'contacts'        => false, 
+        'proposes'        => false,
+        'aboutus'         => false,
+        'payments'        => false,
+        'publics'         => false,
+        'settingss'        => false
     );
 
     /**
@@ -189,6 +203,8 @@ class AppController extends Controller
             $currency = $this->Currency->find()->first();
             $this->currency = $currency;
 
+
+
             $contacts = $this->Settings->find()->first();
              $this->set('currency', $this->currency);
         } else {
@@ -218,11 +234,15 @@ class AppController extends Controller
         
         $this->loadModel('Categories');
         $this->loadModel('Settings');
+        $this->loadModel('Socials');
 
         $categories = $this->Categories->find()->contain(['ChildCategories'])->order('Categories.position ASC')->toArray();
-        $settings = $this->Settings->find()->toArray();
+        $settings = $this->Settings->find()->first();
         $this->categories = $categories;
         $this->settings = $settings;
+        $socials = $this->Socials->find()->toArray();
+            $this->socials = $socials;
+            $this->set('socials', $this->socials);
         $this->set('categories', $this->categories);
         $this->set('settings', $this->settings);
         
@@ -245,7 +265,7 @@ class AppController extends Controller
                 $email= new Email('default');
                 $email->emailFormat('html');
                 $email->transport('default');
-                $email->from('andrsaw4@gmail.com', 'Andrii Sachynetch');
+                $email->from('andrsaw4@gmail.com', 'Компанія Профторг');
                 $email->subject($subject);
                 $email->to($to);
                 

@@ -1,26 +1,25 @@
- <section class="content">
+ <section class="content white_background products_container">
   <div class="row">
    <div class="col-xs-12">
-     <h1 class="blog__title">Категорії</h1>
+     <div class="products_container_top">
+       <p class="products_container_title">Категорії товарів</p>
+       <div class="product_container_buttons">
+         <a href="<?= $this->Url->build(['controller' => 'category','action'=>'add']) ?>" class="product_container_buttons_add btn-primary">
+           <i class="fa fa-plus"></i>
+         </a>
+         <div class="create__new__user">
+            
+           <button class="btn delete_form_checked  btn-dangeres save__changes__form__playlist" data-toggle="modal" data-target="#mediaGallery" >
+                     <i class="fa fa-trash"></i>
+          </button>
+         </div>
+         
+       </div>
+     </div>
      <div class="box">
       <div class="box-body table-responsive no-padding">
        <div class="box-header">
-        <div class="create__new__user">
-          <button class="btn delete_form_checked  btn-dangeres save__changes__form__playlist" data-toggle="modal" data-target="#mediaGallery" >
-                     Delete
-          </button>
-          <?php   echo  $this->Html->link('Додати ',['action'=>'add'],['class'=>'btn btn-primary create__new__user']); ?>
-              <div class="search-form-find">
-               <?= $this->Form->create('Search',['url'   => array(
-               'controller' => 'category','action' => 'search'
-                 )]);
-                echo  $this->Form->control('name',array('label' => false,'class'=>'form-control','min'=>6));
-                echo  $this->Form->end(); 
-             ?>
-               <p class="search-form-find-title"> Пошук </p>
-            </div>
-            </div>
-              
+
            </div>
               <table class="table table-bordered table-striped" id="example1">
                  <thead>
@@ -59,17 +58,19 @@
               </tbody>
               </table>
             </div>
-             <?php
+             <?php if ($category->parent_id != 0 ): ?>
+               <?php
               $params = $this->Paginator->params();
               if ($params['pageCount'] > 1): ?>
                 <ul class="pagination pagination-sm">
-                    <?= $this->Paginator->first('<< ' . __('first')) ?>
-                    <?= $this->Paginator->prev('< ' . __('previous')) ?>
+                    <?= $this->Paginator->first('<< ') ?>
+                    <?= $this->Paginator->prev('< ' ) ?>
                     <?= $this->Paginator->numbers() ?>
-                    <?= $this->Paginator->next(__('next') . ' >') ?>
-                <?= $this->Paginator->last(__('last') . ' >>') ?>
+                    <?= $this->Paginator->next(' >') ?>
+                <?= $this->Paginator->last(' >>') ?>
                 </ul>
           <?php endif; ?>
+      <?php endif; ?>
           </div>
         </div>
       </div>

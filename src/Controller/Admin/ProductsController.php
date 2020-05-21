@@ -71,7 +71,7 @@ class ProductsController extends AppController
     public function add()
     {
         $product = $this->Products->newEntity();
-        $first_options = $this->Options->find()->order('rand()')->limit(5)->toArray();
+        $first_options = $this->Options->find()->order('rand()')->toArray();
         $attributes = $this->Attributes->find()->contain('AttributesItems')->toArray();
         
        if ($this->request->is('post')) {
@@ -148,7 +148,7 @@ class ProductsController extends AppController
             $this->Flash->admin_error(__('Товар не додано. Спробуйте пізніше'));
         }
     
-        $category_id = $this->Products->Categories->find('list', ['limit' => 200]);
+        $category_id = $this->Products->Categories->find('list', ['limit' => 200])->order('name ASC');
         $producer_id = $this->Products->Producers->find('list', ['limit' => 200]);
         $this->set(compact('product', 'category_id', 'producer_id','first_options','attributes'));
         $this->nav_['products'] = true;
@@ -166,7 +166,7 @@ class ProductsController extends AppController
         $product = $this->Products->get($id, [
             'contain' => []
         ]);
-        $first_options = $this->Options->find()->order('rand()')->limit(5)->toArray();
+        $first_options = $this->Options->find()->order('rand()')->toArray();
         $products_gallery = $this->ProductsGallery->find()->where(['product_id' => $id])->order('position ASC')->toArray();
         $attributes_products = $this->AttributesProducts->find()->contain(['AttributesItems'])->where(['product_id' => $id])->toArray();        
        $option_group = $product->getOptionsGroup($product->id);
@@ -229,7 +229,7 @@ class ProductsController extends AppController
             }
             $this->Flash->admin_error(__('Товар не збережено спробуйте пізніше'));
         }
-        $category_id = $this->Products->Categories->find('list', ['limit' => 200]);
+        $category_id = $this->Products->Categories->find('list', ['limit' => 200])->order('name ASC');
         $producer_id = $this->Products->Producers->find('list', ['limit' => 200]);
         $this->nav_['products'] = true;
         $this->set(compact('product', 'category_id', 'products_gallery', 'attributes','attributes_products', 'producer_id','option_group','first_options','id','discounts'));
@@ -316,14 +316,14 @@ class ProductsController extends AppController
 
      public function search($name = null)
     {
-     if ($this->request->is(['patch', 'post', 'put'])) {
+           $this->nav_['products'] = true;
+     if ($this->request->is(['get', 'post', 'put'])) {
         $name = $this->getRequest()->getData('name');
-        $products = $this->Products->find()->select([])->contain(['Categories'])->where([
-                'title LIKE'=>'%'.$name.'%',          
+        $products = $this->Products->find()->contain(['Categories'])->where([
+                'Products.title LIKE'=>'%'.$name.'%',          
         ])->toArray();
           $this->set('products',$products);
      }
-     $this->nav_['products'] = true;
     }
 
     public function getAttributes() {

@@ -1,5 +1,5 @@
 
-                <div class="propose_left">
+                <div class="propose_left <?php if ($baseUrl == '/') { echo 'propose_left_active'; } ?>">
                     <div class="propose_left_top">
                         <div class="propose_left_gamburger">
                             <div class="menu-opener-inner active"></div>
@@ -28,8 +28,9 @@
                            
                                 <?php foreach ($categories as $key => $item_two): ?>
                                     <div class="propose_item_list_two">
-                                <?php if ($item_two['parent_id'] == $item['id'] AND $item_two['name'] != $item['name']) {
-                                 echo "<a  href=".$this->Url->build(['controller' => 'categories','action'=>'view/'.$item['slug']]).">".$item_two['name']."</a>"; } ?>
+                                <?php if ($item_two['parent_id'] == $item['id'] AND $item_two['name'] != $item['name']) { ?>
+                                <a  href="<?= $this->Url->build(['controller' => 'categories','action'=>'view/'.$item_two['slug']]) ?>"><?= $item_two['name']."</a>" ?> 
+                            <?php   } ?>
                                   </div>
                             <?php endforeach; ?>
                             </div>

@@ -1,93 +1,104 @@
-<div class="row">
-      <div class="col-md-8">
-        <div class="playlist__managment__item">
-          <p class="playlist__managment__item__title">
+ <section class="content white_background products_container">
+  <div class="row">
+   <div class="col-xs-12">
+     <?= $this->Form->create($settingssa, ['type' => 'file'])  ?>
+     <div class="products_container_top">
+       <p class="products_container_title">Загальні налаштування</p>
+       <div class="product_container_buttons">
+         <button class="btn-primary" type="submit">
+          <i class="fa fa-save"></i>
+        </button>
+         <div class="create__new__user">
+            <button class="btn delete_form_checked  btn-dangeres save__changes__form__playlist copy_checked" data-toggle="modal" data-target="#mediaGallery" >
+                     <i class="fa fa-copy"></i>
+          </button>
+           <button class="btn delete_form_checked  btn-dangeres save__changes__form__playlist" data-toggle="modal" data-target="#mediaGallery" >
+                     <i class="fa fa-trash"></i>
+          </button>
+         </div>
          
-            
-            <?= __('Налаштування') ?>
-          </p>
-     <?= $this->Form->create($settings, ['type' => 'file'] )  ?>
-       <div class="playlist__managment--item">
+       </div>
+     </div>
+
+             <div class="playlist__managment__item">
+                      <div class="products_add_tabs">
+              <div class="products_add_tabs_item active_add_tabs_item">
+                <p>Загальна інформація</p>
+              </div>
+              <div class="products_add_tabs_item">
+                <p>Контатні данні</p>
+              </div>
+            </div>
+                      <div class="products_container">
+            <div class="product_container_item" style="display: block;">
+                   <div class="playlist__managment--item">
   <div class="playlist__managment--item__left">
     <p>Найменування </p>
   </div>
   <div class="playlist__managment--item__right">
     <div class="playlist--item--sub">
-      <?=  $this->Form->control('name',array('label' => false,'class'=>'form-control','min'=>6));?>
+      <?=  $this->Form->control('name',array('label' => false,'class'=>'form-control','min'=>6,'type'=>'text'));?>
     </div>
   </div>
 </div>
 
         <div class="playlist__managment--item">
             <div class="playlist__managment--item__left">
-              <p>Головне зображення</p>
+              <p>Логотип</p>
             </div>
             <div class="playlist__managment--item__right">
               <div class="playlist--item--sub" style="display: block;">
-                  <?=  $this->Form->control('image',array('label' => 'First Name','type'=>'file','class'=>' form-control ','required'=>'false','style'=>'font-size: 1em;padding:0px;width:200px;','id'=>'fileimgMeal'));?>  
-                  <div id="fotosViewMeal" style="position: relative;width: 100%;" class="image_gallery_preview">
-                    <img src="<?= $this->Url->build('/settings/'.$settings->logo, ['fullBase' => true]) ?>" alt="">
+                  
+                  <div class="choose_image_block">
+                  <?=  $this->Form->control('image',array('label' => 'First Name','type'=>'file','class'=>' form-control ','required'=>'false','style'=>'font-size: 1em;padding:0px;width:300px;opacity:0;display:none;','id'=>'fileimgMeal'));?>  
+
+
+                  <div id="fotosViewMeal" style="position: relative;flex-basis: 300px;object-fit: contain;" class="image_gallery_preview">
+                    <img  style="object-fit: contain;" src="<?= $this->Url->build('/settings/'.$settings->logo, ['fullBase' => true]) ?>" alt="">
                   </div>  
+                  <div class="right_buttons">
+                    
+                 
+                   <label for="fileimgMeal"  class="choose_file_settings choose_file_pencil" style="display:block!important;"><i class="fa fa-pencil"></i></label>
+                   </div>
+                  </div>
+                </div>
+            </div>
+        </div>
+
+                <div class="playlist__managment--item">
+            <div class="playlist__managment--item__left">
+              <p>Favicon</p>
+            </div>
+            <div class="playlist__managment--item__right">
+              <div class="playlist--item--sub" style="display: block;">
+                 <div class="choose_image_block">
+                  <?=  $this->Form->control('favicon',array('label' => 'First Name','type'=>'file','class'=>' form-control upload_gallery_item','required'=>'false','style'=>'font-size: 1em;padding:0px;width:300px;opacity:0;display:none;','id'=>'fileimgMeal2'));?>  
+
+
+                  <div id="fotosViewMeal" style="position: relative;flex-basis: 300px;" class="image_gallery_preview">
+                    <img src="<?= $this->Url->build('/settings/'.$settings->favicon, ['fullBase' => true]) ?>" alt="">
+                  </div>  
+                  <div class="right_buttons">
+                    
+                 
+                   <label for="fileimgMeal2"  class="choose_file_settings choose_file_pencil" style="display:block!important;"><i class="fa fa-pencil"></i></label>
+                   </div>
+                  </div>
                   </div>
             </div>
         </div>
 
-<div class="playlist__managment--item">
-  <div class="playlist__managment--item__left">
-    <p>Description </p>
-  </div>
-  <div class="playlist__managment--item__right">
-    <div class="playlist--item--sub">
-      <?=  $this->Form->control('description_page',array('type'=>'textarea','label' => false,'class'=>'form-control','min'=>6));?>
-    </div>
-  </div>
+</div>
 </div>
 
-<div class="playlist__managment--item">
-  <div class="playlist__managment--item__left">
-    <p>Keywords </p>
-  </div>
-  <div class="playlist__managment--item__right">
-    <div class="playlist--item--sub">
-      <?=  $this->Form->control('keywords',array('type'=>'textarea','label' => false,'class'=>'form-control','min'=>6));?>
-    </div>
-  </div>
-</div>
-
-<div class="playlist__managment--item">
-  <div class="playlist__managment--item__left">
-    <p>Адреса </p>
-  </div>
-  <div class="playlist__managment--item__right">
-    <div class="playlist--item--sub">
-      <?=  $this->Form->control('address',array('label' => false,'class'=>'form-control','min'=>6));?>
-    </div>
-  </div>
-</div>
-
-<div class="playlist__managment--item">
-  <div class="playlist__managment--item__left">
-    <p>Час роботи </p>
-  </div>
-  <div class="playlist__managment--item__right">
-    <div class="playlist--item--sub">
-      <?=  $this->Form->control('time',array('label' => false,'class'=>'form-control','min'=>6));?>
-    </div>
-  </div>
-</div>
-
-
-
-<div class="playlist__managment--item">
-  <div class="playlist__managment--item__left">
-    <p>Місцезнаходженя </p>
-  </div>
-  <div class="playlist__managment--item__right">
-    <div class="playlist--item--sub">
-      <?=  $this->Form->control('locate',array('label' => false,'class'=>'form-control','min'=>6));?>
-    </div>
-  </div>
-</div>
+ 
+<div class="product_container_item">
+  <div class="settings_container_flex">
+  <div class="settings_container_column">
+      <div class="settings_container_item">
+        <span class="settings_container_item_title">Контактні данні</span>
+      
 
 <div class="playlist__managment--item">
   <div class="playlist__managment--item__left">
@@ -100,19 +111,110 @@
   </div>
 </div>
 
-<div class="playlist__managment--item">
-  <div class="playlist__managment--item__left">
-    <p>Телефон </p>
+ <div class="playlist__managment--item">
+            <div class="playlist__managment--item__left">
+    <p>Адреса </p>
   </div>
   <div class="playlist__managment--item__right">
     <div class="playlist--item--sub">
-      <?=  $this->Form->control('phones',array('label' => false,'class'=>'form-control','min'=>6));?>
+      <?=  $this->Form->control('address',array('label' => false,'class'=>'form-control','min'=>6, 'type' => 'text'));?>
     </div>
   </div>
 </div>
-<?=  $this->Form->submit('Зберегти ',['class'=>'btn  btn-primary save__changes__form__playlist']); ?>
+
+ <div class="playlist__managment--item">
+            <div class="playlist__managment--item__left">
+    <p>Адреса LAT</p>
+  </div>
+  <div class="playlist__managment--item__right">
+    <div class="playlist--item--sub">
+      <?=  $this->Form->control('adress_lat',array('label' => false,'class'=>'form-control','min'=>6, 'type' => 'text'));?>
+    </div>
+  </div>
+</div>
+
+ <div class="playlist__managment--item">
+            <div class="playlist__managment--item__left">
+    <p>Адреса LNG</p>
+  </div>
+  <div class="playlist__managment--item__right">
+    <div class="playlist--item--sub">
+      <?=  $this->Form->control('adress_lng',array('label' => false,'class'=>'form-control','min'=>6, 'type' => 'text'));?>
+    </div>
+  </div>
+</div>
+
+<div class="playlist__managment--item">
+  <div class="playlist__managment--item__left">
+    <p>Графік роботи </p>
+  </div>
+  <div class="playlist__managment--item__right">
+    <div class="playlist--item--sub">
+      <?=  $this->Form->control('time',array('label' => false,'class'=>'form-control','min'=>6, 'type' => 'text'));?>
+    </div>
+  </div>
+</div>
+
+
+      </div>
+
+            <div class="settings_container_item">
+        <span class="settings_container_item_title">Соціальні мережі</span>
+
+        <?php foreach ($socialsa as $key => $value): ?>
+<div class="playlist__managment--item">
+  <div class="playlist__managment--item__left">
+    <p><?= $value['name'] ?></p>
+  </div>
+  <div class="playlist__managment--item__right">
+    <div class="playlist--item--sub">
+       <input type="text" name="social_name[]" value="<?= $value['name']  ?>" class="form-control" style="display: none;">
+      <input type="text" name="social_value[]" value="<?= $value['url']  ?>" class="form-control">
+    </div>
+  </div>
+      </div>
+  <?php endforeach; ?>
+
+  </div>
+   </div>
+
+   <div class="settings_container_column">
+           <div class="settings_container_item settings_container_item_phones">
+        <span class="settings_container_item_title">Телефони</span>
+        <div class="settings_container_item_phones_container">
+                <?php foreach ($phones as $key => $value): ?>
+                  <?php if (!empty($value)): ?>
+<div class="playlist__managment--item">
+  <div class="playlist__managment--item__left">
+    <p>Номер</p>
+     <input type="text" name="phones_numbers[]" value="<?= $value  ?>" class="form-control">
+  </div>
+  <div class="playlist__managment--item__right">
+     <button type="button" class="btn btn-danger delete_phone"><i class="fa fa-trash"></i></button>
+  </div>
+      </div>
+    <?php endif; ?>
+  <?php endforeach; ?>
+  </div>
+
+  <div class="playlist__managment--item new_phone_record">
+  <div class="playlist__managment--item__left">
+    <p style="opacity: 0;">s</p>
+    <input type="text" name="phones_numbers[]" class="form-control">
+  </div>
+  <div class="playlist__managment--item__right">
+     <button type="button" class="btn btn-primary add_new_record"><i class="fa fa-plus"></i></button>
+  </div>
+      </div>
+
+      </div>
+   </div>
+
+</div>
      <?=   $this->Form->end() ?>
         </div>
+      </div>
+    </div>
       </div>
 
 </div>
@@ -120,6 +222,24 @@
   
 <script>
         $(document).ready(function () {
+ $("body").on("click",'.delete_phone', function() {
+            
+           $(this).parent().parent().remove();
+  
+          });
+
+          $(".add_new_record").click(function() {
+            $(".settings_container_item_phones_container").append('<div class="playlist__managment--item">'+
+  '<div class="playlist__managment--item__left">'+
+    '<p>Номер</p>'+
+     '<input type="text" name="phones_numbers[]" value="<?= $value  ?>" class="form-control">'+
+  '</div>'+
+  '<div class="playlist__managment--item__right">'+
+     '<button type="button" class="btn btn-danger delete_phone"><i class="fa fa-trash"></i></button>'+
+  '</div>'+
+      '</div>');
+          });
+
         initOptionImg();
            });
     function initOptionImg() {
@@ -161,15 +281,15 @@
                 var dataURL = e.target.result;
                 var mimeType = dataURL.split(",")[0].split(":")[1].split(";")[0];
 
-                if ((mimeType != 'image/jpeg') && (mimeType != 'image/jpg') && (mimeType != 'image/png')) {
+                if ((mimeType != 'image/jpeg') && (mimeType != 'image/jpg') && (mimeType != 'image/png') && (mimeType != 'image/x-icon')) {
                     // not support format
                     inp = $("#fileimgMeal");
                     inp.replaceWith(inp.val('').clone(true));
                     alert("Type file not suported \nOnly PNG or JPEG/JPG");
                 } else { //suport format
-                    dataView = '<div class="thumbnail imgNew" id="imgNew" style="width: 100%;text-align:center;">';
+                    dataView = '<div class="thumbnail imgNew" id="imgNew" style="width: 300px;text-align:center;">';
                     dataView += '<div id="img-list">';
-                    dataView += '<img id="imgMain" class="img-circle" src="' + e.target.result + '" style="width: 100%;height:253px;object-fit:cover;border-radius:0px;"/>';
+                    dataView += '<img id="imgMain" class="img-circle" src="' + e.target.result + '" style="width: 300px;height:200px;object-fit:cover;border-radius:0px;"/>';
                     dataView += '<div class="deleteImgBack" style="display:none;"></div>';
                     dataView += '<div class="deleteImg" id="delView"></div>';
                     dataView += '</div>';

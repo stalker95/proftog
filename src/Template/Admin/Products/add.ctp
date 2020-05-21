@@ -1,3 +1,5 @@
+   <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
     <!-- Main content -->
     <div class="attributes_list attributes_list_parent" style="display: none;">
                           <?php  foreach ($attributes as $key => $value): ?>
@@ -119,12 +121,6 @@
             </div>
         </div>
 
-        
-
-       
-         
-        
-
             </div>
                         <div class="product_container_item" style="display: none;">
 
@@ -201,7 +197,7 @@
             </div>
             <div class="playlist__managment--item__right">
               <div class="playlist--item--sub">
-                  <?=  $this->Form->control('category_id',array('label' => 'Категорія','type'=>'select','min'=>0,'class'=>'form-control', 'options'=>$category_id, 'required'=>'required','empty'=>'Виберіть катгорію','id'=>'choose_category'));?>    
+                  <?=  $this->Form->control('category_id',array('label' => 'Категорія','type'=>'select','min'=>0,'class'=>'form-control js-example-basic-single', 'options'=>$category_id, 'required'=>'required','empty'=>'Виберіть катгорію','id'=>'choose_category'));?>    
               </div>
             </div>
         </div>
@@ -410,6 +406,10 @@
 </script>
 
 <script>
+
+   $(document).ready(function() {
+});
+
         $(document).ready(function () {
         initOptionImg();
            });
@@ -451,8 +451,7 @@ $('body').on('change', ".upload_gallery_item", function() {
 
                 var dataURL = e.target.result;
                 var mimeType = dataURL.split(",")[0].split(":")[1].split(";")[0];
-
-                if ((mimeType != 'image/jpeg') && (mimeType != 'image/jpg') && (mimeType != 'image/png')) {
+                if ((mimeType != 'image/jpeg') && (mimeType != 'image/jpg') && (mimeType != 'image/png') && (mimeType != 'image/webp')) {
                     // not support format
                     inp = $("#fileimgMeal");
                     inp.replaceWith(inp.val('').clone(true));

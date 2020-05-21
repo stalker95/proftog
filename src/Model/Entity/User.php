@@ -28,6 +28,7 @@ class User extends Entity
      * @var array
      */
     protected $_accessible = [
+        '*'         => true,
         'firstname' => true,
         'lastname' => true,
         'mail' => true,
@@ -44,6 +45,7 @@ class User extends Entity
         'phone' => true,
         'business' => true,
         'program_id' => true,
+        'info'       => true,
     ];
 
     public function getName()
@@ -121,13 +123,19 @@ class User extends Entity
     public function is_abs() 
     {
 
-     return $this->is_admin==2;
+     return $this->is_admin == 2;
     }
 
-    public function is_us() 
+    public function is_admin() 
     {
         
      return $this->is_admin==1;
+    } 
+
+    public function is_manager() 
+    {
+        
+     return $this->is_admin == 1;
     } 
 
     public function deleteHimSubUsers($user_id = null)

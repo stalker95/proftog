@@ -34,12 +34,12 @@ class PublicsController extends AppController
          if ($this->request->is(['patch', 'post', 'put'])) {
             $publics = $this->Publicss->patchEntity($publics, $this->request->getData());
             if ($this->Publicss->save($publics)) {
-                $this->Flash->success(__('Зміни збережено'));
+                $this->Flash->admin_success(__('Зміни збережено'));
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('Зміни не збережено. Спробуйте пізніше'));
+            $this->Flash->admin_error(__('Зміни не збережено. Спробуйте пізніше'));
         }
-        $this->nav_['content'] = true;
+        $this->nav_['publics'] = true;
          $this->set(compact('publics'));
         
     }
