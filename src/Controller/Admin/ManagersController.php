@@ -19,10 +19,11 @@ class ManagersController extends AppController
     public function index()
     {
        $this->loadModel('Users');
-
-       $users  = $this->paginate($this->Users->find()->where(['is_admin' => 1]))->toArray();
-               $this->nav_['managers'] = true; 
-
+      
+       if ($this->user->is_admin() OR $this->user->is_abs()) {
+       $users  = $this->paginate($this->Users->find()->where(['is_admin' => 1,'is_admin' => 2,'is_admin' => 3]))->toArray();
+       }
+       $this->nav_['managers'] = true; 
        $this->set(compact('users'));
     }
 
@@ -33,7 +34,6 @@ class ManagersController extends AppController
         $_user = $this->Users->newEntity();
          if ($this->request->is('post')) {
          $_user = $this->Users->patchEntity($_user, $this->request->getData()); 
-         $_user->is_admin = 1;
 
          if ($this->Users->save($_user)) {
 

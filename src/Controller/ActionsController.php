@@ -83,10 +83,95 @@ class ActionsController extends AppController
         $action = $this->Actions->get($id, [
             'contain' => ['ActionsProducts.Products','ActionsProducts.Products.Discounts']
         ]);
+        $id_products = array_column($action['actions_products'], 'id');
+       // debug($id_products);
+
+        if (!empty($id_products)):
+
+        $products = $this->Paginate($this->Products->find()->contain(['Actions','Discounts','Rewiev','ActionsProducts','ActionsProducts.Actions'])->where(['id IN ' => $id_products]))->toArray();
+
+        $max_price = $this->Products->find('all',[
+                    'fields' => array('amount' => 'MAX(Products.price)')])->where(['id IN ' => $id_products])->toArray();
+
+        endif;
+
+        $products = [];
+        
+        $min_price = 0;
+        $current_value_min = 0;
+        
+        
+        if (isset($max_price)):
+            $max_price = $max_price[0]['amount'] * 30;
+            $current_value_max = $max_price;
+        else: 
+            $max_price = 0;
+            $current_value_max = 0;
+        endif;
+
+       if ($this->request->is(['get']) AND isset($this->request['?']['_method'])  AND $this->request['?']['_method'] == 'PUT' ) {
+
+        $action = $this->Actions->get($id, [
+            'contain' => ['ActionsProducts.Products','ActionsProducts.Products.Discounts']
+        ]);
+        $id_products = array_column($action['actions_products'], 'id');
+           if (!empty($id_products)):
+            $query_for_products = $this->Products
+                                        ->find()
+                                        ->contain(['Actions','Discounts','Rewiev','ActionsProducts','ActionsProducts.Actions'])
+                                        ->where(['price * 30 >=' => $this->request['?']['start_price']])
+                                        ->where(['id IN ' => $id_products])
+                                        ->where(['price * 30 <=' => $this->request['?']['end_price']]);
+            $this->paginate = [
+                'limit' => $this->request['?']['count_display']
+            ];
+            if ($this->request['?']['sort_by'] == "За спаданням ціни") {
+                $products = $this->Paginate($query_for_products->order('price DESC'))->toArray();
+            }
+
+            if ($this->request['?']['sort_by'] == "За зростанням ціни") {
+                $products = $this->Paginate($query_for_products->order('price ASC'))->toArray();
+            }
+
+            if ($this->request['?']['sort_by'] == "Акційні") {
+                $this->loadModel('ActionsProducts');
+                $products_actions = $this->ActionsProducts->find()->toArray();
+                $id_products_actions = array_column($products_actions, 'products_id');
+                
+                $this->set('actions', true);
+                $products = $this->Paginate($query_for_products->where(['id IN ' => $id_products_actions]))
+                ->toArray();
+            }
+
+            $products = $this->Paginate($query_for_products)->toArray();
+        else:
+            $products = [];
+        endif;
+
+            $min_value  = $this->request['?']['start_price'];
+          $max_value  = $this->request['?']['end_price'];
+          $this->set('min_price', $min_value);
+          $this->set('max_price', $max_value);
+          $this->set('count_display', $this->request['?']['count_display']);
+           $this->set('sort_by', $this->request['?']['sort_by']);
+          
+
+
+       }
+       else {
+
+       }
+
+
+        $this->set('current_value_min', $current_value_min);
+        $this->set('current_value_max', $current_value_max);
 
        // debug($action);
 
         $this->set('action', $action);
+        $this->set('min_price', $min_price);
+        $this->set('max_price', $max_price);
+        $this->set('products', $products);
     }
 
 }

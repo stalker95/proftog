@@ -20,26 +20,30 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
 <head>
     <?= $this->Html->charset() ?>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= $producer->title ?></title>
-    <meta name="description" content="<?= $producer->description_page ?>">  
-    <meta name="keywords" content="<?= $producer->keywords ?>">  
+    <title>
+        <?= $product->title ?>     
+    </title>
+    <meta name="description" content="<?= $product->page_description ?>">
+    <meta name="keywords" content="<?= $product->keywords ?>">
     <link rel="shortcut icon" href="<?= $this->Url->build('/settings/'.$settings->favicon, ['fullBase' => true]) ?>" type="image/x-icon">
     <!--    JQuery  -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
 <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet">
 
 
   
-    <?= $this->Html->css('bootstrap.min.css') ?>
+   <!-- <?= $this->Html->css('bootstrap.min.css') ?> -->
+   <link href="   https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
+
     <?= $this->Html->css('style.css') ?>
-  <?=  $this->Html->script('bootstrap/dist/js/bootstrap.min.js'); ?>
+
     <?= $this->fetch('meta') ?>
     <?= $this->fetch('css') ?>
 </head>
-<body id="homepage">
+<body >
 <div class="background_grey"></div>
-
 <?= $this->element('header'); ?>
 
 <?= $this->Flash->render() ?>
@@ -47,11 +51,23 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
 <?= $this->fetch('content') ?>
 
 <?= $this->element('footer'); ?>
+<?= $this->element('bascket'); ?>
 <script>
     var currency_url = '<?= $baseUrl ?>';
+    //console.log("erg");
+    <?php  if (isset($_SESSION['cart'])){  ?>
+        var cart = <?= json_encode($_SESSION['cart']); ?>;
+        console.log(cart);
+    <?php   } else { ?>
+        var cart;
+    <?php   }  ?>        
 </script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+
 <?= $this->Html->script('landing.js?v=123'); ?>
+
     <?= $this->fetch('script') ?>
+<script src="//static.liqpay.ua/libjs/checkout.js" async></script>
 
 </body>
 </html>

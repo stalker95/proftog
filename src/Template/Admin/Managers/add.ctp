@@ -44,7 +44,7 @@
   </div>
 </div>   
 
-is_admin
+
 <div class="playlist__managment--item">
   <div class="playlist__managment--item__left">
     <p>Email </p>
@@ -56,14 +56,31 @@ is_admin
   </div>
 </div>  
 
-<?php    ?>
 <div class="playlist__managment--item">
   <div class="playlist__managment--item__left">
     <p>Роль </p>
   </div>
   <div class="playlist__managment--item__right">
-    <div class="playlist--item--sub">
-   <?=  $this->Form->control('role',['type'=>'radio','label' => 'Адміністратор', 'class'=>'form-control','value'=>2]); ?>
+    <div class="playlist--item--sub" style="display: block;">
+
+      <?php  if ($user->is_admin == 3):  ?>
+      <label for="role" style="display: flex;width: 175px;justify-content: space-between;" >Адміністратор
+        <input type="radio" name="is_admin" value="2" style="display: inline-block;width: auto;">
+      </label><br>
+      <label for="role" style="display: flex;width: 175px;justify-content: space-between;">Менеджер
+        <input type="radio" name="is_admin" value="1" style="display: inline-block;width: auto;">
+      </label>
+    <?php endif; ?>
+
+          <?php  if ($user->is_admin == 2):  ?>
+     
+      <label for="role" style="display: none;">
+        <input type="radio" name="is_admin" value="1">
+      </label>
+    <?php endif; ?>
+
+
+
     </div>
   </div>
 </div>  

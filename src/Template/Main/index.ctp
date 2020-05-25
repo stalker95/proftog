@@ -62,7 +62,7 @@
 									<a href="<?= $this->Url->build(['controller' => 'actions','action'=>'view/'.$value['id']]) ?>" class="center_slider_link">Детальніше</a>
 								</div>
 								<div class="center_slider_item_right">
-									<img src="<?= $this->Url->build('/actions/'.$value['image'], ['fullBase' => true]) ?>" alt="">
+									<img class="lazy_load" data-load="<?= $this->Url->build('/actions/'.$value['image'], ['fullBase' => true]) ?>" src="" alt="">
 								</div>
 							</div>
 						</div>
@@ -199,7 +199,8 @@
 		</div>
 		<div class="col-sm-8 col-md-9">
 			<div class="sales_list">
-				<?php foreach ($products as $key => $value): if (!empty($value['products'])):?>
+				<?php foreach ($products as $key => $value): if (!empty($value)):?>
+					<?php  ?>
 				<div class="sales_list_item">
 					<?php foreach ($value['products'] as $key_two => $item): ?>
 			<div class="propose_slider_item <?php if (!empty($item['actions_products'])): ?> propose_slider_item_show_action <?php endif; ?>">
@@ -366,6 +367,8 @@
 	
 	$('.slider_inialize').slick({
   infinite: true,
+  autoplay: true,
+  autoplaySpeed: 4000,
   slidesToShow: 1,
   slidesToScroll: 1
 });  

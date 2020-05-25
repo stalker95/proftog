@@ -15,9 +15,25 @@
 </div>
 <section class="propose ">
 	<div class="categories_page background_white container">
+							<?= $this->Form->create($action, ['type' => 'file','method' => 'get', 'id'=>'product_sort'] )  ?>
+
 		<div class="row">
+
 			<div class="col-md-3">
 				<?= $this->element('catalog_categories'); ?>
+				<?= $this->element('filter_block', 
+						   array('max_price'         => $max_price, 
+				      			 'min_price'         => $min_price, 
+				                 'attributes_to_view'=> [],
+				                 'current_value_min' => $current_value_min,
+				                 'current_value_max' => $current_value_max,
+				                 'selected_values'   => [],
+				                 'producers_list'    => [],
+				                 'producers_page'    => true
+				  ));
+
+				?>
+				
 			</div>
 			<div class="col-md-9">
 	          <div class="categories_product">
@@ -38,7 +54,7 @@
 						
 						</div>
 	          	<div class="products_sort">
-	          			          		<div class="sort_by">
+	          		<div class="sort_by">
 	          			<!--Сортувати за 
 	          			<select name="sort_by" id="sort_by">
 	          				<? if (isset($sort_by)): ?>
@@ -65,58 +81,51 @@
 	          		</div>
 	          		<div class="products_show">
 	          			Показати 
-	          			<select name="" id="">
-	          				<option value="0">1</option>
+	          			<select name="count_display" id="count_display">
+	          				<?php if (isset($count_display)): ?>
+	          					<option value="<?= $count_display ?>"><?= $count_display ?></option>
+	          				<?php endif; ?>
+	          				<option value="9">9</option>
+	          				<option value="12">12</option>
+	          				<option value="16">16</option>
 	          			</select>
 	          		</div>
 	          		<div class="products_display"></div>
 	          	</div>
 	          	<div class="products_list">
-	          		<?php foreach ($action['actions_products'] as $key => $value):?>
+	          		<?php foreach ($products as $key => $value):?>
 	          		<div class="propose_slider_item propose_slider_item_show_action ">
 	          			<div class="propose_slider_item_action"><p>Акція</p></div>
-					<a href="<?php echo $this->Url->build(['controller' => 'products','action'=>'view/'.$value['product']['slug']]) ?>" class="propose_slider_item_image">
-						<img src="<?= $this->Url->build('/products/'.$value['product']['image'], ['fullBase' => true]) ?> " alt="">
+					<a href="<?php echo $this->Url->build(['controller' => 'products','action'=>'view/'.$value['slug']]) ?>" class="propose_slider_item_image">
+						<img src="<?= $this->Url->build('/products/'.$value['image'], ['fullBase' => true]) ?> " alt="">
 					</a>
+
 					<div class="propose_slider_item_stars">
-						<div class="product-star-item">
-							<img src="<?= $this->Url->build('/img/iconfinder_star_yellow.svg', ['fullBase' => true]) ?> " alt=""> 	
-						</div>
-						<div class="product-star-item">
-							<img src="<?= $this->Url->build('/img/iconfinder_star_yellow.svg', ['fullBase' => true]) ?> " alt=""> 	
-						</div>
-						<div class="product-star-item">
-							<img src="<?= $this->Url->build('/img/iconfinder_star_yellow.svg', ['fullBase' => true]) ?> " alt=""> 	
-						</div>
-						<div class="product-star-item">
-							<img src="<?= $this->Url->build('/img/iconfinder_star_yellow.svg', ['fullBase' => true]) ?> " alt=""> 	
-						</div>
-						<div class="product-star-item">
-							<img src="<?= $this->Url->build('/img/gray_star.svg', ['fullBase' => true]) ?> " alt=""> 	
-						</div>
+						<?= $this->element('rating_product', array("item" => $value)); ?>
 					</div>
+
 					<div class="propose_slider_item_title">
-						<p><?= $value['product']['title'] ?></p>
+						<p><?= $value['title'] ?></p>
 					</div>
 					<div class="propose_slider_item_kod">
-						<p>Код товару <span class="item_kod"><?= $value['product']['cod'] ?></span></p>
+						<p>Код товару <span class="item_kod"><?= $value['cod'] ?></span></p>
 					</div>
 					<div class="propose_slider_item_status">
-						<?php if ($value['product']['amount'] > 0) { ?>
+						<?php if ($value['amount'] > 0) { ?>
 						<p class="on_sklad">На складі</p>
 					<?php } ?>
 					</div>
 					<div class="propose_slider_item_price">
-						<?= $this->element('price_product', array("item" => $value['product'])); ?>
+						<?= $this->element('price_product', array("item" => $value)); ?>
 					</div>
 					<div class="product_buttons">
-						<button class="product_buttons_item add_product_to_bascket" data-product="<?= $value['product']['id'] ?>">
+						<button class="product_buttons_item add_product_to_bascket" data-product="<?= $value['id'] ?>">
 							<img src="<?= $this->Url->build('/img/back.svg', ['fullBase' => true]) ?>" alt="">
 						</button>
-						<a href="<?= $this->Url->build(['controller' => 'products','action'=>'view/'.$value['product']['slug']]) ?>" class="product_buttons_item" >
+						<a href="<?= $this->Url->build(['controller' => 'products','action'=>'view/'.$value['slug']]) ?>" class="product_buttons_item" >
 							<i class="fa fa-eye"></i>
 						</a>
-						<button class="product_buttons_item add_product_to_wishlist" data-product="<?= $value['product']['id'] ?>">
+						<button class="product_buttons_item add_product_to_wishlist" data-product="<?= $value['id'] ?>">
 							<img src="<?= $this->Url->build('/img/favorite.svg', ['fullBase' => true]) ?>" alt="">
 						</button>
 						<button class="product_buttons_item">
@@ -129,8 +138,12 @@
 
 
 	          	</div>
+	          	 
 	          </div>
 			</div>
 		</div>
+
+			<?=   $this->Form->end() ?>
+
 	</div>
 </section>

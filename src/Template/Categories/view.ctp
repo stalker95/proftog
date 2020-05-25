@@ -11,15 +11,15 @@
 			<span> / </span>
 
 			<?php if (!empty($category['parent_category']['parent_category'])): ?>
-				<a href="<?= $this->Url->build(['controller' => 'categories','action'    =>  'view/'.$category['parent_category']['parent_category']['slug']]) ?>"><?= $category['parent_category']['parent_category']['name'] ?></a>
+				<a href="<?= $this->Url->build(['controller' => 'categories','action'    =>  $category['parent_category']['parent_category']['slug']]) ?>"><?= $category['parent_category']['parent_category']['name'] ?></a>
 							<span> / </span>
 			<?php endif; ?>
 
 			<?php if (!empty($category['parent_category'])): ?>
-				<a href="<?= $this->Url->build(['controller' => 'categories','action'    =>  'view/'.$category['parent_category']['slug']]) ?>"><?= $category['parent_category']['name'] ?></a>
+				<a href="<?= $this->Url->build(['controller' => 'categories','action'    =>  $category['parent_category']['slug']]) ?>"><?= $category['parent_category']['name'] ?></a>
 							<span> / </span>
 			<?php endif; ?>
-			<a href="<?= $this->Url->build(['controller' => 'categories','action'    =>  'view/'.$category->slug]) ?>"><?= $category->title ?></a>
+			<a href="<?= $this->Url->build(['controller' => 'categories','action'    =>  $category->slug]) ?>"><?= $category->title ?></a>
 		</div>
 	</div>
 </div>
@@ -37,7 +37,8 @@
 				                 'current_value_min' => $current_value_min,
 				                 'current_value_max' => $current_value_max,
 				                 'selected_values'   => $selected_values,
-				                 'producers_list'    => $producers_list
+				                 'producers_list'    => $producers_list,
+				                 'producers_page'    => true
 				  ));
 
 				?>
@@ -57,10 +58,17 @@
 	          			</div>
 	          			<div class="categories_product_description">
 	          				<p></p>
-	          				<?php if (strlen($category->desription) > 548){ ?>
-	          				<span class="short_category_description"><?= substr($category->desription, 0, 548);
+	          				<?php 
+	          				if (strlen($category->desription) > 548){
+	          				$first_string = substr($category->desription, 548);
+
+	          				$first_empty = strpos($first_string, ' ');
+
+	          			}
+	          				if (strlen($category->desription) > 548){ ?>
+	          				<span class="short_category_description"><?= substr($category->desription, 0, 548 + $first_empty);
 	          				echo "<span class='thre_comas'>...</span>"; ?></span>
-	          				<span class="all_description all_description_dispayed"><?= substr($category->desription, 548) ?></span>
+	          				<span class="all_description all_description_dispayed"><?= substr($category->desription, 548 + $first_empty) ?></span>
 	          				<div class="display_all">Розгорнути <i class="fa fa-caret-down"></i></div>
 	          			<?php } else { ?>
 	          				<?= $category->desription ?>

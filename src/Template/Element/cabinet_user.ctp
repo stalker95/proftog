@@ -1,6 +1,6 @@
 <ul>
 	<li>
-		<a href="<?php echo $this->Url->build(['controller' => 'cabinet', 'action' => 'index', '_full' => true,  'plugin' => false]); ?>" class="<?php if ($item == 'main'): ?> active  <?php 	endif; ?>">Особисті данні</a></li>
+		<a href="<?php echo $this->Url->build(['controller' => 'cabinet', 'action' => 'cabinet', '_full' => true,  'plugin' => false]); ?>" class="<?php if ($item == 'main'): ?> active  <?php 	endif; ?>">Особисті данні</a></li>
 	<li>
 		<a href="<?php echo $this->Url->build(['controller' => 'cabinet', 'action' => 'wishlist', '_full' => true,  'plugin' => false]); ?>" class="<?php if ($item == 'wishlist'): ?> active  <?php 	endif; ?>">Список бажань</a></li>
 	<li>

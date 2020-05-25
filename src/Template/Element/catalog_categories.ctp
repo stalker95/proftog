@@ -15,7 +15,7 @@
                     <?php   if ($value['parent_id'] == 0): ?>
                      <div class="propose_item">
                         <div class="propose_item_title">
-                            <a href="<?= $this->Url->build(['controller' => 'categories','action'=>'view/'.$value['slug']]) ?>"><?= $value['name'] ?></a>
+                            <a href="<?= $this->Url->build(['controller' => 'categories','action'=>$value['slug']]) ?>"><?= $value['name'] ?></a>
                         </div>
                         <div class="propose_item_arrov">
                             <i class="fa fa-chevron-right"></i>
@@ -23,15 +23,16 @@
                         <div class="propose_item_list">
                             <?php  foreach ($value['child_categories'] as $key => $item):?>
                                 <div class="propose_item_list_item ">
-                                    <a class="category__title__propose" href="<?= $this->Url->build(['controller' => 'categories','action'=>'view/'.$item['slug']]) ?>"><?= $item['name']; ?></a>
+                                    <a class="category__title__propose" href="<?= $this->Url->build(['controller' => 'categories','action'=>$item['slug']]) ?>"><?= $item['name']; ?></a>
                                 
                            
                                 <?php foreach ($categories as $key => $item_two): ?>
-                                    <div class="propose_item_list_two">
                                 <?php if ($item_two['parent_id'] == $item['id'] AND $item_two['name'] != $item['name']) { ?>
-                                <a  href="<?= $this->Url->build(['controller' => 'categories','action'=>'view/'.$item_two['slug']]) ?>"><?= $item_two['name']."</a>" ?> 
-                            <?php   } ?>
+                                    <div class="propose_item_list_two">
+                                <a  href="<?= $this->Url->build(['controller' => 'categories','action'=>$item_two['slug']]) ?>"><?= $item_two['name']."</a>" ?> 
+                           
                                   </div>
+                                   <?php   } ?>
                             <?php endforeach; ?>
                             </div>
                             <?php   endforeach; ?>
@@ -39,7 +40,7 @@
                             <?php if (empty($value['picture'])) { ?>
                                 <img src="<?= $this->Url->build('/img/unnamed.png', ['fullBase' => true]) ?>" >
                             <?php } else { ?>
-                                <img src="<?= $this->Url->build("/categories/".$value['picture'], ['fullBase' => true]) ?>" >
+                                <img class="lazy_load" data-load="<?= $this->Url->build("/categories/".$value['picture'], ['fullBase' => true]) ?>" src="" >
                             <?php } ?>
                         </div>
                      </div>

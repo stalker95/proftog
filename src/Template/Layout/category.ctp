@@ -23,7 +23,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
     <title><?= $category->title ?></title>
     <meta name="description" content="<?= $category->description_page ?>">  
     <meta name="keywords" content="<?= $category->keywords ?>">  
-    <?= $this->Html->meta('icon') ?>
+    <link rel="shortcut icon" href="<?= $this->Url->build('/settings/'.$settings->favicon, ['fullBase' => true]) ?>" type="image/x-icon">
     <!--    JQuery  -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">

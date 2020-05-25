@@ -201,7 +201,7 @@
                   <input type="radio" name="type_delivery" class="type_delivery" value="2">
                   <span class="checkmark"></span>
                 </label>
-                <input type="text" name="adress_delivery" class="adress_delivery" placeholder="Вкажіть реквізити доставки">
+                <input type="text" name="adress_delivery" class="adress_delivery" placeholder="Вкажіть реквізити доставки" value="<?php if (!empty($_user)) { echo $_user->new_post_city." ".$_user->new_post_delivery; } ?>">
                 <p class="message_display"></p>
 
                 <label class="orders_delivery_item">МістЕкспес
@@ -239,22 +239,22 @@
             <div class="orders_delivery_bottom">
               <div class="orders_delivery_container">
                 <label class="orders_delivery_item">Готівкою
-                  <input type="radio" checked="checked" name="type_radio" value="1">
+                  <input type="radio" checked="checked" name="type_radio" value="1" class="type_payment">
                   <span class="checkmark"></span>
                 </label>
 
                  <label class="orders_delivery_item">Visa або MasterCard
-                  <input type="radio" name="type_radio" value="2">
+                  <input type="radio" name="type_radio" value="2" class="type_payment">
                   <span class="checkmark"></span>
                 </label>
 
                  <label class="orders_delivery_item">LiqPay
-                  <input type="radio" name="type_radio" value="3">
+                  <input type="radio" name="type_radio" value="3" class="type_payment">
                   <span class="checkmark"></span>
                 </label>
 
                  <label class="orders_delivery_item">Наложений платіж
-                  <input type="radio" name="type_radio" value="4">
+                  <input type="radio" name="type_radio" value="4" class="type_payment">
                   <span class="checkmark"></span>
                 </label>
 
@@ -421,9 +421,8 @@
 </form>
 </div>
 </div>
-<div id="liqpay_checkout"></div> 
 
-<div class="modal fade" id="after_add_bascket" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="display_privat" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog  modal-dialog-centered" role="document">
         <div class="modal-content ">
      <div class="modal-header ">
@@ -446,7 +445,6 @@
 <script>
  
 </script>
-<script src="//static.liqpay.ua/libjs/checkout.js" async></script>
 
 
 
@@ -495,6 +493,7 @@ var logger_user_before = <?php if (isset($_user)) { echo "1"; } else {echo "0";}
             $(".user_email").val(data.user.mail);
             $(".user_city").val(data.user.adress_city);
             $(".user_mobile").val(data.user.phone);
+            $('.adress_delivery').eq(0).val(data.user.new_post_city+" "+data.user.new_post_delivery);
             $(".order_item_bottom_item").css('display', 'none');
             $('.order_item_bottom_item').eq(0).css('display', 'block');
             $(".order_item_bottom_tabs_item").removeClass('order_item_bottom_tabs_item_active');
@@ -507,7 +506,7 @@ var logger_user_before = <?php if (isset($_user)) { echo "1"; } else {echo "0";}
               $('.user_mobile').next('.message_display').text("Введіть номер телефону");
             }
 
-            if (data.user.city == "") {
+            if (data.user.adress_city == "") {
               $(".user_city").focus();
               $('.user_city').addClass('new_customer_register_item_input_not_valid');
               $('.user_city').next('.message_display').text("Введіть назву міста");
@@ -818,6 +817,7 @@ $(".user_delivery_item").keyup(function() {
 
 
 $(document).ready(function() {
+  console.log('er');
 
  $("body").on("click", ".not_disabled", function() {
    $(".insert_orders").submit();   
@@ -832,10 +832,14 @@ $(document).ready(function() {
         data: $(this).serialize(),
         success: function(data){ 
           $(".message_submit_quick_order").html("");
+          
+          
+          if ($('.type_payment:checked').val() == 2 || $('.type_payment:checked').val() == 3) {
 
           liqpay_work(data);
+        }
 
-          if (data.status == "true")
+          if ($('.type_payment:checked').val() == 1 || $('.type_payment:checked').val() == 4 && data.status == "true")
            {
              $(".order_item").eq(1).fadeOut('fast');
              $(".order_item_top_number").eq(0).removeClass('order_item_top_number_active');
@@ -853,7 +857,7 @@ $(document).ready(function() {
               $("#after_add_bascket").modal({
                   show: true
             }); 
-           }
+           } 
         }
      });
     }); 
@@ -865,33 +869,54 @@ $(document).ready(function() {
      $.ajax({
         url: currency_url+'orders/get-data',
         type: 'POST',
-        data: $(this).serialize(),
+        data: {json_string: json_string},
         success: function(data){ 
-           $("#after_add_bascket").modal({
+          console.log(data);
+           $("#display_privat").modal({
                   show: true
             }); 
-            window.LiqPayCheckoutCallback = function() {
+            LiqPayCheckoutCallback = function() {
     LiqPayCheckout.init({
-      data:"eyJwdWJsaWNfa2V5IjoiaTk5ODA5NjMwOTQ1IiwidmVyc2lvbiI6IjMiLCJhY3Rpb24iOiJwYXkiLCJhbW91bnQiOiIzIiwiY3VycmVuY3kiOiJVQUgiLCJkZXNjcmlwdGlvbiI6InRlc3QiLCJvcmRlcl9pZCI6IjAwMDAwMiJ9",
-      signature: "m4ixGtUFTC80yVULquZggAw+47k=",
+      data: data.data,
+      signature: data.signature,
       embedTo: "#liqpay_checkout",
       mode: "embed" // embed || popup,
        }).on("liqpay.callback", function(data){
       console.log(data.status);
+
+      if (data.status == 'wait_accept') {
+         confirm_order('pay',data.order_id);
+      }
       console.log(data);
       }).on("liqpay.ready", function(data){
         console.log('ready')
       }).on("liqpay.close", function(data){
         console.log('closed')
     });
+
   }; 
+  LiqPayCheckoutCallback(); 
+            
         }
     });
 
   }
 
-});
 
+  function confirm_order(action, data_id) {
+         $.ajax({
+        url: currency_url+'orders/updateOrder',
+        type: 'POST',
+        data: {data_id: data_id, action: action},
+        success: function(data){ 
+          console.log(data);
+        }
+  
+
+});
+       }
+
+    });
 
 	<?php echo $this->Html->scriptEnd(); ?>
 </script>

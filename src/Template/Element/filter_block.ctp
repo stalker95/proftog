@@ -16,7 +16,8 @@
  		 	<button class="button_filter">Фільтрувати</button>
  		 </div>
 		</div>
-		
+
+		 <?php   if ($producers_page): ?>
  		 <div class="filter_elements_items">
  		 	<?php 	foreach ($attributes_to_view as $key => $value) :?>
  		 		<?php if (!empty($value)): ?>
@@ -49,7 +50,7 @@
           
  		 		</div>
  		 	<?php endif;	endforeach; ?>
-
+     
  		 		<div class="filter_elements_items_item">
  		 			<p class="filter_elements_items_item_title">Виробники</p>
  		 			<?php 	foreach ($producers_list as $keys => $item):  ?>
@@ -66,16 +67,11 @@
             <button class="button_filter">Застосувати фільтр</button>
           </div>
  		 		</div>
-               <!--<div class="filter_elements_items_item">
- 		 		<p class="filter_elements_items_item_title">Потужність</p>
- 		 		<input id="checkbox1" name="checkbox" type="checkbox" checked="checked">
- 		 		<label for="checkbox1">Choice A</label>
-
- 		 		<input id="checkbox1" name="checkbox" type="checkbox" checked="checked">
- 		 		<label for="checkbox1">Choice A</label>
- 		 	</div> -->
+               
  		 	
  		 </div>
+           <?php   endif; ?>
+
 	</div>
 </div>
 <script src='https://code.jquery.com/ui/1.11.4/jquery-ui.min.js'></script>

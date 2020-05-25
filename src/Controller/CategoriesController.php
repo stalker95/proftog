@@ -93,7 +93,7 @@ class CategoriesController extends AppController
                     //     debug($products);
 
         $max_price = $this->Products->find('all',[
-                    'fields' => array('amount' => 'MAX(Products.price)')])->toArray();
+                    'fields' => array('amount' => 'MAX(Products.price)')])->where(['category_id' => $category->id])->toArray();
 
         $max_price = $max_price[0]['amount'] * 30;
         $current_value_max = $max_price;

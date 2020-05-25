@@ -127,7 +127,7 @@
             $(element).parent().find('.display_message_register').html('<p class="display_message_register_alert btn-danger"><strong>Увага</strong> '+data.message+'</p>');
           }
          if (data.status == true) {
-           window.location.href = '<?= $baseUrl ?>'+'/cabinet/index';
+           window.location.href = '<?= $baseUrl ?>'+'/cabinet/cabinet';
          }
         }
      });

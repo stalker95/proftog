@@ -25,7 +25,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
     </title>
     <meta name="description" content="<?= $seo->description ?>">
     <meta name="keywords" content="<?= $seo->keywords ?>">
-    <?= $this->Html->meta('icon') ?>
+    <link rel="shortcut icon" href="<?= $this->Url->build('/settings/'.$settings->favicon, ['fullBase' => true]) ?>" type="image/x-icon">
     <!--    JQuery  -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -34,7 +34,9 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
 
 
   
-    <?= $this->Html->css('bootstrap.min.css') ?>
+   <!-- <?= $this->Html->css('bootstrap.min.css') ?> -->
+   <link href="   https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
+
     <?= $this->Html->css('style.css') ?>
 
     <?= $this->fetch('meta') ?>

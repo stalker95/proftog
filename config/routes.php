@@ -73,6 +73,8 @@ Router::scope('/', function (RouteBuilder $routes) {
      */
     $routes->connect('/', ['controller' => 'Main', 'action' => 'index']);
     $routes->connect('/blogs/', ['controller' => 'Blogs', 'action' => 'index']);
+    $routes->connect('/categories/*', array('controller' => 'categories', 'action' => 'view'));
+
 
     /**
      * ...and connect the rest of 'Pages' controller's URLs.

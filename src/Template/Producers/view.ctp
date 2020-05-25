@@ -13,6 +13,7 @@
 </div>
 <section class="propose ">
 	<div class="categories_page background_white container">
+		<?= $this->Form->create($producer, ['type' => 'file','method' => 'get', 'id'=>'product_sort'] )  ?>
 		<div class="row">
 			<div class="col-md-3">
 
@@ -60,6 +61,18 @@
                     <?php endforeach; ?>
 
                     </div>
+                    <?= $this->element('filter_block', 
+						   array('max_price'         => $max_price, 
+				      			 'min_price'         => $min_price, 
+				                 'attributes_to_view'=> [],
+				                 'current_value_min' => $current_value_min,
+				                 'current_value_max' => $current_value_max,
+				                 'selected_values'   => [],
+				                 'producers_list'    => $producers_list,
+				                 'producers_page'    => false
+				  ));
+
+				?>
 			</div>
 			<div class="col-md-9">
 	          <div class="categories_product">
@@ -202,5 +215,21 @@
 	          </div>
 			</div>
 		</div>
+				     <?=   $this->Form->end() ?>
+
 	</div>
 </section>
+
+<script>
+    <?php echo $this->Html->scriptStart(['block' => true]); ?>
+
+    		$("#sort_by").change(function() {
+               $("#product_sort").submit();
+    		});
+
+    		$("#count_display").change(function() {
+               $("#product_sort").submit();
+    		});
+
+    <?php echo $this->Html->scriptEnd(); ?>
+</script>

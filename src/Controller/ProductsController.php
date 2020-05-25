@@ -35,6 +35,8 @@ class ProductsController extends AppController
             $_SESSION['visits'] = [];
         }
 
+        $this->viewBuilder()->setLayout('product');
+
 
 
         $product = $this->Products->find()->contain(['AttributesProducts','Categories','Categories.ParentCategories','Categories.ParentCategories.ParentCategories','Rewiev','Producers','Discounts','ProductsGallery'])->where(['Products.slug' => $slug])->first();

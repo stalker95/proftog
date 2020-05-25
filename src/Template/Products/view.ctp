@@ -292,33 +292,28 @@
 								<?= $product->description; ?>
 							</div>
 						</div>
-					</div>
-					<div class="product_tabs_container">
-                        <div class="product_tabs_item" style="display: block;">
-                        	<?= $product->description; ?>
-                        </div>
-                         <div class="product_tabs_item">
-                         	<table class="products_attributes_table">
-                         		<thead>
-                         			<th></th>
-                         			<th></th>
-                         		</thead>
-                         		<tbody>
-                         			<?php foreach ($attributes_products as $key => $value) :?>
-                         				<tr>
-                         					<td><?= $value['attributes_item']['name'] ?></td>
-                         					<td><?= $value['value']; ?></td>
-                         				</tr>
-											
-									<?php endforeach; ?>
-                         		</tbody>
-                         	</table>
-                        </div>
-                         <div class="product_tabs_item">
-                        	<iframe src="<?= $product->video ?>" style="width: 100%;height: 400px;" frameborder="0"></iframe>
-                        </div>
-                         <div class="product_tabs_item">
-                            <p class="product_tabs_item_title">Відгуків про даний товар не має </p>
+
+						<div class="products_second_item">
+							<div class="products_second_top">
+								<p class="products_second_top_title">Відео</p>
+								<div class="products_second_close">
+									<i class="fa fa-plus"></i>
+								</div>
+							</div>
+							<div class="products_second_container" >
+								<iframe src="<?= $product->video ?>" style="width: 100%;height: 300px;" frameborder="0"></iframe>
+							</div>
+						</div>
+
+						<div class="products_second_item">
+							<div class="products_second_top">
+								<p class="products_second_top_title">Відгуки</p>
+								<div class="products_second_close">
+									<i class="fa fa-plus"></i>
+								</div>
+							</div>
+							<div class="products_second_container" >
+								                            <p class="product_tabs_item_title">Відгуків про даний товар не має </p>
                             <p class="product_tabs_item_first">Станьте першим, хто оцінить продукт <?= $product->title ?></p>
                             <p class="product_tabs_item_email">Ваш email адресу не буде опубліковано. Заповніть відповідні поля.
                             </p>
@@ -360,8 +355,10 @@
                         		</div>
                         	  </form>
                         	</div>
-                        </div>
+							</div>
+						</div>
 					</div>
+
 				</div>
 				</div>	
 			</div>
@@ -393,7 +390,7 @@
 						<?= $this->element('rating_product', array("item" => $value)); ?>
 					</div>
 					<div class="propose_slider_item_title">
-						<p><a href="<?= $this->Url->build(['controller' => 'products','action'=>'view/'.$value['slug']]) ?>"><?= $value['slug'] ?></a></p>
+						<p><a href="<?= $this->Url->build(['controller' => 'products','action'=>'view/'.$value['slug']]) ?>"><?= $value['title'] ?></a></p>
 					</div>
 					<div class="propose_slider_item_kod">
 						<p>Код товару <span class="item_kod"><?= $value['cod'] ?></span></p>
@@ -477,10 +474,31 @@
 <script>
     <?php echo $this->Html->scriptStart(['block' => true]); ?>
 
+
+$(".products_second_close").click(function() {
+
+	if ($(this).find('.fa').hasClass('fa-plus')) {
+		$(".products_second_close").find('.fa').removeClass('fa-minus').addClass('fa-plus');
+		$('.products_second_container').slideUp('fast');
+		$(this).parent().parent().parent().find('.products_second_container').slideUp('fast');
+		$(this).parent().parent().find('.products_second_container').slideToggle('fast');
+		$(this).find('.fa').removeClass('fa-plus');
+		$(this).find('.fa').addClass('fa-minus'); 
+		return;
+	}
+
+	if ($(this).find('.fa').hasClass('fa-minus')) {
+		$(".products_second_close").find('.fa').removeClass('fa-minus').addClass('fa-plus');
+		$('.products_second_container').slideUp('fast');
+		$(this).parent().parent().find('.products_second_container').slideToggle('fast');
+		$(this).find('.fa').removeClass('fa-minus');
+		$(this).find('.fa').addClass('fa-plus'); 
+		return;
+	}
+
+})
+
 $(function() {
-
-
-
 
  $('.product_left_slider').not('.slick-initialized').slick({
   slidesToShow: 1,

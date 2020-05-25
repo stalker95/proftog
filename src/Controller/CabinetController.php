@@ -57,6 +57,47 @@ class CabinetController extends AppController
         
     }
 
+    public function cabinet()
+    {
+        $id = $this->Auth->user('id');
+
+       $_user = $this->Users->get($id);
+
+       $_monthsList = array(
+            "01" => "Січня",
+            "02" => "Лютого",
+            "03" => "Березня",
+            "04" => "Квітня",
+            "05" => "Травня",
+            "06" => "Червня",
+            "07" => "Липня",
+            "08" => "Серпня",
+            "09" => "Вересня",
+            "10" => "Жовтня",
+            "11" => "Листопада",
+            "12" => "Грудня"
+        );
+       
+       $_mD = date("m", strtotime($_user->created));
+         $_user->month_begin = $_monthsList[$_mD];
+
+       if ($this->request->is('post')) {
+
+        $_user = $this->Users->patchEntity($_user, $this->request->getData());
+            if ($this->Users->save($_user)) {
+                debug($_user);
+                $this->Flash->admin_success(__('Зміни збережно'));
+
+                return $this->redirect(['action' => 'index']);
+            }
+
+       } 
+
+    
+       $this->set(compact('_user','_monthsList'));
+        
+    }
+
     public function changeData()
     {
       $this->autoRender = false;
@@ -69,11 +110,15 @@ class CabinetController extends AppController
         $_user = $this->Users->patchEntity($_user, $this->request->getData());
         $_user->role = 0;
         //debug($_user);
+        $data = date("Y-m-d", strtotime($this->request->getData("date_of_birth['year']").'-'.$this->request->getData("date_of_birth['month']").'-'.$this->request->getData("date_of_birth['day']")));
+        debug($data);
+        debug($this->request->getData("date_of_birth"));
+        $_user->date_of_birth = $data ;
             if ($this->Users->save($_user)) {
-               // debug($_user);
+                debug($_user);
                 //$this->Flash->admin_success(__('Зміни збережно'));
 
-                return $this->redirect(['action' => 'index']);
+                return $this->redirect(['action' => 'cabinet']);
             }
 
        } 

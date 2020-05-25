@@ -127,26 +127,27 @@
           <ul class="treeview-menu">
 
             
-             <li class="<?php if ($nav_['rules'])  { echo 'active'; } ?>"><a href="<?php echo $this->Url->build(['controller' => 'rules', 'action' => 'index', '_full' => true, 'prefix' => 'admin', 'plugin' => false]); ?>"><i class="fa fa-angle-double-right"></i> Правила обміну та повернення  v1</a></li>
+             <li class="<?php if ($nav_['rules'])  { echo 'active'; } ?>"><a href="<?php echo $this->Url->build(['controller' => 'rules', 'action' => 'index', '_full' => true, 'prefix' => 'admin', 'plugin' => false]); ?>"><i class="fa fa-angle-double-right"></i> Обмін та повернення </a></li>
             <li class="<?php if ($nav_['delivery'])  { echo 'active'; } ?>"><a href="<?php echo $this->Url->build(['controller' => 'delivery-page', 'action' => 'index', '_full' => true, 'prefix' => 'admin', 'plugin' => false]); ?>"><i class="fa fa-angle-double-right"></i> Доставка</a></li>
             <li class="<?php if ($nav_['contacts'])  { echo 'active'; } ?>"><a href="<?php echo $this->Url->build(['controller' => 'contacts', 'action' => 'index', '_full' => true, 'prefix' => 'admin', 'plugin' => false]); ?>"><i class="fa fa-angle-double-right"></i> Контакти</a></li>
             <li class="<?php if ($nav_['aboutus'])  { echo 'active'; } ?>"><a href="<?php echo $this->Url->build(['controller' => 'aboutus', 'action' => 'index', '_full' => true, 'prefix' => 'admin', 'plugin' => false]); ?>"><i class="fa fa-angle-double-right"></i> Про нас</a></li>
             <li class="<?php if ($nav_['payments'])  { echo 'active'; } ?>"><a href="<?php echo $this->Url->build(['controller' => 'payments', 'action' => 'index', '_full' => true, 'prefix' => 'admin', 'plugin' => false]); ?>"><i class="fa fa-angle-double-right"></i>Оплата</a></li>
-            <li class="<?php if ($nav_['publics'])  { echo 'active'; } ?>"><a href="<?php echo $this->Url->build(['controller' => 'publics', 'action' => 'index', '_full' => true, 'prefix' => 'admin', 'plugin' => false]); ?>"><i class="fa fa-angle-double-right"></i>Публічна офкрта</a></li>
+            <li class="<?php if ($nav_['publics'])  { echo 'active'; } ?>"><a href="<?php echo $this->Url->build(['controller' => 'publics', 'action' => 'index', '_full' => true, 'prefix' => 'admin', 'plugin' => false]); ?>"><i class="fa fa-angle-double-right"></i>Публічна оферта</a></li>
 
           </ul>
         </li>
 
 
 
-
+<?php if ($user->is_admin() OR $user->is_abs()): ?>
         <li class="<?= $nav_['users'] ? 'active' : '' ?>">
             <a href="<?php echo $this->Url->build(['controller' => 'users', 'action' => 'index', '_full' => true, 'prefix' => 'admin', 'plugin' => false]); ?>">
                 <img src="<?= $this->Url->build('/img/people.svg', ['fullBase' => true]) ?>" alt="">
                  <span><?php echo __('Клієнти'); ?></span>
             </a>
         </li> 
-
+      <?php endif; ?>
+<?php if ($user->is_admin() OR $user->is_abs()): ?>
         <li class="<?php if ($nav_['blogs'] OR $nav_['blog_categories'])  { echo 'active'; } ?> treeview">
           <a href="#">
              <img src="<?= $this->Url->build('/img/news.svg', ['fullBase' => true]) ?>" alt=""> <span>Блог</span>
@@ -166,14 +167,14 @@
            
           </ul>
         </li>
-
-
+<?php endif; ?>
+<?php if ($user->is_admin() OR $user->is_abs()): ?>
         <li class="<?= $nav_['seo'] ? 'active' : '' ?>">
             <a href="<?php echo $this->Url->build(['controller' => 'seos', 'action' => 'index', '_full' => true, 'prefix' => 'admin', 'plugin' => false]); ?>">
                  <img src="<?= $this->Url->build('/img/seo_icon.svg', ['fullBase' => true]) ?>" alt=""> <span><?php echo __('Seo'); ?></span>
             </a>
         </li> 
-
+<?php endif; ?>
         
 
      <li class="<?php if ($nav_['settingss'] OR $nav_['currencys'] OR $nav_['managers'] OR $nav_['socials'] )  { echo 'active'; } ?> treeview">
@@ -187,10 +188,11 @@
             <li class="<?php if ($nav_['settingss'])  { echo 'active'; } ?>">
                 <a href="<?php echo $this->Url->build(['controller' => 'settings', 'action' => 'edit', '_full' => true, 'prefix' => 'admin', 'plugin' => false]); ?>"><i class="fa fa-angle-double-right"></i>Загальні налаштування </a>
             </li>
-           
+           <?php if ($user->is_admin() OR $user->is_abs()): ?>
              <li class="<?php if ($nav_['managers'])  { echo 'active'; } ?>">
                 <a href="<?php echo $this->Url->build(['controller' => 'managers', 'action' => 'index', '_full' => true, 'prefix' => 'admin', 'plugin' => false]); ?> "><i class="fa fa-angle-double-right"></i>Менеджери</a>
             </li>
+          <?php endif; ?>
             <li class="<?= $nav_['currencys'] ? 'active' : '' ?>">
             <a href="<?php echo $this->Url->build(['controller' => 'currency', 'action' => 'index', '_full' => true, 'prefix' => 'admin', 'plugin' => false]); ?>">
                 <i class="fa fa-angle-double-right"></i><span><?php echo __('Валюти'); ?></span>

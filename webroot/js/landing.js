@@ -1,8 +1,21 @@
 $(document).ready(function() {
 
+
+
+
+  setTimeout(function() {
+    $(".lazy_load").each(function() {
+      var data = $(this).attr('data-load');
+        $(this).attr('src', data);
+    });
+  });
+
 setTimeout(function(){ 
     $('header .propose_item').eq(2).find('.propose_item_list_item_float').eq(2).css('top','33%');
     $('main .propose_item').eq(2).find('.propose_item_list_item_float').eq(2).css('top','33%');
+
+     $('header .propose_item').eq(11).find('.propose_item_list_item_float').eq(1).css('left','4%').css('top','69%');
+    $('main .propose_item').eq(11).find('.propose_item_list_item_float').eq(1).css('left','4%').css('top','69%');
 
 }, 500);
 
@@ -190,7 +203,7 @@ var flickerAPI = "https://api.privatbank.ua/p24api/pubinfo?json&exchange&coursid
     });
   })
 
-}, 500);
+}, 400);
   } else {
     global_curs = custom_currency;
     $(".translate_price").each(function() {
@@ -206,7 +219,7 @@ var flickerAPI = "https://api.privatbank.ua/p24api/pubinfo?json&exchange&coursid
     });
 
   }
-},500);
+},400);
 
 
 
@@ -617,7 +630,7 @@ function set_new_price_tovar(element, product, new_count) {
 
 $(document).ready(function() {
 
- $("body").on("click",'.add_product_to_wishlist', function() {
+ $("body").on("click",'div.add_product_to_wishlist', function() {
 
    
    var id_product = $(this).attr("data-product");
@@ -631,6 +644,23 @@ $(document).ready(function() {
         }
     });
      $(this).parent().parent().parent().parent().remove();
+     update_bascket();
+
+});
+
+ $("body").on("click",'button.add_product_to_wishlist', function() {
+
+   
+   var id_product = $(this).attr("data-product");
+
+   $.ajax({ 
+        url: currency_url+'/wishlist/add',
+        method: 'POST',
+        data: { "id_product": id_product},
+        success: function(data){ 
+          alert("Додано");
+        }
+    });
      update_bascket();
 
 });

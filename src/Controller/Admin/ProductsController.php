@@ -148,7 +148,7 @@ class ProductsController extends AppController
             $this->Flash->admin_error(__('Товар не додано. Спробуйте пізніше'));
         }
     
-        $category_id = $this->Products->Categories->find('list', ['limit' => 200])->order('name ASC');
+        $category_id = $this->Products->Categories->find('list')->order('name ASC');
         $producer_id = $this->Products->Producers->find('list', ['limit' => 200]);
         $this->set(compact('product', 'category_id', 'producer_id','first_options','attributes'));
         $this->nav_['products'] = true;
@@ -229,7 +229,7 @@ class ProductsController extends AppController
             }
             $this->Flash->admin_error(__('Товар не збережено спробуйте пізніше'));
         }
-        $category_id = $this->Products->Categories->find('list', ['limit' => 200])->order('name ASC');
+        $category_id = $this->Products->Categories->find('list')->order('name ASC');
         $producer_id = $this->Products->Producers->find('list', ['limit' => 200]);
         $this->nav_['products'] = true;
         $this->set(compact('product', 'category_id', 'products_gallery', 'attributes','attributes_products', 'producer_id','option_group','first_options','id','discounts'));

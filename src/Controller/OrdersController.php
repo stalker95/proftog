@@ -16,7 +16,7 @@ class OrdersController extends AppController
     public function beforeFilter(Event $event)
     {
         parent::beforeFilter($event);
-        $this->Auth->allow(['index','add','quickOrder', 'search', 'authAjax']);
+        $this->Auth->allow(['index','add','quickOrder', 'search', 'authAjax', 'updateOrder', 'getData']);
     }
     /**
      * Index method
@@ -25,6 +25,7 @@ class OrdersController extends AppController
      */
     public function index()
     {
+      $this->viewBuilder()->setLayout('order');
       if ($this->Auth->user('id')) {
         $id = $this->Auth->user('id');
 
@@ -141,7 +142,7 @@ class OrdersController extends AppController
       // debug($kusr_euro);
 
       $order = $this->Orders->newEntity();
-      $order->firstname = $datas['user_name'];
+      $order->username = $datas['user_name'];
       $order->phone = $datas['user_mobile'];
       $order->email = $datas['user_email'];
       $order->created = date("Y-m-d H:i:s");
@@ -155,6 +156,8 @@ class OrdersController extends AppController
       $array_count = array_column($_SESSION['cart'], 'count');
     //  debug(array_sum($array_count));
       $order->amount = array_sum($array_count);
+      $order->dostavka = $dostavka;
+      $order->otrumuvach = $otrumuvach;
       $this->Orders->save($order);
       
       $textfirst = 
@@ -223,8 +226,10 @@ class OrdersController extends AppController
                        ";
        
        $final = $textfirst.$table;
+       if ( $order->oplata_id != 2 OR  $order->oplata_id !=3 ) {
      $this->sendEmail($settings->email, $subject, $final);
-      $this->response->body(json_encode(array('status' => 'true')));
+   }
+      $this->response->body(json_encode(array('status' => 'true','order'=> $order->id,'total' => $total, 'amount' => array_sum(array_column($_SESSION['cart'], 'count')) )));
     }
 
     /**
@@ -338,6 +343,151 @@ class OrdersController extends AppController
             $this->Auth->setUser($_user);
              $this->response->body(json_encode(array('status'=>true, 'message' => 'Неправильний логін або пароль. Спробуйте ще раз', 'user' => $_user)));
             return $this->response;
+    }
+
+    public function getData()
+    {
+      $this->autoRender = false;
+       $this->RequestHandler->renderAs($this, 'json');  
+       $this->response->disableCache();
+       $this->response->type('application/json');
+        $datas = $this->request->getData();
+        $this->response->body(json_encode(array('data' => $datas)));
+
+      $public_key = 'i99809630945';
+      $private_key = 'P1fteazv2CkeNBGGRwSb68hudidNAKG4pGPgsvbX';
+
+      $json_string = '{"public_key":"'.$public_key.'","version":"3","action":"pay","amount":"'.round($datas['json_string']['total']).'","currency":"UAH","description":"Оплата замовлення №00'.$datas['json_string']['order'].'","order_id":"00'.$datas['json_string']['order'].'"}';
+
+      $json_string_base64 = base64_encode($json_string);
+      $private_key_base64 = base64_encode($private_key);
+
+      $sign_string = $private_key.$json_string_base64.$private_key;
+      //echo $sign_string;
+    
+      $signature = base64_encode(sha1($sign_string, true));
+
+
+      $this->response->body(json_encode(array('signature' => $signature, 'data' => $json_string_base64)));
+
+    }
+
+
+    public function updateOrder()
+    {
+      $this->loadModel('Settings');
+        $this->loadModel('Orders');
+        $this->loadModel('OrdersItems');
+        $settings = $this->Settings->find()->first();
+
+       $this->autoRender = false;
+       $this->RequestHandler->renderAs($this, 'json');  
+       $this->response->disableCache();
+       $this->response->type('application/json');
+        $datas = $this->request->getData();
+        
+        $this->loadModel('Orders');
+        
+        $id = substr($datas['data_id'], 2);
+        $order =  $this->Orders->get($id);
+        
+        
+        
+        $oplata = "";
+        if ($order->oplata_id == 1) {
+        $oplata = "Готівкою";
+      }
+      if ($order->oplata_id == 2) {
+        $oplata = "Visa або MasterCard";
+      }
+      if ($order->oplata_id == 3) {
+        $oplata = "LiqPay";
+      }
+
+      if ($order->oplata_id == 4) {
+        $oplata = "Наложений платіж";
+      }
+
+      $dostavka = "";
+      if ($order->delivery_id == 1) {
+        $dostavka = "Самовивіз";
+      }
+
+      if ($order->delivery_id == 2) {
+        $dostavka = "Нова пошта: ". $order['adress_delivery'];
+      }
+
+      if ($order->delivery_id == 3) {
+        $dostavka = "МІстЕкспрес: ". $order['adress_delivery'];
+      }
+
+      if ($order->delivery_id == 4) {
+        $dostavka = "Інтайм: ". $order['adress_delivery'];
+      }
+
+      if ($order->delivery_id == 5) {
+        $dostavka = "Делівері: ". $order['adress_delivery'];
+      }
+
+      $textfirst = 
+            "Ім'я: ".$order->username."<br>
+             Email:".$order->email."<br>
+             Телефон:".$order->phone."<br>
+             Місто:".$order->city."<br>
+             Оплата:".$oplata."<br>
+             Доставка:".$order->dostavka."<br>
+             Отримувач:".$order->otrumuvach."<br>
+             Статус: Оплачено<br>
+      ";
+     // debug($data);
+
+      $table = "<table style='width:100%;border:1px solid #000;text-align:center;'>
+                 <thead style='border:1px solid #000;'>
+                  <th style='border-right:1px solid #000; border-bottom:1px solid #000;'>Товар</th>
+                  <th style='border-bottom:1px solid #000; border-bottom:1px solid #000;'>Кількість</th>
+                  <th style='border-bottom:1px solid #000; border-bottom:1px solid #000;'>Опції</th>
+                  <th style='border-bottom:1px solid #000; border-bottom:1px solid #000;'>Ціна</th>
+                 </thead>
+                 <tbody style='border:1px solid #000;'>
+      ";
+      
+      $total = 0;
+      foreach ($_SESSION['cart'] as $key => $value) {
+        $price = 0;
+        if ($value['product']['currency_id'] == 2) {
+            $price = (($value['count'] * $value['product']['price']) + (array_sum($value['array_option_value']) * $value['count'])) * $kusr_euro;
+        } if  ($value['product']['currency_id'] == 3) {
+             $price = (($value['count'] * $value['product']['price']) + (array_sum($value['array_option_value']) * $value['count'])) * $kurs_dollar;
+         } if  ($value['product']['currency_id'] == 1) {
+            $price = (($value['count'] * $value['product']['price']) + (array_sum($value['array_option_value']) * $value['count']));
+        }
+
+        $options = ""; 
+        
+        if (!empty($value['array_options_name'])) :
+
+         foreach ($value['array_options_name'] as $key => $item) {
+           $options = $options.$item.": ".$value['array_option_value'][$key].";";
+         }
+
+        endif;
+
+         $table  = $table."<tr><td style='border-right:1px solid #000;'>".$value['product']['title']."</td>
+         <td>".$value['count']."</td>
+         <td>".$options."</td>
+         <td>".$price."</td></tr>";
+        
+        $total = $total + $price;
+
+
+      $table = $table."</tbody></table><br>". "
+                          <p style='text-align: right;'>Підсумок : <strong>".$total."</strong></p>
+                       ";
+       $final = $textfirst.$table;
+       $subject = "Замовлення #00".$order->id;
+     $this->sendEmail($settings->email, $subject, $final);
+   }
+
     }
 
 }

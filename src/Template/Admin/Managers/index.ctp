@@ -36,6 +36,7 @@
                   <th>First Nmae</th>
                   <th>Last name</th>
                   <th>Email</th>
+                  <th>Роль</th>
                   <th>Реєстрація</th>
                   <th>Дії</th>
                 </tr>
@@ -53,6 +54,14 @@
                     <td><?= $user['firstname'] ?></td>
                     <td><?= $user['lastname'] ?></td>
                     <td><?= $user['mail'] ?></td>
+                    <td><?php 
+                         if ($user['is_admin'] == 2) {
+                            echo "Адміністратор";
+                         }
+                        if ($user['is_admin'] == 1) {
+                           echo "Менеджер";
+                        }
+                     ?></td>
                     <td><?= $user['created'] ?></td>
                     <td class='table__flex'>
                       <?php

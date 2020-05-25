@@ -123,13 +123,13 @@ class User extends Entity
     public function is_abs() 
     {
 
-     return $this->is_admin == 2;
+     return $this->is_admin == 3;
     }
 
     public function is_admin() 
     {
         
-     return $this->is_admin==1;
+     return $this->is_admin==2;
     } 
 
     public function is_manager() 

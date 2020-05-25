@@ -211,11 +211,10 @@
 							<option value="<?= $key ?>"  <?php 	if ($value == $_user->month_begin) { echo 'selected'; } ?>><?= $value ?></option>
 						<?php endforeach ?>
 					</select>
-
 					<select name="date_of_birth['year']" id="">
-						<?php if (isset($_user->date_of_birth['year'])){ ?>
+						<?php if (isset($_user->date_of_birth->year)){ ?>
 						<?php for ($i= 1980; $i	< date('Y') + 1; $i++): ?>
-							<option value="<?= $i ?>" <?php 	if ($i == $_user->date_of_birth['year']) { echo 'selected'; } ?>><?= $i ?></option>
+							<option value="<?= $i ?>" <?php 	if ($i == $_user->date_of_birth->year) { echo 'selected'; } ?>><?= $i ?></option>
 						<?php 	endfor; ?>
 					<?php } else {?>
 						<?php for ($i= 1980; $i	< date('Y') + 1; $i++): ?>
