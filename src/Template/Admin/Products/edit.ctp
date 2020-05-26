@@ -19,7 +19,7 @@
           <p class="products_container_title">Редагування товару</p>
           <div class="product_container_buttons">
          
-        <a class="display_product" href="/products/view/<?= $product->slug  ?>" class="propose_slider_item_image" target="_blanck"
+        <a class="display_product" href="/products/<?= $product->slug  ?>" class="propose_slider_item_image" target="_blanck"
           >
           <i class="fa fa-eye"></i>
           </a>

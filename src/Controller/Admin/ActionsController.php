@@ -68,21 +68,39 @@ class ActionsController extends AppController
              return $this->redirect(['controller'=>'dashboard','action' => 'index']);
         endif;
         $this->loadModel('Products');
+        $this->loadModel('Producers');
         $action = $this->Actions->newEntity();
         $products = $this->Products->find()->toArray();
+        $producers = $this->Producers->find()->toArray();
 
 
         if ($this->request->is('post')) {
+            $producers = $this->request->getData('producers_id');
+           // debug($producers);
+            $products_id = $this->Products->find()->where(['producer_id IN ' => $producers])->toArray();
             $action = $this->Actions->patchEntity($action, $this->request->getData());
+            $action->slug = str_replace(" ", "-", $action->slug);
+            $action->slug = str_replace(" ", "-", $this->request->getData('slug'));
+            $action->slug = strtolower($action->slug);
             $action->date_end = date("Y-m-d H:i:s", strtotime($this->request->getData('date_end')));    
-            if ($this->Actions->save($action)) {
-
+            if ($this->Actions->save($action)) { 
+                 
+                 if (!empty($this->request->getData('product_id'))) {
                 foreach ($this->request->getData('product_id') as $key => $value) {
                     $action_product = $this->ActionsProducts->newEntity();
                     $action_product->action_id = $action->id;
                     $action_product->products_id = $value;
                     $this->ActionsProducts->save($action_product);
                 }
+            }
+            if (!empty($products_id)) {
+                foreach ($products_id as $key => $value) {
+                    $action_product = $this->ActionsProducts->newEntity();
+                    $action_product->action_id = $action->id;
+                    $action_product->products_id = $value['id'];
+                    $this->ActionsProducts->save($action_product);
+                }
+            }
 
                 if ($this->request->getData('image.error')['error'] == 0) {
             $mm_dir = new Folder(WWW_ROOT . DS . 'actions', true, 0777);
@@ -105,7 +123,7 @@ class ActionsController extends AppController
             $this->Flash->admin_error(__('Акцію не збережно. Спробуйте пізніше'));
         }
         $this->nav_['actions'] = true; 
-        $this->set(compact('action', 'products'));
+        $this->set(compact('action', 'products', 'producers'));
     }
 
     /**

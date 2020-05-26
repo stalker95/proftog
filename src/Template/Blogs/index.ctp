@@ -2,9 +2,9 @@
 	<div class="breadcrums_list">
 		<p class="breadcrums_title">Блог</p>
 		<div class="breadcrums_list_item">
-			<a href="">Головна</a>
+			<a href="<?= $this->Url->build(['controller' => 'main','action'    =>  'index/'], ['fullBase' => true]) ?>">Головна</a>
 			<span> / </span>
-			<a href="">Блог</a>
+			<a href="<?= $this->Url->build(['controller' => 'blogs','action'    =>  'index/'], ['fullBase' => true]) ?>">Блог</a>
 			
 		</div>
 	</div>
@@ -39,6 +39,7 @@
 				</div>
 			</div>
 			<div class="col-md-9">
+				<?php 	foreach ($blogs as $key => $value):?>
 				<div class="blog_item">
 					<div class="blog_item_image">
 						<img src="<?= $this->Url->build('/img/blog_item.png', ['fullBase' => true]) ?>" alt="">
@@ -48,13 +49,13 @@
 						<p>29 Лютого, 2020</p>
 					</div>
 					<div class="blog_item_title">
-						<p>Новинки у кухонному обладнанні</p>
+						<p><?= $value['title'] ?></p>
 					</div>
 					<div class="blog_item_description">
-						<p>	Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorum commodi, iusto magnam ad id eum quidem similique. Illo molestiae est, animi iusto. Laborum corrupti, omnis veritatis non autem sunt quaerat.</p>
+						<p><?= $value['description'] ?></p>
 					</div>
 					<div class="blog_item_link">
-						<a href="#">Детальніше</a>
+						<a href="<?= $this->Url->build(['controller' => 'categories','action'    =>  'view/'.$value['slug']], ['fullBase' => true]) ?>">Детальніше</a>
 					</div>
 					<div class="blog_item_auth">
 						<p> <i class="fa fa-pencil"></i> admin</p>
@@ -63,6 +64,7 @@
 					</div>
 					
 				</div>
+			<?php 	endforeach; ?>
 			</div>
 		</div>	
 	</div>

@@ -18,6 +18,7 @@ class ActionsController extends AppController
         parent::initialize();
         $this->Auth->allow(['view','index']);
         $this->loadModel('Products');
+        $this->loadModel('ActionsProducts');
         $this->nav_['users'] = true;
     }
     /**
@@ -78,24 +79,27 @@ class ActionsController extends AppController
      * @return \Cake\Http\Response|void
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function view($id = null)
+    public function view($slug = null)
     {
-        $action = $this->Actions->get($id, [
-            'contain' => ['ActionsProducts.Products','ActionsProducts.Products.Discounts']
-        ]);
-        $id_products = array_column($action['actions_products'], 'id');
+        $action = $this->Actions->find()->where(['slug' => $slug])->first();
+        $actions_products = $this->ActionsProducts->find()->select('products_id')->where(['action_id' => $action->id])->toArray();
+       // debug($actions_products);
+         $this->paginate = [
+                'limit' => '9'
+            ];
+        $id_products = array_column((array)$actions_products, 'products_id');
        // debug($id_products);
 
         if (!empty($id_products)):
 
-        $products = $this->Paginate($this->Products->find()->contain(['Actions','Discounts','Rewiev','ActionsProducts','ActionsProducts.Actions'])->where(['id IN ' => $id_products]))->toArray();
+        
 
         $max_price = $this->Products->find('all',[
                     'fields' => array('amount' => 'MAX(Products.price)')])->where(['id IN ' => $id_products])->toArray();
 
         endif;
 
-        $products = [];
+        //$products = [];
         
         $min_price = 0;
         $current_value_min = 0;
@@ -108,13 +112,13 @@ class ActionsController extends AppController
             $max_price = 0;
             $current_value_max = 0;
         endif;
+        
 
-       if ($this->request->is(['get']) AND isset($this->request['?']['_method'])  AND $this->request['?']['_method'] == 'PUT' ) {
-
-        $action = $this->Actions->get($id, [
-            'contain' => ['ActionsProducts.Products','ActionsProducts.Products.Discounts']
-        ]);
-        $id_products = array_column($action['actions_products'], 'id');
+       if ($this->request->is(['get']) AND isset($this->request['?']['_method'])  ) {
+        $action = $this->Actions->find()->where(['slug' => $slug])->first();
+                $actions_products = $this->ActionsProducts->find()->select('products_id')->where(['action_id' => $action->id])->toArray();
+       
+$id_products = array_column((array)$actions_products, 'products_id');
            if (!empty($id_products)):
             $query_for_products = $this->Products
                                         ->find()
@@ -144,6 +148,7 @@ class ActionsController extends AppController
             }
 
             $products = $this->Paginate($query_for_products)->toArray();
+            $this->set('products', $products);
         else:
             $products = [];
         endif;
@@ -160,6 +165,29 @@ class ActionsController extends AppController
        }
        else {
 
+if (!empty($id_products)):
+
+  //  debug($id_products);
+
+        $products = $this->Paginate($this->Products->find()->contain(['Rewiev','Discounts','Actions'])->where(['id IN ' => $id_products]))->toArray();
+       // debug($products);
+        $this->set(compact('products'));
+
+        $max_price = $this->Products->find('all',[
+                    'fields' => array('amount' => 'MAX(Products.price)')])->where(['id IN ' => $id_products])->toArray();
+        endif;
+
+         if (isset($max_price)){
+            $max_price = $max_price[0]['amount'] * 30;
+            $current_value_max = $max_price;
+        } else {
+            $max_price = 0;
+            $current_value_max = 0;
+        }
+                  $this->set('max_price', $max_price);
+        $this->set('min_price', $min_price);
+        $this->set('current_value_min', $current_value_min);
+        $this->set('current_value_max', $current_value_max);
        }
 
 
@@ -169,9 +197,8 @@ class ActionsController extends AppController
        // debug($action);
 
         $this->set('action', $action);
-        $this->set('min_price', $min_price);
-        $this->set('max_price', $max_price);
-        $this->set('products', $products);
+        //$this->set('max_price', $max_price);
+        //$this->set('products', $products);
     }
 
 }

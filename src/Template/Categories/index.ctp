@@ -23,7 +23,7 @@
 				<div class="categories_list">
                     <?php foreach ($categories_main as $key => $value): if ($value['parent_id'] ==  0): ?>
 
-					<a href="<?= $this->Url->build(['controller' => 'categories','action'=>'view/'.$value['slug']]) ?>" class="categories_list_item">
+					<a href="<?= $this->Url->build(['controller' => 'categories','action'=>$value['slug']]) ?>" class="categories_list_item">
 						<div class="categories_list_item_image">
 							<?= $value->image ?>
 							<img src="<?= $this->Url->build('/categories/refrigerator.svg', ['fullBase' => true]) ?>" alt="">

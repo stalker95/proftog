@@ -39,7 +39,7 @@ class ProducersController extends AppController
      * @return \Cake\Http\Response|void
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function view($id = null)
+    public function view($slug = null)
     {
          $this->paginate = [
                 'limit' => '9'
@@ -47,7 +47,7 @@ class ProducersController extends AppController
         $data_today = date('Y-m-d H:i:s');
         $new_date = date('Y-m-d H:i:s', strtotime($data_today));
 
-        $producer = $this->Producers->get($id);
+        $producer = $this->Producers->find()->where(['slug' => $slug])->first();
         $producers_list = $this->Producers->find('all')->toArray();
 
         $title = $producer->title;

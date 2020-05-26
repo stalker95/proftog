@@ -74,6 +74,11 @@ Router::scope('/', function (RouteBuilder $routes) {
     $routes->connect('/', ['controller' => 'Main', 'action' => 'index']);
     $routes->connect('/blogs/', ['controller' => 'Blogs', 'action' => 'index']);
     $routes->connect('/categories/*', array('controller' => 'categories', 'action' => 'view'));
+    $routes->connect('/products/*', array('controller' => 'products', 'action' => 'view'));
+    $routes->connect('/actions/*', array('controller' => 'actions', 'action' => 'view'));
+    $routes->connect('/actions/index', array('controller' => 'actions', 'action' => 'index'));
+    $routes->connect('/categories/index', array('controller' => 'categories', 'action' => 'index'));
+    $routes->connect('/producers/*', array('controller' => 'producers', 'action' => 'view'));
 
 
     /**

@@ -140,7 +140,7 @@
 	          		<?php foreach ($products as $key => $value):?>
 	          		<div class="propose_slider_item <?php if (!empty($value['actions'])): ?> propose_slider_item_show_action <?php endif; ?> ">
 	          			<div class="propose_slider_item_action"><p>Акція</p></div>
-					<a href="<?php echo $this->Url->build(['controller' => 'products','action'=>'view/'.$value['slug']]) ?>" class="propose_slider_item_image">
+					<a href="<?php echo $this->Url->build(['controller' => 'products','action' => $value['slug']]) ?>" class="propose_slider_item_image">
 						<img src="<?= $this->Url->build('/products/'.$value['image'], ['fullBase' => true]) ?> " alt="">
 					</a>
 					<div class="propose_slider_item_stars">
@@ -161,7 +161,7 @@
 						</div>
 					</div>
 					<div class="propose_slider_item_title">
-						<p><a href="<?php echo $this->Url->build(['controller' => 'products','action'=>'view/'.$value['slug']]) ?>"><?= $value['title'] ?></a></p>
+						<p><a href="<?php echo $this->Url->build(['controller' => 'products','action'=>$value['slug']]) ?>"><?= $value['title'] ?></a></p>
 					</div>
 					<div class="propose_slider_item_kod">
 						<p>Код товару <span class="item_kod"><?= $value['cod'] ?></span></p>
@@ -185,7 +185,7 @@
 						<button class="product_buttons_item add_product_to_bascket" data-product="<?= $value['id'] ?>">
 							<img src="<?= $this->Url->build('/img/back.svg', ['fullBase' => true]) ?>" alt="">
 						</button>
-						<a href="<?= $this->Url->build(['controller' => 'products','action'=>'view/'.$value['slug']]) ?>" class="product_buttons_item" >
+						<a href="<?= $this->Url->build(['controller' => 'products','action'=>$value['slug']]) ?>" class="product_buttons_item" >
 							<i class="fa fa-eye"></i>
 						</a>
 						<button class="product_buttons_item add_product_to_wishlist" data-product="<?= $value['id'] ?>">

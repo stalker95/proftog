@@ -17,6 +17,7 @@ class BlogsController extends AppController
         parent::initialize();
         $this->Auth->allow(['index','register']);
         $this->loadComponent('Flash');
+        $this->loadModel('BlogCategories');
     }
     /**
      * Index method
@@ -25,7 +26,13 @@ class BlogsController extends AppController
      */
     public function index()
     {
-        
+        $this->paginate = [
+                'limit' => '2'
+            ];
+
+        $blogCategories = $this->BlogCategories->find()->toArray();
+        $blogs = $this->Paginate($this->Blogs->find())->toArray();
+        $this->set(compact('blogs', 'blogCategories'));
     }
 
     /**

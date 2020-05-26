@@ -671,7 +671,7 @@ $(".type_user_delivery").change(function() {
  } else {
 
      $(".new_delivery_user").css('display', 'none');
-       if ($('.type_delivery:checked').val() !=1 && $('.type_delivery:checked').parent().next(".adress_delivery").text() != "") {
+       if ($('.type_delivery:checked').val() !=1 && $('.type_delivery:checked').parent().next(".adress_delivery").val() != "") {
      $(".button_confirm_bascket").removeClass('disabled');
      $(".button_confirm_bascket").addClass('not_disabled');
    }
@@ -756,9 +756,8 @@ $(".adress_delivery").keyup(function() {
       $(this).parent().find('.message_display').css('display', 'none').text('');
       $(this).removeClass('new_customer_register_item_input_not_valid');
       
-      if ($('.type_user_delivery:checked') != 2) {
+      if ($('.type_user_delivery:checked').val() == 2) {
 
-      
       if (   $('.user_delivery_surname').val() != "" 
             && $('.user_delivery_second').val() != "" 
             && $('.user_delivery_name').val() != ""
@@ -768,8 +767,7 @@ $(".adress_delivery").keyup(function() {
       $('.button_confirm_bascket').addClass('not_disabled');
     }
     }
-
-     if ($('.type_user_delivery:checked') == 1) {
+     if ($('.type_user_delivery:checked').val() == 1) {
           $('.button_confirm_bascket').removeClass('disabled');
           $('.button_confirm_bascket').addClass('not_disabled');
 
@@ -792,7 +790,7 @@ $(".user_delivery_item").keyup(function() {
          }
        });
 
-       if ($('.type_delivery:checked').val() != 1 && $('.type_delivery:checked').find('.adress_delivery').val() == "") {
+       if ($('.type_delivery:checked').val() != 1 && $('.type_delivery:checked').parent().next('.adress_delivery').val() == "") {
            $('.type_delivery:checked').find('.adress_delivery').addClass('new_customer_register_item_input_not_valid');
           $('.type_delivery:checked').parent().next('.adress_delivery').next('.message_display').text('Введіть адресу доставки');
        }
@@ -801,6 +799,7 @@ $(".user_delivery_item").keyup(function() {
             && $('.type_delivery:checked').val() == 1
             && errors_inputs == 0
             ) {
+        alert('s')
         $(".button_confirm_bascket").removeClass('disabled');
         $(".button_confirm_bascket").addClass('not_disabled');
        }

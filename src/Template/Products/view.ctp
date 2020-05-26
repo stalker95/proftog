@@ -10,17 +10,17 @@
 			<a href="<?= $this->Url->build(['controller' => 'categories','action'    =>  '/index']) ?>">Категорії</a>
 			<span> / </span>
 			<?php if (!empty($product->category['parent_category']['parent_category'])): ?>
-				<a href="<?= $this->Url->build(['controller' => 'categories','action'    =>  'view/'.$category['parent_category']['parent_category']['slug']]) ?>"><?= $product['category']['parent_category']['parent_category']['name'] ?></a>
+				<a href="<?= $this->Url->build(['controller' => 'categories','action'    =>  $category['parent_category']['parent_category']['slug']]) ?>"><?= $product['category']['parent_category']['parent_category']['name'] ?></a>
 							<span> / </span>
 			<?php endif; ?>
 
 			<?php if (!empty($product->category['parent_category'])): ?>
-				<a href="<?= $this->Url->build(['controller' => 'categories','action'    =>  'view/'.$product->category['parent_category']['slug']]) ?>"><?= $product->category['parent_category']['name'] ?></a>
+				<a href="<?= $this->Url->build(['controller' => 'categories','action'    =>  $product->category['parent_category']['slug']]) ?>"><?= $product->category['parent_category']['name'] ?></a>
 							<span> / </span>
 			<?php endif; ?>
-			<a href="<?= $this->Url->build(['controller' => 'categories','action'    =>  'view/'.$product->category->slug]) ?>"><?= $product->category->name; ?></a>
+			<a href="<?= $this->Url->build(['controller' => 'categories','action'    =>  $product->category->slug]) ?>"><?= $product->category->name; ?></a>
 			<span> / </span>
-			<a href="<?= $this->Url->build(['controller' => 'products','action'    =>  'view/'.$product->slug]) ?>"><?= $product->title ?></a>
+			<a href="<?= $this->Url->build(['controller' => 'products','action'    =>  $product->slug]) ?>"><?= $product->title ?></a>
 			<span> / </span>
 			
 		</div>
@@ -35,7 +35,7 @@
 							<img src="<?= $this->Url->build('/products/'.$product->image, ['fullBase' => true]) ?>" alt="">
 						</a>
 						<?php foreach ($product['products_gallery'] as $key => $value):?>
-								<a href="<?= $this->Url->build('/products_gallery/'.$value['name'], ['fullBase' => true]) ?> " class="product_item ">
+								<a href="<?= $this->Url->build('/products_gallery/'.$value['name'], ['fullBase' => true]) ?> " class="product_item gallery_item">
 									<img src="<?= $this->Url->build('/products_gallery/'.$value['name'], ['fullBase' => true]) ?>" alt="">
 								</a>
 								
@@ -383,14 +383,14 @@
 			<?php 	foreach ($products as $key => $value): ?>
 					<div class="propose_slider_item <?= $this->element('action_product', array("item" => $value['actions_products'])); ?> ">
 					<div class="propose_slider_item_action"><p>Акція</p></div>
-					<a href="<?= $this->Url->build(['controller' => 'products','action'=>'view/'.$value['slug']]) ?>" class="propose_slider_item_image">
+					<a href="<?= $this->Url->build(['controller' => 'products','action'=>$value['slug']]) ?>" class="propose_slider_item_image">
 						<img src="<?= $this->Url->build('/products/'.$value['image'], ['fullBase' => true]) ?> " alt="">
 					</a>
 					<div class="propose_slider_item_stars">
 						<?= $this->element('rating_product', array("item" => $value)); ?>
 					</div>
 					<div class="propose_slider_item_title">
-						<p><a href="<?= $this->Url->build(['controller' => 'products','action'=>'view/'.$value['slug']]) ?>"><?= $value['title'] ?></a></p>
+						<p><a href="<?= $this->Url->build(['controller' => 'products','action'=>$value['slug']]) ?>"><?= $value['title'] ?></a></p>
 					</div>
 					<div class="propose_slider_item_kod">
 						<p>Код товару <span class="item_kod"><?= $value['cod'] ?></span></p>

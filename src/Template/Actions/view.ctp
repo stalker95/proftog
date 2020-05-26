@@ -15,7 +15,7 @@
 </div>
 <section class="propose ">
 	<div class="categories_page background_white container">
-							<?= $this->Form->create($action, ['type' => 'file','method' => 'get', 'id'=>'product_sort'] )  ?>
+							<?= $this->Form->create('', ['type' => 'file','method' => 'get', 'id'=>'product_sort' ] )  ?>
 
 		<div class="row">
 
@@ -29,7 +29,7 @@
 				                 'current_value_max' => $current_value_max,
 				                 'selected_values'   => [],
 				                 'producers_list'    => [],
-				                 'producers_page'    => true
+				                 'producers_page'    => false
 				  ));
 
 				?>
@@ -96,7 +96,7 @@
 	          		<?php foreach ($products as $key => $value):?>
 	          		<div class="propose_slider_item propose_slider_item_show_action ">
 	          			<div class="propose_slider_item_action"><p>Акція</p></div>
-					<a href="<?php echo $this->Url->build(['controller' => 'products','action'=>'view/'.$value['slug']]) ?>" class="propose_slider_item_image">
+					<a href="<?php echo $this->Url->build(['controller' => 'products','action'=>$value['slug']]) ?>" class="propose_slider_item_image">
 						<img src="<?= $this->Url->build('/products/'.$value['image'], ['fullBase' => true]) ?> " alt="">
 					</a>
 
@@ -105,7 +105,7 @@
 					</div>
 
 					<div class="propose_slider_item_title">
-						<p><?= $value['title'] ?></p>
+						<p><a href="<?php echo $this->Url->build(['controller' => 'products','action'=>$value['slug']]) ?>"><?= $value['title'] ?></a></p>
 					</div>
 					<div class="propose_slider_item_kod">
 						<p>Код товару <span class="item_kod"><?= $value['cod'] ?></span></p>
@@ -122,7 +122,7 @@
 						<button class="product_buttons_item add_product_to_bascket" data-product="<?= $value['id'] ?>">
 							<img src="<?= $this->Url->build('/img/back.svg', ['fullBase' => true]) ?>" alt="">
 						</button>
-						<a href="<?= $this->Url->build(['controller' => 'products','action'=>'view/'.$value['slug']]) ?>" class="product_buttons_item" >
+						<a href="<?= $this->Url->build(['controller' => 'products','action'=>$value['slug']]) ?>" class="product_buttons_item" >
 							<i class="fa fa-eye"></i>
 						</a>
 						<button class="product_buttons_item add_product_to_wishlist" data-product="<?= $value['id'] ?>">
@@ -138,6 +138,17 @@
 
 
 	          	</div>
+	          	 <?php
+              $params = $this->Paginator->params();
+              if ($params['pageCount'] > 1): ?>
+                <ul class="pagination pagination-sm">
+                    <?= $this->Paginator->first('<< ') ?>
+                    <?= $this->Paginator->prev('< ' ) ?>
+                    <?= $this->Paginator->numbers() ?>
+                    <?= $this->Paginator->next(' >') ?>
+                <?= $this->Paginator->last(' >>') ?>
+                </ul>
+          <?php endif; ?>
 	          	 
 	          </div>
 			</div>
@@ -147,3 +158,16 @@
 
 	</div>
 </section>
+<script>
+    <?php echo $this->Html->scriptStart(['block' => true]); ?>
+
+    		$("#sort_by").change(function() {
+               $("#product_sort").submit();
+    		});
+
+    		$("#count_display").change(function() {
+               $("#product_sort").submit();
+    		});
+
+    <?php echo $this->Html->scriptEnd(); ?>
+</script>

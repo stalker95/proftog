@@ -50,7 +50,7 @@
           
  		 		</div>
  		 	<?php endif;	endforeach; ?>
-     
+  <?php   if ($producers_page) { ?>   
  		 		<div class="filter_elements_items_item">
  		 			<p class="filter_elements_items_item_title">Виробники</p>
  		 			<?php 	foreach ($producers_list as $keys => $item):  ?>
@@ -67,6 +67,7 @@
             <button class="button_filter">Застосувати фільтр</button>
           </div>
  		 		</div>
+      <?php } ?>
                
  		 	
  		 </div>

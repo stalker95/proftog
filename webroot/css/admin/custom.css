@@ -1546,6 +1546,7 @@ a.product_container_buttons_add {
     border-right: 1px solid #222D32;
     border-bottom: 1px solid #222D32;
     vertical-align: middle;
+    font-size: 13px;
 }
 .products_container .table-bordered>tbody>tr {
     border-left: 1px solid #222D32;

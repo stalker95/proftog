@@ -469,7 +469,7 @@ $(document).ready(function() {
           $(".loader.loader--style3").css("display", "none");
 
           var html = "";
-          
+              setTimeout(function() {
           console.log(data);
           if (data.products.length > 1) {
           for (i = 0; i < data.products.length; i++) {
@@ -489,6 +489,7 @@ $(document).ready(function() {
         } else {
           $(".header_search_products").html("<p class='products_not_found'>Товарів за вашим запитом не знайдено.</p>");
         }
+      }, 300);
           setTimeout(function() {
         
 change_currency();

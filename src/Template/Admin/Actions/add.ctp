@@ -38,6 +38,19 @@
   </div>
 </div>
 
+
+ <div class="playlist__managment--item">
+  <div class="playlist__managment--item__left">
+    <p>Slug</p>
+  </div>
+  <div class="playlist__managment--item__right">
+    <div class="playlist--item--sub">
+    <?=  $this->Form->control('slug',array('label' => 'First Name','type'=>'text','class'=>'form-control','required'=>'required'));?>
+    </div>
+  </div>
+</div>
+
+
        <div class="playlist__managment--item choose_color_picker ">
   <div class="playlist__managment--item__left">
     <p>Фон</p>
@@ -88,6 +101,34 @@
 
 <div class="playlist__managment--item">
   <div class="playlist__managment--item__left">
+    <p>Виробники</p>
+  </div>
+  <div class="playlist__managment--item__right">
+    <div class="playlist--item--sub">
+      <input type="checkbox" class="selected__producer" style="width: auto;">
+
+    </div>
+  </div>
+</div>
+
+<div class="playlist__managment--item">
+  <div class="playlist__managment--item__left">
+    <p>Виробники</p>
+  </div>
+  <div class="playlist__managment--item__right">
+    <div class="playlist--item--sub">
+    <select name="producers_id[]" id="producers_list" class="form-control js-example-basic-single" multiple="multiple" disabled="disabled">
+      <?php foreach ($producers as $key => $value): ?>
+        <option value="<?= $value['id'] ?>"> <?= $value['title']; ?></option>
+      <?php endforeach; ?>
+    </select>
+
+    </div>
+  </div>
+</div>
+
+<div class="playlist__managment--item">
+  <div class="playlist__managment--item__left">
     <p>Товар</p>
   </div>
   <div class="playlist__managment--item__right">
@@ -101,6 +142,9 @@
     </div>
   </div>
 </div>
+
+
+
 <div class="playlist__managment--item">
   <div class="playlist__managment--item__left">
     <p>Позиція</p>
@@ -137,6 +181,15 @@
 <?php $this->Html->script('admin/dataTables.bootstrap.min.js', ['block' => 'scriptBottom']); ?>
 <script>  
 <?php echo $this->Html->scriptStart(['block' => true]); ?>
+
+$(".selected__producer").change(function() {
+  if ($(this).is(":checked")) {
+  $("#producers_list").removeAttr('disabled')
+} else {
+  $("#producers_list").attr('disabled', 'disabled');
+}
+});
+
 
  $(document).ready(function() {
     $('.js-example-basic-single').select2();

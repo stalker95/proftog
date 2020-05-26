@@ -79,14 +79,7 @@
                     </div>
                     <div class="header_center_form hide_mobile">
                         <form action="">
-                           <!-- <div class="custom-select" >
-                                <select name="category" >
-                                    <?php foreach ($categories as $key => $value): if ($value['parent_id']): ?>
-                                    <option value="<?= $value['id'] ?>"><?= $value['name'] ?></option>
-                                    
-                                <?php endif; endforeach; ?>
-                                </select>
-                            </div> -->
+                          
                             <input type="text" class="header_center_text outline-none" placeholder="Пошук продуктів" autocomplete="off" name="search">
                             <label for="submit" class="header_center_submit">
                                 <img src="<?= $this->Url->build('/img/search.svg', ['fullBase' => true]) ?>" alt="">
