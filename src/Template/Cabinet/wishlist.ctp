@@ -107,7 +107,7 @@
               <i class="fa fa-eye"></i>
             </a>
            
-            <button class="product_buttons_item">
+            <button class="product_buttons_item add_product_to_compare" data-product="<?= $value['id'] ?>">
               <i class="fa fa-exchange"></i>
             </button>
           </div>

@@ -471,7 +471,7 @@ $(document).ready(function() {
           var html = "";
               setTimeout(function() {
           console.log(data);
-          if (data.products.length > 1) {
+          if (data.products.length >= 1) {
           for (i = 0; i < data.products.length; i++) {
            // html  = html + data.products[i];
             html  = html +'<div class="header_search_product">'+
@@ -648,6 +648,23 @@ $(document).ready(function() {
      update_bascket();
 
 });
+
+  $("body").on("click",'.add_product_to_compare', function() {
+
+   
+   var id_product = $(this).attr("data-product");
+
+   $.ajax({ 
+        url: currency_url+'/compares/add',
+        method: 'POST',
+        data: { "id_product": id_product},
+        success: function(data){ 
+          alert("Додано");
+        }
+    });
+
+});
+
 
  $("body").on("click",'button.add_product_to_wishlist', function() {
 

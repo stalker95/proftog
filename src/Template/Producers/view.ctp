@@ -191,7 +191,7 @@
 						<button class="product_buttons_item add_product_to_wishlist" data-product="<?= $value['id'] ?>">
 							<img src="<?= $this->Url->build('/img/favorite.svg', ['fullBase' => true]) ?>" alt="">
 						</button>
-						<button class="product_buttons_item">
+						<button class="product_buttons_item add_product_to_compare" data-product="<?= $value['id'] ?>">
 							<i class="fa fa-exchange"></i>
 						</button>
 					</div>

@@ -53,7 +53,7 @@
 	          							</p>
 	          						</div>
 	          						<div class="actions_list_item_right_read">
-	          							<a href="<?= $this->Url->build(['controller' => 'actions','action'=>'view/'.$value['id']]) ?>">Детальніше</a>
+	          							<a href="<?= $this->Url->build(['controller' => 'promotions','action'=>'view/'.$value['slug'], ['fullBase' => true]]) ?>">Детальніше</a>
 	          						</div>
 	          					</div>
 	          				</div>

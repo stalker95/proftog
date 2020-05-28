@@ -33,6 +33,11 @@ class BlogCategoriesTable extends Table
         $this->setTable('blog_categories');
         $this->setDisplayField('name');
         $this->setPrimaryKey('id');
+
+        $this->hasMany('Blogs', [
+            'foreignKey' => 'category_id',
+            'joinType' => 'INNER'
+        ]);
     }
 
     /**

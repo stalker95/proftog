@@ -2,6 +2,7 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
+use Cake\Event\Event;
 
 /**
  * Blogs Controller
@@ -12,11 +13,10 @@ use App\Controller\AppController;
  */
 class BlogsController extends AppController
 {
-    public function initialize()
-     {
+    public function beforeFilter(Event $event)
+    {
         parent::initialize();
-        $this->Auth->allow(['index','register']);
-        $this->loadComponent('Flash');
+        $this->Auth->allow(['index','register','view']);
         $this->loadModel('BlogCategories');
     }
     /**
@@ -30,8 +30,33 @@ class BlogsController extends AppController
                 'limit' => '2'
             ];
 
+            $_monthsList = array(
+            "01" => "Січня",
+            "02" => "Лютого",
+            "03" => "Березня",
+            "04" => "Квітня",
+            "05" => "Травня",
+            "06" => "Червня",
+            "07" => "Липня",
+            "08" => "Серпня",
+            "09" => "Вересня",
+            "10" => "Жовтня",
+            "11" => "Листопада",
+            "12" => "Грудня"
+        );
+       
+       
+
+
+
         $blogCategories = $this->BlogCategories->find()->toArray();
         $blogs = $this->Paginate($this->Blogs->find())->toArray();
+
+        foreach ($blogs as $key => $value) {
+            $_mD = date("m", strtotime($value['created']));
+            $blogs[$key]['month'] = $_monthsList[$_mD];
+        }
+
         $this->set(compact('blogs', 'blogCategories'));
     }
 
@@ -42,76 +67,71 @@ class BlogsController extends AppController
      * @return \Cake\Http\Response|void
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function view($id = null)
+    public function view($slug = null)
     {
-        $blog = $this->Blogs->get($id, [
-            'contain' => []
-        ]);
+        debug($slug);
+         $_monthsList = array(
+            "01" => "Січня",
+            "02" => "Лютого",
+            "03" => "Березня",
+            "04" => "Квітня",
+            "05" => "Травня",
+            "06" => "Червня",
+            "07" => "Липня",
+            "08" => "Серпня",
+            "09" => "Вересня",
+            "10" => "Жовтня",
+            "11" => "Листопада",
+            "12" => "Грудня"
+        );
+        $blog = $this->Blogs->find()->contain(['BlogCategories'])->where(['Blogs.slug' => $slug])->first();
+
+        $prev_post = $this->Blogs
+                          ->find()
+                          ->contain(['BlogCategories'])
+                          ->where(['Blogs.id < ' <= $blog->id])
+                          ->limit('1')
+                          ->first();
+     //   debug($prev_post);
+
+        $next_post =  $this->Blogs
+                          ->find()
+                          ->contain(['BlogCategories'])
+                          ->where(['Blogs.id > ' => $blog->id])
+                          ->limit('1')
+                          ->first();
+      //  debug($next_post);
+
+        $other_posts = $this->Blogs
+                             ->find()
+                             ->order(['id DESC'])
+                             ->limit(2)
+                             ->toArray();
+
+        $_mD = date("m", strtotime($blog->created));
+
+        foreach ($other_posts as $key => $value) {
+           $_mDD = date("m", strtotime($value['created']));
+            $other_posts[$key]['month'] = $_monthsList[$_mDD];
+        }
+
+        
+        
+
+        $blogCategories = $this->BlogCategories->find()->toArray();
 
         $this->set('blog', $blog);
+        $this->set('blogCategories', $blogCategories);
+        $this->set(compact('next_post', 'prev_post', 'other_posts'));
     }
 
-    /**
-     * Add method
-     *
-     * @return \Cake\Http\Response|null Redirects on successful add, renders view otherwise.
-     */
-    public function add()
+    public function category($slug = null)
     {
-        $blog = $this->Blogs->newEntity();
-        if ($this->request->is('post')) {
-            $blog = $this->Blogs->patchEntity($blog, $this->request->getData());
-            if ($this->Blogs->save($blog)) {
-                $this->Flash->success(__('The blog has been saved.'));
+        $blog_category = $this->BlogCategories->find()->where(['slug' => $slug])->first();
+        $blogs = $this->Blogs->find()->contain(['BlogCategories'])->where(['category_id' => $blog_category->id])->toArray();
+        
+        $this->set('blogs', $blogs);
 
-                return $this->redirect(['action' => 'index']);
-            }
-            $this->Flash->error(__('The blog could not be saved. Please, try again.'));
-        }
-        $this->set(compact('blog'));
     }
 
-    /**
-     * Edit method
-     *
-     * @param string|null $id Blog id.
-     * @return \Cake\Http\Response|null Redirects on successful edit, renders view otherwise.
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function edit($id = null)
-    {
-        $blog = $this->Blogs->get($id, [
-            'contain' => []
-        ]);
-        if ($this->request->is(['patch', 'post', 'put'])) {
-            $blog = $this->Blogs->patchEntity($blog, $this->request->getData());
-            if ($this->Blogs->save($blog)) {
-                $this->Flash->success(__('The blog has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
-            }
-            $this->Flash->error(__('The blog could not be saved. Please, try again.'));
-        }
-        $this->set(compact('blog'));
-    }
-
-    /**
-     * Delete method
-     *
-     * @param string|null $id Blog id.
-     * @return \Cake\Http\Response|null Redirects to index.
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function delete($id = null)
-    {
-        $this->request->allowMethod(['post', 'delete']);
-        $blog = $this->Blogs->get($id);
-        if ($this->Blogs->delete($blog)) {
-            $this->Flash->success(__('The blog has been deleted.'));
-        } else {
-            $this->Flash->error(__('The blog could not be deleted. Please, try again.'));
-        }
-
-        return $this->redirect(['action' => 'index']);
-    }
 }

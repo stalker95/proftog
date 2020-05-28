@@ -36,7 +36,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <?php   foreach ($categories as $category): ?>
+                <?php   foreach ($categories_blog as $category): ?>
                   <tr>
                      <td class="first-check">
                        <label class="custom-checkbox">

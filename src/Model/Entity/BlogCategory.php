@@ -21,6 +21,7 @@ class BlogCategory extends Entity
      * @var array
      */
     protected $_accessible = [
+        '*'    => true,
         'name' => true
     ];
 }

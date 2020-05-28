@@ -31,10 +31,10 @@ class BlogCategoriesController   extends AppController
 
     public function index()
     {
-        $categories = $this->paginate(
+        $categories_blog = $this->paginate(
             $this->BlogCategories->find('all'));
 
-        $this->set('categories', $categories);   
+        $this->set('categories_blog', $categories_blog);   
       $this->nav_['blog_categories'] = true;
     }
 

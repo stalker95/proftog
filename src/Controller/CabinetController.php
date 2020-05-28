@@ -78,9 +78,10 @@ class CabinetController extends AppController
             "12" => "Грудня"
         );
        
-       $_mD = date("m", strtotime($_user->created));
+       $_mD = date("m", strtotime($_user->date_of_birth));
+      // debug($_mD);
          $_user->month_begin = $_monthsList[$_mD];
-
+      //   debug($_user);
        if ($this->request->is('post')) {
 
         $_user = $this->Users->patchEntity($_user, $this->request->getData());
@@ -106,16 +107,15 @@ class CabinetController extends AppController
         $id = $this->Auth->user('id');
 
        $_user = $this->Users->get($id);
+      // debug($_user);
 
         $_user = $this->Users->patchEntity($_user, $this->request->getData());
         $_user->role = 0;
-        //debug($_user);
-        $data = date("Y-m-d", strtotime($this->request->getData("date_of_birth['year']").'-'.$this->request->getData("date_of_birth['month']").'-'.$this->request->getData("date_of_birth['day']")));
-        debug($data);
-        debug($this->request->getData("date_of_birth"));
-        $_user->date_of_birth = $data ;
+      //  debug($_user);
+       // debug($data);
+       // debug($this->request->getData("date_of_birth"));
+      //  $_user->date_of_birth = $data ;
             if ($this->Users->save($_user)) {
-                debug($_user);
                 //$this->Flash->admin_success(__('Зміни збережно'));
 
                 return $this->redirect(['action' => 'cabinet']);

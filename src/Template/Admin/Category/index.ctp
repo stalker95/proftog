@@ -58,7 +58,6 @@
               </tbody>
               </table>
             </div>
-             <?php if ($category->parent_id != 0 ): ?>
                <?php
               $params = $this->Paginator->params();
               if ($params['pageCount'] > 1): ?>
@@ -69,7 +68,6 @@
                     <?= $this->Paginator->next(' >') ?>
                 <?= $this->Paginator->last(' >>') ?>
                 </ul>
-          <?php endif; ?>
       <?php endif; ?>
           </div>
         </div>

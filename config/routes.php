@@ -72,7 +72,6 @@ Router::scope('/', function (RouteBuilder $routes) {
      * to use (in this case, src/Template/Pages/home.ctp)...
      */
     $routes->connect('/', ['controller' => 'Main', 'action' => 'index']);
-    $routes->connect('/blogs/', ['controller' => 'Blogs', 'action' => 'index']);
     $routes->connect('/categories/*', array('controller' => 'categories', 'action' => 'view'));
     $routes->connect('/products/*', array('controller' => 'products', 'action' => 'view'));
     $routes->connect('/actions/*', array('controller' => 'actions', 'action' => 'view'));
@@ -80,11 +79,19 @@ Router::scope('/', function (RouteBuilder $routes) {
     $routes->connect('/categories/index', array('controller' => 'categories', 'action' => 'index'));
     $routes->connect('/producers/*', array('controller' => 'producers', 'action' => 'view'));
 
+   // $routes->connect('/blogs/*', array('controller' => 'blogs', 'action' => 'view'));
+
+    $routes->connect('/promotions/*', array('controller' => 'promotions', 'action' => 'view'));
+    $routes->connect('/promotions/index', array('controller' => 'promotions', 'action' => 'index'));
+  //  $routes->connect('/blogs/*', array('controller' => 'blogs', 'action' => 'view'));
+    $routes->connect('/blogs/index', array('controller' => 'blogs', 'action' => 'index'));
+
+
 
     /**
      * ...and connect the rest of 'Pages' controller's URLs.
      */
-    $routes->connect('/pages/*', ['controller' => 'Pages', 'action' => 'display']);
+  //  $routes->connect('/pages/*', ['controller' => 'Pages', 'action' => 'display']);
 
     /**
      * Connect catchall routes for all controllers.
@@ -108,6 +115,8 @@ Router::scope('/', function (RouteBuilder $routes) {
     $routes->fallbacks(DashedRoute::class);
 });
 
+
+
 /**
  * If you need a different set of middleware or none at all,
  * open new scope and define routes there.
@@ -119,3 +128,6 @@ Router::scope('/', function (RouteBuilder $routes) {
  * });
  * ```
  */
+Router::connect('/blogs/:param1/',
+    array('controller'=>'BlogsController', 'action'=>'view'), 
+    array('pass' => array('param1', '')));

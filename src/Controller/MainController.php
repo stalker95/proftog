@@ -22,6 +22,7 @@ class MainController extends AppController
         $this->loadModel('Proposes');
         $this->loadModel('Producers');
         $this->loadModel('Seo');
+        $this->loadModel('Blogs');
         
     }
     /**
@@ -31,9 +32,14 @@ class MainController extends AppController
      */
     public function index()
     {
+        
         $seo = $this->Seo->find()->first();
         $categories = $this->Categories->find()->contain(['ChildCategories'])->order('Categories.position ASC')->toArray();
         
+        $blogs = $this->Blogs
+                      ->find('all')
+                      ->order('id DESC')->toArray();
+
         $data = date("Y-m-d H:i:s");
         $actions = $this->Actions->find()->order('Actions.position ASC')->toArray();
         $proposes = $this->Proposes->find()->contain(['Products','Products.ActionsProducts','Products.ActionsProducts.Actions','Products.Discounts','Products.Rewiev'])->order('Proposes.position ASC')->toArray();
@@ -47,7 +53,7 @@ class MainController extends AppController
         $products = $category->getAllHits();
 
         $producers = $this->Producers->find()->toArray();
-        $this->set(compact('categories','actions', 'proposes','products','producers', 'seo'));
+        $this->set(compact('categories','actions', 'proposes','products','producers', 'seo', 'blogs'));
     }
 
     /**

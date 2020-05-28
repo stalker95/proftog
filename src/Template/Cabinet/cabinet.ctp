@@ -203,15 +203,15 @@
 				<div class="cabinet_data_item_title">
 					<p>Дата народження</p>
 				</div>
-				<div class="cabinet_data_item_description">
-					<input type="text" name="date_of_birth['day']" min="1" max="31" value="<?= date("d", strtotime($_user->created)) ?>">
-					<select name="date_of_birth['month']" id="">
+				<div class="cabinet_data_item_description cabinet_data_item_birth_day">
+					<input type="text" name="date_of_birth[day]" min="1" max="31" value="<?= date("d", strtotime($_user->created)) ?>">
+					<select name="date_of_birth[month]" id="">
 						<option value=""><?= $_user->month_begin ?></option>
 						<?php foreach ($_monthsList as $key => $value): ?>
 							<option value="<?= $key ?>"  <?php 	if ($value == $_user->month_begin) { echo 'selected'; } ?>><?= $value ?></option>
 						<?php endforeach ?>
 					</select>
-					<select name="date_of_birth['year']" id="">
+					<select name="date_of_birth[year]" id="">
 						<?php if (isset($_user->date_of_birth->year)){ ?>
 						<?php for ($i= 1980; $i	< date('Y') + 1; $i++): ?>
 							<option value="<?= $i ?>" <?php 	if ($i == $_user->date_of_birth->year) { echo 'selected'; } ?>><?= $i ?></option>

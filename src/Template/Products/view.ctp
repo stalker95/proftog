@@ -403,17 +403,17 @@
 					</div>
 
 					<div class="product_buttons">
-						<button class="product_buttons_item">
+						<button type="button" class="product_buttons_item add_product_to_bascket" data-product="<?= $value['id'] ?>">
 							<img src="<?= $this->Url->build('/img/back.svg', ['fullBase' => true]) ?>" alt="">
 						</button>
-						<button class="product_buttons_item">
-							<img src="<?= $this->Url->build('/img/back.svg', ['fullBase' => true]) ?>" alt="">
-						</button>
-						<button class="product_buttons_item add_product_to_wishlist" data-product="<?= $value['id'] ?>">
+						<a href="<?= $this->Url->build(['controller' => 'products','action' => $value['slug']]) ?>" class="product_buttons_item" >
+							<i class="fa fa-eye"></i>
+						</a>
+						<button type="button" class="product_buttons_item add_product_to_wishlist" data-product="<?= $value['id'] ?>">
 							<img src="<?= $this->Url->build('/img/favorite.svg', ['fullBase' => true]) ?>" alt="">
 						</button>
-						<button class="product_buttons_item">
-							<img src="<?= $this->Url->build('/img/back.svg', ['fullBase' => true]) ?>" alt="">
+						<button type="button" class="product_buttons_item add_product_to_compare" data-product="<?= $value['id'] ?>">
+							<i class="fa fa-exchange"></i>
 						</button>
 					</div>
 				</div>

@@ -256,8 +256,8 @@
                             <ul>
                                 <li><a href="<?= $this->Url->build(['controller' => 'main','action'    =>  'index']) ?>">Головна</a></li>
                                 <li><a href="<?= $this->Url->build(['controller' => 'about','action'   =>  'index']) ?>">Про нас</a></li>
-                                <li><a href="<?= $this->Url->build(['controller' => 'actions','action' =>  'index/']) ?>">Акції</a></li>
-                                <li><a href="<?= $this->Url->build(['controller' => 'blogs','action'   =>  'index/']) ?>">Блог</a></li>
+                                <li><a href="<?= $this->Url->build(['controller' => 'promotions','action' =>  '/']) ?>">Акції</a></li>
+                                <li><a href="<?= $baseUrl ?>blogs/">Блог</a></li>
                                 <li><a href="">Відгуки</a></li>
                                 <li><a href="<?= $this->Url->build(['controller' => 'contacts','action'=>'index']) ?>">Контакти</a></li>
                             </ul>
@@ -297,8 +297,8 @@
          <ul>
              <li><a href="<?= $this->Url->build(['controller' => 'main','action'    =>  'index']) ?>">Головна</a></li>
              <li><a href="<?= $this->Url->build(['controller' => 'about','action'   =>  'index']) ?>">Про нас</a></li>
-             <li><a href="<?= $this->Url->build(['controller' => 'actions','action' =>  'index']) ?>">Акції</a></li>
-             <li><a href="<?= $this->Url->build(['controller' => 'blogs','action'   =>  'index']) ?>">Блог</a></li>
+             <li><a href="<?= $this->Url->build(['controller' => 'promotions','action' =>  '/']) ?>">Акції</a></li>
+             <li><a href="<?= $baseUrl ?>blogs/">Блог</a></li>
              <li><a href="">Відгуки</a></li>
              <li><a href="<?= $this->Url->build(['controller' => 'contacts','action'=>'index']) ?>">Контакти</a></li>
          </ul> 

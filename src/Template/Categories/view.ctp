@@ -11,8 +11,10 @@
 			<span> / </span>
 
 			<?php if (!empty($category['parent_category']['parent_category'])): ?>
-				<a href="<?= $this->Url->build(['controller' => 'categories','action'    =>  $category['parent_category']['parent_category']['slug']]) ?>"><?= $category['parent_category']['parent_category']['name'] ?></a>
-							<span> / </span>
+				<a href="<?= $this->Url->build(['controller' => 'categories','action'    =>  $category['parent_category']['parent_category']['slug']]) ?>"><?= $category['parent_category']['parent_category']['name'] ?>
+				
+				</a>
+				<span> / </span>
 			<?php endif; ?>
 
 			<?php if (!empty($category['parent_category'])): ?>
@@ -178,7 +180,7 @@
 						<button type="button" class="product_buttons_item add_product_to_wishlist" data-product="<?= $value['id'] ?>">
 							<img src="<?= $this->Url->build('/img/favorite.svg', ['fullBase' => true]) ?>" alt="">
 						</button>
-						<button type="button" class="product_buttons_item">
+						<button type="button" class="product_buttons_item add_product_to_compare" data-product="<?= $value['id'] ?>">
 							<i class="fa fa-exchange"></i>
 						</button>
 					</div>

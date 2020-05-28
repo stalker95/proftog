@@ -88,7 +88,7 @@
 			<div class="products_slider">
 				<?php foreach ($categories as $key => $value): if ($value['parent_id'] == 0) :?>
 				<div>
-					<a href="<?= $this->Url->build(['controller' => 'categories','action'=>$value['slug']]) ?>" class="products_slider_item">
+					<a href="<?= $this->Url->build(['controller' => 'categories','action'=>$value['slug']], ['fullBase' => true]) ?>" class="products_slider_item">
 						<?= $value['image'] ?>
 					</a>
 				</div>
@@ -144,7 +144,7 @@
 						<button class="product_buttons_item add_product_to_wishlist" data-product="<?= $value['product']['id'] ?>">
 							<img src="<?= $this->Url->build('/img/favorite.svg', ['fullBase' => true]) ?>" alt="">
 						</button>
-						<button class="product_buttons_item">
+						<button class="product_buttons_item add_product_to_compare" data-product="<?= $value['product']['id'] ?>"> 
 							<i class="fa fa-exchange"></i>
 						</button>
 					</div>
@@ -234,7 +234,7 @@
 						<button class="product_buttons_item add_product_to_wishlist" data-product="<?= $item['id'] ?>">
 							<img src="<?= $this->Url->build('/img/favorite.svg', ['fullBase' => true]) ?>" alt="">
 						</button>
-						<button class="product_buttons_item">
+						<button class="product_buttons_item add_product_to_compare" data-product="<?= $item['id'] ?>">
 							<i class="fa fa-exchange"></i>
 						</button>
 					</div>
@@ -267,62 +267,25 @@
 		</div>
 		<div class="news_inside">
 			<div class="news_slider">
+               <?php 	foreach ($blogs as $key => $value): ?>
 				<div class="news_slider_item">
 					<div class="news_slider_item_image">
-						<img src="<?= $this->Url->build('/img/news_image.png', ['fullBase' => true]) ?>" alt="">
+						<img src="<?= $this->Url->build('/blogs/'.$value['image'], ['fullBase' => true]) ?>" alt="">
 					</div>
 					<div class="news_slider_item_data">
-						<p>9 лютого 2020</p>
+						<p><?= $value['created']->day ?> <?= $value['month'] ?>, <?= $value['created']->year ?></p>
 					</div>
 				    <div class="news_slider_item_title">
-				    	<p>Новинки у сфері барнного обладнання</p>
+				    	<p><?= $value['title'] ?></p>
 				    </div>
 				    <div class="news_slider_item_link">
-				    	<a href="/">Детальніше</a>
+				    	<a href="<?= $this->Url->build(['controller' => 'blogs','action' => 'view', 'param1'=>$value['slug']], ['fullBase' => true]) ?>">Детальніше</a>
 				    </div>
 				</div>
-				<div class="news_slider_item">
-					<div class="news_slider_item_image">
-						<img src="<?= $this->Url->build('/img/news_image.png', ['fullBase' => true]) ?>" alt="">
-					</div>
-					<div class="news_slider_item_data">
-						<p>9 лютого 2020</p>
-					</div>
-				    <div class="news_slider_item_title">
-				    	<p>Новинки у сфері барнного обладнання</p>
-				    </div>
-				    <div class="news_slider_item_link">
-				    	<a href="/">Детальніше</a>
-				    </div>
-				</div>
-				<div class="news_slider_item">
-					<div class="news_slider_item_image">
-						<img src="<?= $this->Url->build('/img/news_image.png', ['fullBase' => true]) ?>" alt="">
-					</div>
-					<div class="news_slider_item_data">
-						<p>9 лютого 2020</p>
-					</div>
-				    <div class="news_slider_item_title">
-				    	<p>Новинки у сфері барнного обладнання</p>
-				    </div>
-				    <div class="news_slider_item_link">
-				    	<a href="/">Детальніше</a>
-				    </div>
-				</div>
-				<div class="news_slider_item">
-					<div class="news_slider_item_image">
-						<img src="<?= $this->Url->build('/img/news_image.png', ['fullBase' => true]) ?>" alt="">
-					</div>
-					<div class="news_slider_item_data">
-						<p>9 лютого 2020</p>
-					</div>
-				    <div class="news_slider_item_title">
-				    	<p>Новинки у сфері барнного обладнання</p>
-				    </div>
-				    <div class="news_slider_item_link">
-				    	<a href="/">Детальніше</a>
-				    </div>
-				</div>
+                <?php 	endforeach; ?>
+				
+				
+				
 			</div>
 		</div>
 	</div>

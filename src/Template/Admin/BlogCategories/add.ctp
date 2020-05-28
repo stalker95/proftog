@@ -19,6 +19,19 @@
     </div>
   </div>
 </div>
+
+ <div class="playlist__managment--item">
+  <div class="playlist__managment--item__left">
+    <p>Slug</p>
+  </div>
+  <div class="playlist__managment--item__right">
+    <div class="playlist--item--sub">
+    <?=  $this->Form->control('slug',array('label' => 'First Name','class'=>'form-control','required'=>'required'));?>
+
+    </div>
+  </div>
+</div>
+
 <?=  $this->Form->submit('Додати',['class'=>'btn  btn-primary save__changes__form']); ?>
      <?=   $this->Form->end() ?>
         </div>

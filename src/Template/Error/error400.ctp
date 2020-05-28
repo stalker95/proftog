@@ -1,38 +1,37 @@
 <?php
-use Cake\Core\Configure;
-use Cake\Error\Debugger;
 
-$this->layout = 'error';
+use Cake\ORM\Entity;
+use Cake\ORM\TableRegistry;
+use Cake\Filesystem\Folder;
+use App\Model\Products;
+use App\Controller\AppController;
 
-if (Configure::read('debug')) :
-    $this->layout = 'dev_error';
 
-    $this->assign('title', $message);
-    $this->assign('templateName', 'error400.ctp');
-
-    $this->start('file');
+$this->Products = TableRegistry::get('products');
+$this->Categories = TableRegistry::get('categories');
+$products = $this->Products->find()->toArray(); 
+$categories = $this->Categories->find()->contain(['ChildCategories'])->order('Categories.position ASC')->toArray();
+$this->set(compact('categories'));
 ?>
-<?php if (!empty($error->queryString)) : ?>
-    <p class="notice">
-        <strong>SQL Query: </strong>
-        <?= h($error->queryString) ?>
-    </p>
-<?php endif; ?>
-<?php if (!empty($error->params)) : ?>
-        <strong>SQL Query Params: </strong>
-        <?php Debugger::dump($error->params) ?>
-<?php endif; ?>
-<?= $this->element('auto_table_warning') ?>
-<?php
-if (extension_loaded('xdebug')) :
-    xdebug_print_function_stack();
-endif;
 
-$this->end();
-endif;
-?>
-<h2><?= h($message) ?></h2>
-<p class="error">
-    <strong><?= __d('cake', 'Error') ?>: </strong>
-    <?= __d('cake', 'The requested address {0} was not found on this server.', "<strong>'{$url}'</strong>") ?>
-</p>
+<section class="propose ">
+    <div class="categories_page background_white container">
+        <?= $this->Form->create($category, ['type' => 'file','method' => 'get', 'id'=>'product_sort'] )  ?>
+        <div class="row">
+            <div class="col-md-3">
+                <?= $this->element('catalog_categories'); ?>
+               
+            </div>
+            <div class="col-md-4">
+                <p style="color: red;">Помилка 404</p>
+                <p>Сторінку не знайдено</p>
+                <p>Неправильно набрано адресу або такої сторінки на сайті більше не існує </p>
+                <div style="margin-top: 20px;">
+                    <p>Перейдіть на <a href="<?= $this->Url->build(['controller' => 'categories','action'    =>  $category['parent_category']['slug']]) ?>">головну сторінку</a> або оберіть потрібну категорію </p>
+                </div>
+                <img style="max-width: 100px;" src="<?= $this->Url->build('/img/photo_2020-05-26_13-50-20.jpg', ['fullBase' => true]) ?>" alt="">
+            </div>
+        </div>
+    </div>
+</section>
+    
