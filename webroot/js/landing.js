@@ -17,6 +17,9 @@ setTimeout(function(){
      $('header .propose_item').eq(11).find('.propose_item_list_item_float').eq(1).css('left','4%').css('top','69%');
     $('main .propose_item').eq(11).find('.propose_item_list_item_float').eq(1).css('left','4%').css('top','69%');
 
+    $('header .propose_item').eq(10).find('.propose_item_list_item_float').eq(1).css('left','4%').css('top','69%');
+    $('main .propose_item').eq(10).find('.propose_item_list_item_float').eq(1).css('left','4%').css('top','69%');
+
 }, 500);
 
 });
@@ -49,7 +52,16 @@ function update_bascket_list() {
         type: 'POST',
         success: function(data){ 
              console.log(data.products);   
-              var html = "";
+              var html = '<div class="modal-dialog basket_modal modal-dialog-centered" role="document">'+
+    '<div class="modal-content ">'+
+      '<div class="modal-header">'+
+        '<h5 class="modal-title" id="basketlabel">Корзина</h5>'+
+        '<button type="button" class="close close-backet" data-dismiss="modal" aria-label="Close">'+
+          '<span aria-hidden="true">&times;</span>'+
+        '</button>'+
+      '</div>'+
+      '<div class="modal-body quick_buy_form baskets_items">'+
+            '<div class="bascket_container">';
           
           console.log(data.products.length);
           for (i = 0; i < data.products.length; i++) {
@@ -91,7 +103,7 @@ function update_bascket_list() {
                '</div>'+
                '<div class="bascket_item_right_prices">'+
                  '<div class="bascket_item_price">'+
-                   '<p><span class="translate_price_search" data-currency="'+data.products[i]['product']['currency_id']+'">'+data.products[i]['product']['price']+'</span> грн</p>'+
+                   '<p><span class="translate_price_search translate_price" data-currency="'+data.products[i]['product']['currency_id']+'">'+(data.products[i]['one_price']).toFixed(2)+'</span> грн</p>'+
                  '</div>'+
                  '<div class="bascket_item_buttons">'+
                    '<div class="bascket_item_buttons_inside">'+
@@ -111,7 +123,27 @@ function update_bascket_list() {
              '</div>'+
            '</div>';
           } 
-          $(".bascket_container").html(html);
+
+          html = html + '</div>'+
+        '<div class="bascet_total">'+
+          '<div class="bascet_total_left"></div>'+
+          '<div class="bascet_total_right">'+
+            '<span>Разом: </span><span><strong class="total_of_bascket"></strong> грн</span>'+
+          '</div>'+
+        '</div>'+
+        '<div class="bascket_bottom">'+
+          '<div class="bascet_bottom_left">'+
+            '<a href="#" data-dismiss="modal">Продовжити покупки</a>'+
+          '</div>'+
+          '<div class="bascet_bottom_right">'+
+            '<a href="'+currency_url+'/orders" class="bascet_bottom_right_link">Оформити'+
+                '</a>'+
+          '</div>'+
+        '</div>'+
+      '</div>'+
+    '</div>'+
+  '</div>';
+          $("#basket").html(html);
           $(".bascket_container_empty").html(html);
           setTimeout(function(){
         change_currency();
@@ -124,13 +156,24 @@ function update_bascket_list() {
      });
 }
 
+ $("body").on("click", '#basket .close-backet', function() {
+       $('#basket').removeClass('show');
+       $(".modal-backdrop").css('display', 'none');
+       $("body").removeClass('modal-open');
+        $('#basket').modal('hide');
+        $('#basket').css('opacity', 0);
+        $('#basket').css('z-index', -1);
+});
+
 function update_bascket() {
   setTimeout(function() {
   var total_basket_new = 0;
 
-  $(".total_basket").each(function() {
+  $("#basket .total_basket").each(function() {
      total_basket_new =  total_basket_new + parseInt($(this).text());
   });
+  
+  total_basket_new = parseInt(total_basket_new);
   
   $(".total_of_bascket").text(total_basket_new);
   $(".total_of_bascket").css('opacity', 1);
@@ -192,7 +235,7 @@ var flickerAPI = "https://api.privatbank.ua/p24api/pubinfo?json&exchange&coursid
     global_curs_dollar = data[0]['buy'];
     console.log(data);
    $(".translate_price").each(function() {
-        var price= parseInt($(this).text());
+        var price= parseFloat($(this).text());
         if ($(this).attr('data-currency') == 2) {
         $(this).text(Math.floor(price * global_curs));
       }
@@ -250,7 +293,7 @@ var flickerAPI = "https://api.privatbank.ua/p24api/pubinfo?json&exchange&coursid
     global_curs_dollar = data[0]['buy'];
     console.log(data);
    $(".translate_price_search").each(function() {
-        var price= parseInt($(this).text());
+        var price= parseFloat($(this).text());
         if ($(this).attr('data-currency') == 2) {
         $(this).text(Math.floor(price * global_curs));
       }
@@ -265,7 +308,7 @@ var flickerAPI = "https://api.privatbank.ua/p24api/pubinfo?json&exchange&coursid
   } else {
     global_curs = custom_currency;
     $(".translate_price_search").each(function() {
-        var price= parseInt($(this).text());
+        var price= parseFloat($(this).text());
         if ($(this).attr('data-currency') == 2) {
         $(this).text(Math.floor(price * custom_currency));
         }
@@ -481,7 +524,7 @@ $(document).ready(function() {
                               '<div class="header_search_product_description">'+
                                 '<p class="header_search_product_title">'+data.products[i]['title']+'</p>'+
                                 '<p class="header_search_product_price"><span class="translate_price_search" data-currency='+data.products[i]['currency_id']+'>'+data.products[i]['price']+'</span> грн</p>'+
-                                '<a href="'+global_url+'/products/view/'+data.products[i]['slug']+'" class="header_search_product_link">Перейти</a>'+
+                                '<a href="'+global_url+'/products/'+data.products[i]['slug']+'" class="header_search_product_link">Перейти</a>'+
                               '</div>'+
                             '</div>';
           } 
@@ -569,7 +612,7 @@ setTimeout(function() {
      cart[keys[index]]['count'] = new_count;
 
      $(this).parent().find('.bascket_item_buttons_output').text(cart[keys[index]]['count']);
-     
+
      set_new_price_tovar($(this), cart[keys[index]], cart[keys[index]]['count']);
      save_count_bascket(new_count, keys[index]);
      update_bascket();
@@ -597,8 +640,7 @@ function set_new_price_tovar(element, product, new_count) {
      console.log(product['array_option_value'].reduce(reducer));
    }
    
-   
-   price_product = product['product']['price'];
+   price_product = product['one_price'];
 
    if (product['product']['currency_id'] == 2) {
 
@@ -699,6 +741,14 @@ $(document).ready(function() {
      update_bascket();
 });
 
+ $("body").on("click",'.popup_bascket_item_bottom', function() {
+   var element = $(this);
+   setTimeout(function() {
+  $(element).parent().css('display', 'none');
+
+   }, 150);
+});
+
 
 });
 
@@ -733,6 +783,11 @@ $(document).ready(function() {
         $("#basket").modal({
               show: true
             }); 
+$('#basket').removeClass('show');
+       $(".modal-backdrop").removeAttr('style');
+       $("body").addClass('modal-open');
+        $('#basket').css('opacity', 1);
+        $('#basket').css('z-index', 1050);
 
 update_bascket_list();
 update_cart();
@@ -788,3 +843,28 @@ $(document).ready(function() {
 });
 
 
+$(document).ready(function() {
+ $('.user_register').submit(function() {
+       event.preventDefault(); 
+
+       var element = $(this);
+       $(this).parent().find('.hide_submit').css("display",'none');
+       $(this).parent().find(".loader_svg").css('display','block');
+       $.ajax({
+        url: currency_url +'/users/auth-ajax' ,
+        type: 'POST',
+        data: $(this).serialize(),
+        success: function(data){ 
+                   $(element).parent().find('.hide_submit').css("display",'block');
+       $(element).parent().find(".loader_svg").css('display','none');
+        if (data.status == false ) {
+            $(element).parent().find('.display_message_register').html('<p class="display_message_register_alert btn-danger"><strong>Увага</strong> '+data.message+'</p>');
+          }
+         if (data.status == true) {
+           window.location.href = currency_url+'/cabinet/cabinet';
+         }
+        }
+     });
+     });
+
+})

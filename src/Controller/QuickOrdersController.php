@@ -150,4 +150,26 @@ class QuickOrdersController extends AppController
        $this->response->body(json_encode(array('status' => $this->QuickOrders->save($quick_order))));
         }
     }
+
+    public function changeNotes()
+    {
+
+      $this->autoRender = false;
+      $this->RequestHandler->renderAs($this, 'json');
+      $this->response->disableCache();
+      $this->response->type('application/json');
+      $this->loadModel('QuickOrders');
+
+      $data = $this->request->getData();
+
+      $id = $data['id'];
+
+      $quick_order = $this->QuickOrders->get($id);
+
+      $quick_order->notes = $data['text'];
+      $this->QuickOrders->save($quick_order);
+            $this->response->body(json_encode(array('status' => $this->QuickOrders->save($quick_order))));
+ 
+
+    }
 }

@@ -193,6 +193,11 @@
 	          <?php endif; ?>
 	          <?php if ($category->parent_id != 0 ): ?>
 	          	 <?php
+	          	 $this->Paginator->options([
+    'url' => [
+        'controller' => 'categories',
+        'action' => $category->slug]
+    ]);
               $params = $this->Paginator->params();
               if ($params['pageCount'] > 1): ?>
                 <ul class="pagination pagination-sm">

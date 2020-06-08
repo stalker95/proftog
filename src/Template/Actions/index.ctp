@@ -21,7 +21,7 @@
 			<div class="col-md-9">
 	          <div class="categories_product">
 	          		<div class="actions_list">
-	          		  <?php foreach ($actions as $key => $value): ?>
+	          		 <!-- <?php foreach ($actions as $key => $value): ?>
 	          			<div class="actions_list_item">
 	          				<div class="actions_list_item_top">
 	          					<img src="<?= $this->Url->build('/actions/'.$value['image'], ['fullBase' => true]) ?>" alt="">
@@ -58,7 +58,24 @@
 	          					</div>
 	          				</div>
 	          			</div>
-	          		   <?php endforeach; ?>         		   
+	          		   <?php endforeach; ?>  --> 	
+	          		       <div class="promo-list">
+	          		       	<?php foreach ($actions as $key => $value): ?>
+      <div class="promo-template">
+        <div class="promo-image">
+          <img src="<?= $this->Url->build('/actions/'.$value['image'], ['fullBase' => true]) ?>" alt="x100f" />
+        </div>
+        <div class="promo-description">
+          <span class="promo-number">01</span>
+          <p class="promo-camera">x100f</p>
+          <p class="promo-name">promo name here</p>
+          <p class="promo-price">65,699 <span>100,000</span></p>
+          <a href="#">buy now</a>
+        </div>
+      </div>
+<?php 	endforeach; ?>
+
+    </div>	   
 	          		</div>
 	          </div>
 			</div>

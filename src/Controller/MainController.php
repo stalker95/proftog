@@ -21,6 +21,7 @@ class MainController extends AppController
         $this->loadModel('Actions');
         $this->loadModel('Proposes');
         $this->loadModel('Producers');
+        $this->loadModel('Advantages');
         $this->loadModel('Seo');
         $this->loadModel('Blogs');
         
@@ -32,17 +33,49 @@ class MainController extends AppController
      */
     public function index()
     {
+        $_monthsList = array(
+            "01" => "Січня",
+            "02" => "Лютого",
+            "03" => "Березня",
+            "04" => "Квітня",
+            "05" => "Травня",
+            "06" => "Червня",
+            "07" => "Липня",
+            "08" => "Серпня",
+            "09" => "Вересня",
+            "10" => "Жовтня",
+            "11" => "Листопада",
+            "12" => "Грудня"
+        );
+
         
+
+        
+
         $seo = $this->Seo->find()->first();
         $categories = $this->Categories->find()->contain(['ChildCategories'])->order('Categories.position ASC')->toArray();
+
+        $advanteges = $this->Advantages
+                           ->find()
+                           ->toArray();
         
         $blogs = $this->Blogs
                       ->find('all')
-                      ->order('id DESC')->toArray();
+                      ->order('id DESC')
+                      ->limit(3)
+                      ->toArray();
+                      
+        foreach ($blogs as $key => $value) {
+           $_mDD = date("m", strtotime($value['created']));
+            $blogs[$key]['month'] = $_monthsList[$_mDD];
+        }
 
         $data = date("Y-m-d H:i:s");
+        
+        $data_today = date('Y-m-d H:i:s');
+        $new_date = date('Y-m-d H:i:s', strtotime($data_today));
         $actions = $this->Actions->find()->order('Actions.position ASC')->toArray();
-        $proposes = $this->Proposes->find()->contain(['Products','Products.ActionsProducts','Products.ActionsProducts.Actions','Products.Discounts','Products.Rewiev'])->order('Proposes.position ASC')->toArray();
+        $proposes = $this->Proposes->find()->contain(['Products','Products.ActionsProducts','Products.ActionsProducts.Actions','Products.Discounts','Products.Rewiev', 'Products.Producers.ProducersDiscounts'])->order('Proposes.position ASC')->toArray();
        // debug($proposes);
 
 
@@ -53,7 +86,7 @@ class MainController extends AppController
         $products = $category->getAllHits();
 
         $producers = $this->Producers->find()->toArray();
-        $this->set(compact('categories','actions', 'proposes','products','producers', 'seo', 'blogs'));
+        $this->set(compact('categories','actions', 'proposes','products','producers', 'seo', 'blogs', 'advanteges'));
     }
 
     /**

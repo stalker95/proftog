@@ -54,6 +54,17 @@
 
 <div class="playlist__managment--item">
   <div class="playlist__managment--item__left">
+    <p>Новий пароль </p>
+  </div>
+  <div class="playlist__managment--item__right">
+    <div class="playlist--item--sub">
+   <?=  $this->Form->control('new_password',['type'=>'text','label' => 'Email', 'class'=>'form-control', 'min' => '6']); ?>
+    </div>
+  </div>
+</div>  
+
+<div class="playlist__managment--item">
+  <div class="playlist__managment--item__left">
     <p>Статус </p>
   </div>
   <div class="playlist__managment--item__right">

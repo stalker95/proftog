@@ -59,7 +59,9 @@ class ManagersController extends AppController
       
       $_user = $this->Users->get($id);
         if ($this->request->is(['patch', 'post', 'put'])) {
-           
+           if (!empty($this->request->getData('new_password'))) {
+            $_user->password = $this->request->getData('new_password');
+           }
             if ($this->Users->save($_user)) {
                 $this->Flash->admin_success(__('Данні змінено'));
                 return $this->redirect(['action' => 'index']);
@@ -68,6 +70,25 @@ class ManagersController extends AppController
         }
         $this->set('_user',$_user);
         $this->nav_['managers'] = true; 
+    }
+
+    public function deletechecked() {
+        if (!$this->user->is_abs()):
+            $this->Flash->admin_error(__('У вас не має прав'));
+             return $this->redirect(['controller'=>'dashboard','action' => 'index']);
+        endif;
+
+     $ids=$this->request->getData('ids');
+     $this->request->allowMethod(['post', 'delete']);
+     
+      foreach ($ids as  $value) {
+        $_user = $this->Users->get($value);
+        $this->Users->delete($_user);      
+         
+      } 
+
+     $this->Flash->admin_success(__('Менеджерів видалено'));
+     return $this->redirect(['action' => 'index']);
     }
 
 

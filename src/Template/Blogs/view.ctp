@@ -4,7 +4,7 @@
 		<div class="breadcrums_list_item">
 			<a href="<?= $this->Url->build(['controller' => 'main','action'    =>  'index/'], ['fullBase' => true]) ?>">Головна</a>
 			<span> / </span>
-			<a href="<?= $this->Url->build(['controller' => 'blogs','action'    =>  'index/'], ['fullBase' => true]) ?>">Блог</a>
+			<a href="<?= $this->Url->build(['controller' => 'blog','action'    =>  'index/'], ['fullBase' => true]) ?>">Блог</a>
 			
 		</div>
 	</div>
@@ -27,10 +27,10 @@
 					</div>
 					<div class="blog_container">
 						<div class="blog_latest_news">
-							<a href="" class="blog_latest_news_item">Остання новина 1</a>
-							<a href="" class="blog_latest_news_item">Остання новина 1</a>
-							<a href="" class="blog_latest_news_item">Остання новина 1</a>
-							<a href="" class="blog_latest_news_item">Остання новина 1</a>
+							<?php 	foreach ($latest_news as $key => $value): ?>
+								<a href="<?= $this->Url->build(['controller' => 'blog','action'    =>  $value['slug']], ['fullBase' => true]) ?>" class="blog_latest_news_item"><?= $value['title'] ?></a>
+							<?php 	endforeach; ?>
+							
 						</div>
 					</div>
 				</div>
@@ -40,7 +40,7 @@
 					</div>
 					<div class="blog_container">
 						<?php foreach ($blogCategories as $key => $value): ?>
-							<a href="<?= $this->Url->build(['controller' => 'blogs','action'    =>  'category/'.$value['slug']], ['fullBase' => true]) ?>" class="blog_latest_news_item"><?=  $value['name'] ?></a>
+							<a href="<?= $this->Url->build(['controller' => 'blog','action'    =>  'category/'.$value['slug']], ['fullBase' => true]) ?>" class="blog_latest_news_item"><?=  $value['name'] ?></a>
 						<?php endforeach; ?>
 					</div>
 				</div>
@@ -60,20 +60,20 @@
 						</div>
 					</div>
 					<div class="blog_item_data">
-						<p class="blog_item_data_created"> <i class="fa fa-pencil"></i> admin <span>|</span> </p>
+						<p class="blog_item_data_created"> <i class="fa fa-pencil"></i> <?= $blog->user['firstname']." ".$blog->user['lastname'] ?> <span>|</span> </p>
 						<p class="blog_item_data_time"><?= $blog->created->day ?> <?= $blog->month ?>, <?= $blog->created->year ?></p> <span>|</span> 
 						<p class="blog_item_data_category"><?= $blog->blog_category->name ?></p>
 					</div>
 					<div class="blog_item_posts">
 												<?php 	if (!empty($prev_post)): ?>
 
-						<a href="<?= $this->Url->build(['controller' => 'blogs','action'    =>  'view/'.$prev_post->slug], ['fullBase' => true]) ?>" class="blog_item_posts_prev">
+						<a href="<?= $this->Url->build(['controller' => 'blogs','action'    =>  $prev_post->slug], ['fullBase' => true]) ?>" class="blog_item_posts_prev">
 							<img src="<?= $this->Url->build('/img/left_arrow_grey.svg', ['fullBase' => true]) ?>" alt="">
 							<span>Попередній пост </span>
 						</a>
 					<?php 	endif; ?>
 						<?php 	if (!empty($next_post)): ?>
-						<a href="<?= $this->Url->build(['controller' => 'blogs','action' => 'view/'.$next_post->slug], ['fullBase' => true]) ?>" class="blog_item_posts_next">
+						<a href="<?= $this->Url->build(['controller' => 'blogs','action' => $next_post->slug], ['fullBase' => true]) ?>" class="blog_item_posts_next">
 							<span>Наступний пост </span>
 							<img src="<?= $this->Url->build('/img/right_arrow_grey.svg', ['fullBase' => true]) ?>" alt="">
 						</a>
@@ -87,14 +87,17 @@
 					<div class="latest_news_container">
                        <?php 	foreach ($other_posts as $key => $value):?>
 						<div class="latest_news_item">
-						<a href="" class="latest_news_item_image">
-							<img src="<?= $this->Url->build('/img/product_item.png', ['fullBase' => true]) ?>" alt="">
+						<a href="<?= $this->Url->build(['controller' => 'blog','action' => $value['slug']], ['fullBase' => true]) ?>" class="latest_news_item_image">
+							<img src="<?= $this->Url->build('/blog/'.$value['image'], ['fullBase' => true]) ?>" alt="">
 						</a>
 						<div class="latest_news_item_data">
 							<p><?= $value['created']->day ?> <?= $value['month'] ?>, <?= $value['created']->year ?></p>
 						</div>
 						<div class="latest_news_item_title">
-							<p><?= $value['title'] ?></p>
+							<p>
+								<a href="<?= $this->Url->build(['controller' => 'blog','action' => $value['slug']], ['fullBase' => true]) ?>"><?= $value['title'] ?>
+								</a>
+							</p>
 						</div>
 						</div>
 					<?php 	endforeach; ?>

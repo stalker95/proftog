@@ -2,6 +2,7 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
+use Cake\Event\Event;
 
 /**
  * Blog Controller
@@ -11,6 +12,14 @@ use App\Controller\AppController;
  */
 class BlogController extends AppController
 {
+    public function beforeFilter(Event $event)
+    {
+        parent::initialize();
+        $this->Auth->allow(['index','register','view', 'category']);
+        $this->loadModel('BlogCategories');
+        $this->loadModel('Blogs');
+        $this->loadComponent('Paginator');
+    }
     /**
      * Index method
      *
@@ -18,9 +27,38 @@ class BlogController extends AppController
      */
     public function index()
     {
-        $blog = $this->paginate($this->Blog);
+        $this->paginate = [
+                'limit' => '2'
+            ];
 
-        $this->set(compact('blog'));
+            $_monthsList = array(
+            "01" => "Січня",
+            "02" => "Лютого",
+            "03" => "Березня",
+            "04" => "Квітня",
+            "05" => "Травня",
+            "06" => "Червня",
+            "07" => "Липня",
+            "08" => "Серпня",
+            "09" => "Вересня",
+            "10" => "Жовтня",
+            "11" => "Листопада",
+            "12" => "Грудня"
+        );
+       
+       
+
+
+        $latest_news = $this->Blogs->find()->order(['id DESC'])->limit(8)->toArray();
+        $blogCategories = $this->BlogCategories->find()->toArray();
+        $blogs = $this->paginate($this->Blogs->find()->contain(['Users']))->toArray();
+
+        foreach ($blogs as $key => $value) {
+            $_mD = date("m", strtotime($value['created']));
+            $blogs[$key]['month'] = $_monthsList[$_mD];
+        }
+
+        $this->set(compact('blogs', 'blogCategories', 'latest_news'));
     }
 
     /**
@@ -32,74 +70,78 @@ class BlogController extends AppController
      */
     public function view($slug = null)
     {
-        $blog = $this->Blog->get($id, [
-            'contain' => []
-        ]);
+      $this->viewBuilder()->setLayout('blog');
+      $slug = $this->request->params['param1'];
+              $latest_news = $this->Blogs->find()->order(['id DESC'])->limit(8)->toArray();
+
+         $_monthsList = array(
+            "01" => "Січня",
+            "02" => "Лютого",
+            "03" => "Березня",
+            "04" => "Квітня",
+            "05" => "Травня",
+            "06" => "Червня",
+            "07" => "Липня",
+            "08" => "Серпня",
+            "09" => "Вересня",
+            "10" => "Жовтня",
+            "11" => "Листопада",
+            "12" => "Грудня"
+        );
+        $blog = $this->Blogs->find()->contain(['BlogCategories','Users'])->where(['Blogs.slug' => $slug])->first();
+
+        $prev_post = $this->Blogs
+                          ->find()
+                          ->where(['id < ' <= $blog->id])
+                          ->where(['id != ' <= $blog->id])
+                          ->limit('1')
+                          ->first();
+
+        $next_post =  $this->Blogs
+                          ->find()
+                          ->contain(['BlogCategories'])
+                          ->where(['Blogs.id > ' => $blog->id])
+                          ->limit('1')
+                          ->first();
+      //  debug($next_post);
+
+        $other_posts = $this->Blogs
+                             ->find()
+                             ->order(['id DESC'])
+                             ->limit(2)
+                             ->toArray();
+
+        $_mD = date("m", strtotime($blog->created));
+        $blog->month = $_monthsList[$_mD];
+
+        foreach ($other_posts as $key => $value) {
+           $_mDD = date("m", strtotime($value['created']));
+            $other_posts[$key]['month'] = $_monthsList[$_mDD];
+        }
+
+        
+        
+
+        $blogCategories = $this->BlogCategories->find()->toArray();
 
         $this->set('blog', $blog);
+        $this->set('blogCategories', $blogCategories);
+        $this->set(compact('next_post', 'prev_post', 'other_posts', 'latest_news'));
     }
 
-    /**
-     * Add method
-     *
-     * @return \Cake\Http\Response|null Redirects on successful add, renders view otherwise.
-     */
-    public function add()
+    public function category($slug = null)
     {
-        $blog = $this->Blog->newEntity();
-        if ($this->request->is('post')) {
-            $blog = $this->Blog->patchEntity($blog, $this->request->getData());
-            if ($this->Blog->save($blog)) {
-                $this->Flash->success(__('The blog has been saved.'));
+              $latest_news = $this->Blogs->find()->order(['id DESC'])->limit(8)->toArray();
 
-                return $this->redirect(['action' => 'index']);
-            }
-            $this->Flash->error(__('The blog could not be saved. Please, try again.'));
-        }
-        $this->set(compact('blog'));
-    }
+      $this->paginate = [
+                'limit' => '2'
+            ];
+        $blog_category = $this->BlogCategories->find()->where(['slug' => $slug])->first();
+        $blogs = $this->Paginate($this->Blogs->find()->contain(['BlogCategories', 'Users'])->where(['category_id' => $blog_category->id]))->toArray();
+                $blogCategories = $this->BlogCategories->find()->toArray();
 
-    /**
-     * Edit method
-     *
-     * @param string|null $id Blog id.
-     * @return \Cake\Http\Response|null Redirects on successful edit, renders view otherwise.
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function edit($id = null)
-    {
-        $blog = $this->Blog->get($id, [
-            'contain' => []
-        ]);
-        if ($this->request->is(['patch', 'post', 'put'])) {
-            $blog = $this->Blog->patchEntity($blog, $this->request->getData());
-            if ($this->Blog->save($blog)) {
-                $this->Flash->success(__('The blog has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
-            }
-            $this->Flash->error(__('The blog could not be saved. Please, try again.'));
-        }
-        $this->set(compact('blog'));
-    }
-
-    /**
-     * Delete method
-     *
-     * @param string|null $id Blog id.
-     * @return \Cake\Http\Response|null Redirects to index.
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function delete($id = null)
-    {
-        $this->request->allowMethod(['post', 'delete']);
-        $blog = $this->Blog->get($id);
-        if ($this->Blog->delete($blog)) {
-            $this->Flash->success(__('The blog has been deleted.'));
-        } else {
-            $this->Flash->error(__('The blog could not be deleted. Please, try again.'));
-        }
-
-        return $this->redirect(['action' => 'index']);
+        $this->set('blogs', $blogs);
+        $this->set('blogCategories', $blogCategories);
+        $this->set('latest_news', $latest_news);
     }
 }

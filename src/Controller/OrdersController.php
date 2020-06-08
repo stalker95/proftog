@@ -16,7 +16,7 @@ class OrdersController extends AppController
     public function beforeFilter(Event $event)
     {
         parent::beforeFilter($event);
-        $this->Auth->allow(['index','add','quickOrder', 'search', 'authAjax', 'updateOrder', 'getData']);
+        $this->Auth->allow(['index','add','quickOrder', 'search', 'authAjax', 'updateOrder', 'getData', 'getDataParts']);
     }
     /**
      * Index method
@@ -25,6 +25,9 @@ class OrdersController extends AppController
      */
     public function index()
     {
+      header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: GET, POST, PATCH, PUT, DELETE, OPTIONS');
+header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token');
       $this->viewBuilder()->setLayout('order');
       if ($this->Auth->user('id')) {
         $id = $this->Auth->user('id');
@@ -79,19 +82,19 @@ class OrdersController extends AppController
       }
 
       if ($datas['type_delivery'] == 2) {
-        $dostavka = "Нова пошта: ". $datas['adress_delivery'];
+        $dostavka = "Нова пошта: ". $datas['adress_delivery_new'];
       }
 
       if ($datas['type_delivery'] == 3) {
-        $dostavka = "МІстЕкспрес: ". $datas['adress_delivery'];
+        $dostavka = "МІстЕкспрес: ". $datas['adress_delivery_mist'];
       }
 
       if ($datas['type_delivery'] == 4) {
-        $dostavka = "Інтайм: ". $datas['adress_delivery'];
+        $dostavka = "Інтайм: ". $datas['adress_delivery_in'];
       }
 
       if ($datas['type_delivery'] == 5) {
-        $dostavka = "Делівері: ". $datas['adress_delivery'];
+        $dostavka = "Делівері: ". $datas['adress_delivery_del'];
       }
 
       if ($datas['type_radio'] == 1) {
@@ -111,9 +114,9 @@ class OrdersController extends AppController
        
       $otrumuvach = "";
       if ($datas['type_user_delivery'] != 1) {
-        $otrumuvach = "Ім'я: ". $datas['user_delivery_name']."<br>".
-                      "Прізвище: ". $datas['user_delivery_phone']."<br>".
-                      "Телефон: ". $datas['user_delivery_surname']."<br>".
+        $otrumuvach = "Отримувач:<br> Ім'я: ". $datas['user_delivery_name']."<br>".
+                      "Прізвище: ". $datas['user_delivery_surname']."<br>".
+                      "Телефон: ". $datas['user_delivery_phone']."<br>".
                       "По батькові: ". $datas['user_delivery_second'];
       }
 
@@ -167,7 +170,7 @@ class OrdersController extends AppController
              Місто:".$datas['user_city']."<br>
              Оплата:".$oplata."<br>
              Доставка:".$dostavka."<br>
-             Отримувач:".$otrumuvach."<br>
+             ".$otrumuvach."<br>
       ";
      // debug($data);
 
@@ -185,11 +188,11 @@ class OrdersController extends AppController
       foreach ($_SESSION['cart'] as $key => $value) {
         $price = 0;
         if ($value['product']['currency_id'] == 2) {
-            $price = (($value['count'] * $value['product']['price']) + (array_sum($value['array_option_value']) * $value['count'])) * $kusr_euro;
+            $price = (($value['count'] * $value['one_price']) + (array_sum($value['array_option_value']) * $value['count'])) * $kusr_euro;
         } if  ($value['product']['currency_id'] == 3) {
-             $price = (($value['count'] * $value['product']['price']) + (array_sum($value['array_option_value']) * $value['count'])) * $kurs_dollar;
+             $price = (($value['count'] * $value['one_price']) + (array_sum($value['array_option_value']) * $value['count'])) * $kurs_dollar;
          } if  ($value['product']['currency_id'] == 1) {
-            $price = (($value['count'] * $value['product']['price']) + (array_sum($value['array_option_value']) * $value['count']));
+            $price = (($value['count'] * $value['one_price']) + (array_sum($value['array_option_value']) * $value['count']));
         }
 
         $options = ""; 
@@ -211,6 +214,10 @@ class OrdersController extends AppController
         //$ordersItems->summa = ($value['count'] * $value['product']['price']) + (array_sum($value['array_option_value']) * $value['count']);
         $ordersItems->currency_id = $value['product']['currency_id'];
         $ordersItems->product_id = $value['product']['id'];
+
+        $change_count = $this->Products->get($value['product']['id']);
+
+      //  $change_count->
         $this->OrdersItems->save($ordersItems);
          $table  = $table."<tr><td style='border-right:1px solid #000;'>".$value['product']['title']."</td>
          <td>".$value['count']."</td>
@@ -372,6 +379,34 @@ class OrdersController extends AppController
 
     }
 
+    public function getDataParts()
+    {
+
+       $this->autoRender = false;
+       $this->RequestHandler->renderAs($this, 'json');  
+       $this->response->disableCache();
+       $this->response->type('application/json');
+       $datas = $this->request->getData();  
+       $string = 'password + storeId + orderId + withoutFloatingPoint(amount) + partsCount + merchantType + responseUrl + redirectUrl + products_string + password';
+
+       $password = '66a0dcbee82c4bd9b262cd5fe6f37547';
+       $storeId  = 'BDCF7CE5E48F497DB45A';
+       $amount   = '400';
+       $partsCount = '2';
+       $merchantType = 'PP';
+       $responseUrl = '';
+       $redirectUrl = '';
+       $products_string  = '';
+
+       $string = $password.$storeId.$orderId.$amount.$partsCount.$merchantType.$responseUrl.$redirectUrl.$products_string.$password;
+       
+       $signature = base64_encode(sha1($string, true));
+
+
+      $this->response->body(json_encode(array('signature' => $signature, 'data' => $json_string_base64)));
+
+    }
+
 
     public function updateOrder()
     {
@@ -455,11 +490,11 @@ class OrdersController extends AppController
       foreach ($_SESSION['cart'] as $key => $value) {
         $price = 0;
         if ($value['product']['currency_id'] == 2) {
-            $price = (($value['count'] * $value['product']['price']) + (array_sum($value['array_option_value']) * $value['count'])) * $kusr_euro;
+            $price = (($value['count'] * $value['one_price']) + (array_sum($value['array_option_value']) * $value['count'])) * $kusr_euro;
         } if  ($value['product']['currency_id'] == 3) {
-             $price = (($value['count'] * $value['product']['price']) + (array_sum($value['array_option_value']) * $value['count'])) * $kurs_dollar;
+             $price = (($value['count'] * $value['one_price']) + (array_sum($value['array_option_value']) * $value['count'])) * $kurs_dollar;
          } if  ($value['product']['currency_id'] == 1) {
-            $price = (($value['count'] * $value['product']['price']) + (array_sum($value['array_option_value']) * $value['count']));
+            $price = (($value['count'] * $value['one_price']) + (array_sum($value['array_option_value']) * $value['count']));
         }
 
         $options = ""; 

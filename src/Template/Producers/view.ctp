@@ -33,7 +33,7 @@
                     <?php   if ($value['parent_id'] == 0): ?>
                      <div class="propose_item">
                         <div class="propose_item_title">
-                            <a href="<?= $this->Url->build(['controller' => 'categories','action'=>'view/'.$value['slug']]) ?>"><?= $value['name'] ?></a>
+                            <a href="<?= $this->Url->build(['controller' => 'categories','action'=>$value['slug']]) ?>"><?= $value['name'] ?></a>
                         </div>
                         <div class="propose_item_arrov">
                             <i class="fa fa-chevron-right"></i>
@@ -41,13 +41,13 @@
                         <div class="propose_item_list">
                             <?php  foreach ($value['child_categories'] as $key => $item):?>
                                 <div class="propose_item_list_item">
-                                    <a href="<?= $this->Url->build(['controller' => 'categories','action'=>'view/'.$item['slug']]) ?>"><?= $item['name']; ?></a>
+                                    <a href="<?= $this->Url->build(['controller' => 'categories','action'=>$item['slug']]) ?>"><?= $item['name']; ?></a>
                                 
                            
                                 <?php foreach ($categories as $key => $item_two): ?>
                                     <div class="propose_item_list_two">
                                 <?php if ($item_two['parent_id'] == $item['id'] AND $item_two['name'] != $item['name']) {
-                                 echo "<a  href=".$this->Url->build(['controller' => 'categories','action'=>'view/'.$item['slug']]).">".$item_two['name']."</a>"; } ?>
+                                 echo "<a  href=".$this->Url->build(['controller' => 'categories','action'=>$item['slug']]).">".$item_two['name']."</a>"; } ?>
                                   </div>
                             <?php endforeach; ?>
                            </div>
@@ -172,26 +172,19 @@
 					<?php } ?>
 					</div>
 					<div class="propose_slider_item_price">
-						<?php if ($value['price_new'] > 0) { ?>
-							<p><span class="translate_price" data-currency="<?= $value['currency_id'] ?>"><?= $value['price_new'] ?></span> грн</p>
-						<p class="slider_item_price_old"><span class="translate_price" data-currency="<?= $value['currency_id'] ?>"><?= $value['price'] ?></span> грн</p>
-						<p class="slider_item_discount"> -11%</p>
-
-					    <?php }  else { ?>
-						<p><span class="translate_price" data-currency="<?= $value['currency_id'] ?>"><?= $value['price'] ?></span> грн</p>
-					    <?php } ?>
+						<?= $this->element('price_product', array("item" => $value)); ?>
 					</div>
 					<div class="product_buttons">
-						<button class="product_buttons_item add_product_to_bascket" data-product="<?= $value['id'] ?>">
+						<button type="button" class="product_buttons_item add_product_to_bascket" data-product="<?= $value['id'] ?>">
 							<img src="<?= $this->Url->build('/img/back.svg', ['fullBase' => true]) ?>" alt="">
 						</button>
 						<a href="<?= $this->Url->build(['controller' => 'products','action'=>$value['slug']]) ?>" class="product_buttons_item" >
 							<i class="fa fa-eye"></i>
 						</a>
-						<button class="product_buttons_item add_product_to_wishlist" data-product="<?= $value['id'] ?>">
+						<button type="button" class="product_buttons_item add_product_to_wishlist" data-product="<?= $value['id'] ?>">
 							<img src="<?= $this->Url->build('/img/favorite.svg', ['fullBase' => true]) ?>" alt="">
 						</button>
-						<button class="product_buttons_item add_product_to_compare" data-product="<?= $value['id'] ?>">
+						<button type="button" class="product_buttons_item add_product_to_compare" data-product="<?= $value['id'] ?>">
 							<i class="fa fa-exchange"></i>
 						</button>
 					</div>

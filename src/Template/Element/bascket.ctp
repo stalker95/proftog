@@ -1,5 +1,23 @@
-<div class="modal fade" id="basket" tabindex="-1" role="dialog" aria-labelledby="basketlabel" aria-hidden="true">
-  <div class="modal-dialog basket_modal modal-dialog-centered" role="document">
+<div class="modal  fade" id="basket" tabindex="-1" role="dialog" aria-labelledby="basketlabel" aria-hidden="true">
+    <?php if (!isset($_SESSION['cart']) OR isset($_SESSION['cart']) AND empty($_SESSION['cart']) ) { ?>
+  <div class="modal-dialog  modal-dialog-centered" role="document">
+
+      <div class="modal-content ">
+              <div class="modal-body  quick_buy_form ">
+                  <div class="empty_basckets">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                    <div class="empty_basckets empty_bascket_container">
+                        <img src="<?= $this->Url->build('/img/empty_bucket.svg', ['fullBase' => true]) ?>" alt="">
+                        <p><strong>Кошик порожній (</strong></p>
+                    </div>
+                  </div>
+              </div>
+        </div>
+
+<?php   } else { ?>
+ <div class="modal-dialog basket_modal modal-dialog-centered" role="document">
     <div class="modal-content ">
       <div class="modal-header">
         <h5 class="modal-title" id="basketlabel">Корзина</h5> 
@@ -7,15 +25,8 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div class="modal-body quick_buy_form">
-        <?php if (isset($_SESSION['cart']) AND !empty($_SESSION['cart']) ) { ?>
+      <div class="modal-body quick_buy_form baskets_items">
             <div class="bascket_container"> 
-        <?php } else { ?>
-            <div class="bascket_container_empty"> 
-              <p class="bascket_container_empty_title">Ваш кошик покупок пустий</p>
-        <?php } ?>
-          
-          <?php if (isset($_SESSION['cart'])): ?>
             <?php //debug($_SESSION['cart']); ?>
             <?php   foreach ($_SESSION['cart'] as $key => $value): ?>
           
@@ -56,7 +67,7 @@
                </div>
                <div class="bascket_item_right_prices">
                  <div class="bascket_item_price">
-                   <p><span class="translate_price" data-currency="<?=$value['product']['currency_id'] ?>"><?= $value['product']['price']  ?></span> грн</p>
+                   <p><span class="translate_price" data-currency="<?= $value['product']['currency_id'] ?>" data-first="<?= $_SESSION['cart'][$key]['one_price'] ?>"><?= $_SESSION['cart'][$key]['one_price']  ?></span> грн</p>
                  </div>
                  <div class="bascket_item_buttons">
                    <div class="bascket_item_buttons_inside">
@@ -70,14 +81,13 @@
                    </div>
                  </div>
                  <div class="bascket_item_price_total">
-                   <p><span class="translate_price total_basket" data-currency="<?=$value['product']['currency_id'] ?>"><?= ($value['count'] * $value['product']['price']) + (array_sum($value['array_option_value']) * $value['count']); ?></span> грн</p>
+                   <p><span class="translate_price total_basket" data-currency="<?=$value['product']['currency_id'] ?>"><?= ($value['count'] * $_SESSION['cart'][$key]['one_price']) + (array_sum($value['array_option_value']) * $value['count']); ?></span> грн</p>
                  </div>
                </div>
              </div>
            </div>
          <?php  endforeach; ?>
 
-           <?php endif; ?>
 
         </div>
         <div class="bascet_total">
@@ -97,15 +107,45 @@
           </div>
         </div>
       </div>
-      <!--<div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
-      </div> --> 
+      
     </div>
   </div>
+  <?php   } ?>
+</div> 
 </div>
+<div class="modal fade"  id="after_add_bascket" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="false">
+  <div class="modal-dialog basket_modal modal-dialog-centered" role="document">
+        <div class="modal-content ">
+     <div class="modal-header ">
+      <div class="modal-header_left">
+        <img src="<?= $this->Url->build('/img/35c3623714226214e0d47ead41c6053b.png', ['fullBase' => true]) ?>" alt="">
+        <p>Дякуємо за замовлення</p>
+      </div>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+    <div class=" quick_buy_modal">
+      <div class="modal-body quick_buy_form added_to_cart_modal">
+        <div class="added_to_cart_modal_message_top">
+          <p>Персонал магазину підтвердить його, зв'язавшись з Вами по телефону чи через Email, який Ви вказали при оформленні замовлення.  </p>
+          
+        </div>
+        <div class="added_to_cart_modal_message">
+          <p>Номер Вашого замовлення</p>
+          <p class="code_order">888</p>
+        </div>
+        <div class="to_home_page_link">
+          <a href="<?= $this->Url->build(['controller' => 'main','action'    =>  '/']) ?>" class="to_home_page">Повернутись на головну</a>
+        </div>
+        
+      </div>
+    </div>
+</div>
+  </div>
+</div> 
 
-<div class="modal fade" id="after_add_bascket" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade"  id="auth_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="false">
   <div class="modal-dialog  modal-dialog-centered" role="document">
         <div class="modal-content ">
      <div class="modal-header ">
@@ -113,14 +153,48 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-    <div class="modal-content quick_buy_modal">
       <div class="modal-body quick_buy_form added_to_cart_modal">
-        <h5>Ваше замовлення прийнято</h5>
-        <div class="added_to_cart">
-          <button class="btn btn-primary " data-dismiss="modal" aria-label="Close">OK</button>
+    <div class="user_form">
+        <div class="user_authorization">
+            <form action="" class="user_register">
+                <label for="login">Логін або Email</label>
+                <input type="email" name="email" class="login_input" required="required">
+
+                <label for="password">Пароль </label>
+                <input type="password" name="password" class="login_input"  required="required">
+                
+                <div class="user_form_checkbox">
+                    <input type="checkbox"> Запам'ятати мене
+                </div>
+                <div class="user_form_checkbox">
+                  <a href="<?= $this->Url->build(['controller' => 'users','action'    =>  'remember']) ?>">Забули пароль?</a>
+                </div>
+                <div class="users_bottom_register">
+
+ <button class="login_submit">
+                      <svg class="loader_svg" version="1.1" id="loader-1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                             width="35px" height="23px" viewBox="0 0 50 50" style="enable-background:new 0 0 50 50;margin: auto;" xml:space="preserve">
+                        <path fill="#fff" d="M25.251,6.461c-10.318,0-18.683,8.365-18.683,18.683h4.068c0-8.071,6.543-14.615,14.615-14.615V6.461z">
+                            <animateTransform attributeType="xml"
+                                    attributeName="transform"
+                                        type="rotate"
+                                        from="0 25 25"
+                                        to="360 25 25"
+                                        dur="0.6s"
+                                        repeatCount="indefinite"/>
+                        </path>
+                    </svg>
+                    <span class="hide_submit">Увійти</span>
+                </button> 
+                <a href="/" class="new_user_register">Реєстрація</a>
+
+                </div>
+                                <output class="display_message_register"></output>
+                  
+            </form>
         </div>
+      </div>
       </div>
     </div>
 </div>
-  </div>
 </div> 

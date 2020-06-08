@@ -38,6 +38,11 @@ class BlogsTable extends Table
             'foreignKey' => 'category_id',
             'joinType' => 'INNER'
         ]);
+
+        $this->belongsTo('Users', [
+            'foreignKey' => 'user_id',
+            'joinType' => 'INNER'
+        ]);
     }
 
     /**

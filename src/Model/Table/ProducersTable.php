@@ -39,6 +39,11 @@ class ProducersTable extends Table
             'joinType' => 'INNER'
         ]);
 
+        $this->hasMany('ProducersDiscounts', [
+            'foreignKey' => 'producer_id',
+            'joinType' => 'INNER'
+        ]);
+
     }
 
     /**

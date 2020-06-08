@@ -32,6 +32,7 @@
                   <th>Ім'я</th>
                   <th>Батьківська категорія</th>
                   <th>Позиція</th>
+                  <th>Статус</th>
                   <th>Зображення</th>
                   <th>Дії</th>
                 </tr>
@@ -47,11 +48,15 @@
                     <td><?= $category->name ?></td>
                     <td><?php  if (isset($category->parent_category->name)) { echo $category->parent_category->name; } else {echo "---"; } ?></td>
                     <td><?= $category->position ?></td>
+                    <td><?php   if($category->status == 0) { echo "Активний"; }  ?>
+                        <?php   if($category->status == 1) { echo "Не активний"; }  ?>
+                      
+                    </td>
                     <td><img style="max-width: 100px; max-height: 100px;" src="<?= $this->Url->build('/categories/'.$category->picture, ['fullBase' => true]) ?>" alt="" class="img-fluid"></td>
                     <td class='table__flex'>
                       <?php
                         echo   $this->Html->link('<i class="fa fa-pencil"></i>', ['action' => 'edit', $category->id], ['class'=>'btn change__user','escape' => false]);
-                        echo  $this->Form->postLink('<i class="fa fa-trash"></i>', ['action' => 'delete', $category->id], ['class'=>'btn  delete__user','escape' => false,'confirm' => __('Ви справді хочете видалити категорію # {0}?', $category->id)]);  ?>
+                        echo  $this->Form->postLink('<i class="fa fa-trash"></i>', ['action' => 'delete', $category->id], ['class'=>'btn  delete__user','escape' => false,'confirm' => __('Ви справді хочете видалити категорію {0}  ? ', $category->name)]);  ?>
                     </td>
                     </tr>
                 <?php endforeach; ?>

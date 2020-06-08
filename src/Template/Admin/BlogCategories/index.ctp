@@ -49,7 +49,7 @@
                     <td class='table__flex'>
                       <?php
                         echo   $this->Html->link('<i class="fa fa-pencil"></i>', ['action' => 'edit', $category->id], ['class'=>'btn change__user','escape' => false]);
-                        echo  $this->Form->postLink('<i class="fa fa-trash"></i>', ['action' => 'delete', $category->id], ['class'=>'btn  delete__user','escape' => false,'confirm' => __('Ви справді хочете видалити категорію # {0}?', $category->id)]);  ?>
+                        echo  $this->Form->postLink('<i class="fa fa-trash"></i>', ['action' => 'delete', $category->id], ['class'=>'btn  delete__user','escape' => false,'confirm' => __('Ви справді хочете видалити категорію {0} ? ', $category->name)]);  ?>
                     </td>
                     </tr>
                 <?php endforeach; ?>

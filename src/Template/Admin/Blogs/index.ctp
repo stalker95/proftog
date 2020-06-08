@@ -34,7 +34,7 @@
                   <th>ID</th>
                   <th>Заголовок</th>
                   <th>Зображення</th>
-                  <th>Текст</th>
+                  
                   <th>Дії</th>
                 </tr>
                 </thead>
@@ -52,12 +52,12 @@
                     <td>
                       <img style="max-width: 100px; max-height: 100px;" src="<?= $this->Url->build('/blogs/'.$blog->image, ['fullBase' => true]) ?>" alt="" class="img-fluid">
                     </td>
-                    <td><?= $blog->text ?></td>
+                    
                    
                     <td class='table__flex'>
                       <?php
                         echo   $this->Html->link('<i class="fa fa-pencil"></i>', ['action' => 'edit', $blog->id], ['class'=>'btn change__user','escape' => false]);
-                        echo  $this->Form->postLink('<i class="fa fa-trash"></i>', ['action' => 'delete', $blog->id], ['class'=>'btn  delete__user','escape' => false,'confirm' => __('Ви справді хочете видалити категорію # {0}?', $blog->id)]);  ?>
+                        echo  $this->Form->postLink('<i class="fa fa-trash"></i>', ['action' => 'delete', $blog->id], ['class'=>'btn  delete__user','escape' => false,'confirm' => __('Ви справді хочете видалити статтю {0} ? ', $blog->title)]);  ?>
                     </td>
                     </tr>
                 <?php endforeach; ?>

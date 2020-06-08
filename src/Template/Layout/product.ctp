@@ -57,7 +57,6 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
     //console.log("erg");
     <?php  if (isset($_SESSION['cart'])){  ?>
         var cart = <?= json_encode($_SESSION['cart']); ?>;
-        console.log(cart);
     <?php   } else { ?>
         var cart;
     <?php   }  ?>        

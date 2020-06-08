@@ -177,7 +177,7 @@
 <?php endif; ?>
         
 
-     <li class="<?php if ($nav_['settingss'] OR $nav_['currencys'] OR $nav_['managers'] OR $nav_['socials'] )  { echo 'active'; } ?> treeview">
+     <li class="<?php if ($nav_['settingss'] OR $nav_['currencys'] OR $nav_['managers'] OR $nav_['socials'] OR $nav_['producers_discounts'] )  { echo 'active'; } ?> treeview">
           <a href="#">
              <img src="<?= $this->Url->build('/img/new_setting.svg', ['fullBase' => true]) ?>" alt=""> <span>Налаштування</span>
             <span class="pull-right-container">
@@ -196,6 +196,11 @@
             <li class="<?= $nav_['currencys'] ? 'active' : '' ?>">
             <a href="<?php echo $this->Url->build(['controller' => 'currency', 'action' => 'index', '_full' => true, 'prefix' => 'admin', 'plugin' => false]); ?>">
                 <i class="fa fa-angle-double-right"></i><span><?php echo __('Валюти'); ?></span>
+            </a>
+        </li> 
+        <li class="<?= $nav_['producers_discounts'] ? 'active' : '' ?>">
+            <a href="<?php echo $this->Url->build(['controller' => 'producers-discounts', 'action' => 'index', '_full' => true, 'prefix' => 'admin', 'plugin' => false]); ?>">
+                <i class="fa fa-angle-double-right"></i><span><?php echo __('Зміна вартості'); ?></span>
             </a>
         </li> 
             

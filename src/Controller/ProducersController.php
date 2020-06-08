@@ -54,11 +54,13 @@ class ProducersController extends AppController
         $description = $producer->description_page;
         $keywords = $producer->keywords;
 
-        $products = $this->Paginate($this->Products->find()->contain(['Actions' => [
+        $products = $this->Paginate($this->Products->find()
+            ->contain(['Actions' => [
                                                                      'conditions' => [
                                                                        'Actions.date_end >' => $new_date
-            ]]
+            ]],'Producers','Producers.ProducersDiscounts','Discounts'
         ])->where(['producer_id' => $producer->id]))->toArray();
+
 
         //debug($products);
          $min_price = 0;
@@ -74,7 +76,7 @@ class ProducersController extends AppController
 
             $query_for_products = $this->Products
                                         ->find()
-                                        ->contain(['Actions','Discounts','Rewiev','ActionsProducts','ActionsProducts.Actions'])
+                                        ->contain(['Actions','Discounts','Rewiev','ActionsProducts','ActionsProducts.Actions','Producers','Producers.ProducersDiscounts'])
                                         ->where(['price * 30 >=' => $this->request['?']['start_price']])
                                         ->where(['producer_id' => $producer->id])
                                         ->where(['price * 30 <=' => $this->request['?']['end_price']]);

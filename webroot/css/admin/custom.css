@@ -8,6 +8,9 @@ body {
     position: absolute;
     color: #fff;
 }
+.advanteges_item textarea {
+    width: 100%;
+}
 .search_product input {
     background: none;
     border: none;

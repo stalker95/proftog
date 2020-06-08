@@ -27,10 +27,10 @@
 					</div>
 					<div class="blog_container">
 						<div class="blog_latest_news">
-							<a href="" class="blog_latest_news_item">Остання новина 1</a>
-							<a href="" class="blog_latest_news_item">Остання новина 1</a>
-							<a href="" class="blog_latest_news_item">Остання новина 1</a>
-							<a href="" class="blog_latest_news_item">Остання новина 1</a>
+							<?php 	foreach ($latest_news as $key => $value): ?>
+								<a href="<?= $this->Url->build(['controller' => 'blogs','action'    =>  $value['slug']], ['fullBase' => true]) ?>" class="blog_latest_news_item"><?= $value['title'] ?></a>
+							<?php 	endforeach; ?>
+							
 						</div>
 					</div>
 				</div>
@@ -49,7 +49,7 @@
 				<?php 	foreach ($blogs as $key => $value):?>
 				<div class="blog_item">
 					<div class="blog_item_image">
-						<img src="<?= $this->Url->build('/img/blog_item.png', ['fullBase' => true]) ?>" alt="">
+						<img src="<?= $this->Url->build('/blogs/'.$value['image'], ['fullBase' => true]) ?>" alt="">
 					</div>
 					<div class="blog_item_inside">
 						<div class="blog_item_data">
@@ -62,16 +62,30 @@
 						<p><?= $value['description'] ?></p>
 					</div>
 					<div class="blog_item_link">
-						<a href="<?= $this->Url->build(['controller' => 'blogs','action'    =>  'view/'.$value['slug']], ['fullBase' => true]) ?>">Детальніше</a>
+						<a href="<?= $this->Url->build(['controller' => 'blogs','action'    =>  $value['slug']], ['fullBase' => true]) ?>">Детальніше</a>
 					</div>
 					<div class="blog_item_auth">
-						<p> <i class="fa fa-pencil"></i> admin</p>
-						<p> <i class="fa fa-pencil"></i> 1 контар</p>
+						<p> <i class="fa fa-pencil"></i> <?= $value['user']['firstname']." ".$value['user']['lastname'] ?></p>
+						
 					</div>
 					</div>
 					
 				</div>
 			<?php 	endforeach; ?>
+			<?php
+              $params = $this->Paginator->params();
+              $this->Paginator->options = array(
+                    'url' => array('controller'=>'blogs')
+   );
+              if ($params['pageCount'] > 1): ?>
+                <ul class="pagination pagination-sm">
+                    <?= $this->Paginator->first('<< ') ?>
+                    <?= $this->Paginator->prev('< ' ) ?>
+                    <?= $this->Paginator->numbers() ?>
+                    <?= $this->Paginator->next(' >') ?>
+                <?= $this->Paginator->last(' >>') ?>
+                </ul>
+          <?php endif; ?>
 			</div>
 		</div>	
 	</div>

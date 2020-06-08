@@ -31,9 +31,8 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
 
 
   
-    <?= $this->Html->css('bootstrap.min.css') ?>
+   <link href="   https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
     <?= $this->Html->css('style.css') ?>
-  <?=  $this->Html->script('bootstrap/dist/js/bootstrap.min.js'); ?>
     <?= $this->fetch('meta') ?>
     <?= $this->fetch('css') ?>
 </head>
@@ -54,7 +53,6 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
     //console.log("erg");
    <?php  if (isset($_SESSION['cart'])){  ?>
         var cart = <?= json_encode($_SESSION['cart']); ?>;
-        console.log(cart);
     <?php   } else { ?>
         var cart;
     <?php   }  ?> 

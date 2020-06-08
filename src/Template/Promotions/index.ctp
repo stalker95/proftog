@@ -7,7 +7,7 @@
 		<div class="breadcrums_list_item">
 			<a href="<?= $this->Url->build(['controller' => 'main','action'    =>  'index'],['fullBase' => true]) ?>">Головна</a>
 			<span> / </span>
-			<a href="<?= $this->Url->build(['controller' => 'actions','action'    =>  'index/'], ['fullBase' => true]) ?>">Акції</a>
+			<a href="<?= $this->Url->build(['controller' => 'promotions','action'    =>  '/'], ['fullBase' => true]) ?>">Акції</a>
 			<span> / </span>
 		</div>
 	</div>
@@ -20,45 +20,52 @@
 			</div>
 			<div class="col-md-9">
 	          <div class="categories_product">
-	          		<div class="actions_list">
-	          		  <?php foreach ($actions as $key => $value): ?>
-	          			<div class="actions_list_item">
-	          				<div class="actions_list_item_top">
-	          					<img src="<?= $this->Url->build('/actions/'.$value['image'], ['fullBase' => true]) ?>" alt="">
-	          				</div>
-	          				<div class="actions_list_item_bottom">
-	          					<div class="actions_list_item_left">
-	          						<p class="actions_list_item_left_title">Залишилось</p>
-	          						<p class="actions_list_item_left_center"><?= $value['days_left'] ?></p>
-	          						<p class="actions_list_item_left_bottom">днів</p>
-	          					</div>
-	          					<div class="actions_list_item_right">
-	          						<div class="actions_list_item_right_start">
-	          							<p><?= $value['day_begin'] ?> <?= $value['month_begin'] ?> - <?= $value['day_end'] ?> <?= $value['month_end'] ?></p>
-	          						</div>
-	          						<div class="actions_list_item_right_title">
-	          							<p>
-	          							<?php 
-	          				if (strlen($value['title']) > 30){
-	          				$first_string = substr($value['title'], 30);
+	          		<div class="actions_list" style="display: block;">
+	          		  
 
-	          				$first_empty = strpos($first_string, ' ');
-
-	          			}
-	          			if (strlen($value['title']) > 30){ ?><?= substr($value['title'], 0, 30 + $first_empty);
-	          				echo "<span class='thre_comas'>...</span>"; ?>
-	          			<?php 	} else { ?>
-	          				<? $value['title'] ?>
-	          			<?php } ?>
-	          							</p>
-	          						</div>
-	          						<div class="actions_list_item_right_read">
-	          							<a href="<?= $this->Url->build(['controller' => 'promotions','action'=>'view/'.$value['slug'], ['fullBase' => true]]) ?>">Детальніше</a>
-	          						</div>
-	          					</div>
-	          				</div>
-	          			</div>
-	          		   <?php endforeach; ?>         		   
+	          		<!--  <?php foreach ($actions as $key => $value): ?>
+	          		   <div class="actions_list_item_new">
+	          		   		<div class="actions_list_item_new_left">
+	          		   			<div class="actions_list_item_new_left_inside">
+	          		   				<div class="actions_list_item_new_left_inside_left">
+	          		   					<p class="actions_list_item_new_left_title"><?= $value['title'] ?></p>
+	          		   					<div class="actions_list_item_new_left_link">
+	          		   						<a href="<?= $this->Url->build(['controller' => 'promotions','action' => $value['slug']], ['fullBase' => true]) ?>">Переглянути</a>
+	          		   					</div>
+	          		   				</div>
+	          		   				<div class="actions_list_item_new_left_inside_right">
+	          		   					 <img src="<?= $this->Url->build('/actions/'.$value['image'], ['fullBase' => true]) ?>">
+	          		   				</div>
+	          		   				
+	          		   			</div>
+	          		   		</div>
+	          		   		<div class="actions_list_item_new_right">
+	          		   			<p class="actions_list_item_new_right_top">
+	          		   				До завершення акції 
+	          		   			</p>
+	          		   			<p class="actions_list_item_new_right_center">
+	          		   				<?= $value['days_left'] ?>
+	          		   			</p>
+	          		   			<p class="actions_list_item_new_right_bottom">
+	          		   				днів
+	          		   			</p>
+	          		   		</div>
+	          		   </div>       
+	          		   <?php endforeach; ?>		   -->
+	          		   	          		       <div class="promo-list">
+	  <?php foreach ($actions as $key => $value): ?>
+      <div class="promo-template">
+        <div class="promo-image">
+          <img src="<?= $this->Url->build('/actions/'.$value['image'], ['fullBase' => true]) ?>" alt="x100f" />
+        </div>
+        <div class="promo-description">
+          <p class="promo-name"><?= $value['title'] ?></p>
+          <p class="promo-price">До завершення акції <?= $value['days_left'] ?> днів </p>
+          <a href="<?= $this->Url->build(['controller' => 'promotions','action' => $value['slug']], ['fullBase' => true]) ?>">Перейти</a>
+        </div>
+      </div>
+  <?php endforeach; ?>
+    </div>	  
 	          		</div>
 	          </div>
 			</div>

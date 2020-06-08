@@ -13,6 +13,8 @@ class CartsController extends AppController
 {
     public function beforeFilter(Event $event)
     {
+        $this->loadModel('Producers');
+        $this->loadModel('ProducersDiscounts');
         parent::beforeFilter($event);
         $this->Auth->allow(['index','add', 'change', 'delete', 'list', 'cart']);
     }
@@ -75,9 +77,50 @@ class CartsController extends AppController
         $_SESSION['cart'][$index]['count'] = $_SESSION['cart'][$index]['count'] + $data['count_id_bascket'];
         var_dump("reg");
       }
+      
+      $products_discount = $this->Producers
+                                ->find()
+                                ->contain(['ProducersDiscounts'])
+                                ->where(['Producers.id' => $_SESSION['cart'][$index]['product']['producer_id']])
+                                ->first();
 
-    
-     debug($_SESSION['cart']);
+      $product_discount = $this->Products
+                               ->find()
+                               ->contain(['Discounts'])
+                               ->where(['Products.id' => $_SESSION['cart'][$index]['product']['id']])
+                               ->first();
+
+        debug($products_discount->producers_discounts[0]['discount']);
+      
+      $persent = 0;
+      $price_product = $_SESSION['cart'][$index]['product']['price'];
+      if (!isset( $_SESSION['cart'][$index]['total_sum'])) {
+
+        if (isset($products_discount->producers_discounts[0]['discount'])) {
+            $new_price = $products_discount->producers_discounts[0]['discount'];
+            $price_product = $price_product - ($price_product * ($new_price / 100)) ;
+        }
+        
+        $fina_discount = 0;
+        $data = date("Y-m-d H:i:s");
+        debug($product_discount);
+        foreach ($product_discount['discounts'] as $key => $values): 
+           $date_compare1= date("d-m-Y", strtotime($data));
+        // date now
+    $date_compare2= date("d-m-Y", strtotime($values['end_data']));
+    $start_data = date("d-m-Y", strtotime($values['start_data']));
+    if ($date_compare1 < $date_compare2 AND $date_compare1 > $start_data) {
+              echo "2";
+                  $price_product = $price_product - $values['price'];
+              break;
+            }
+        endforeach; 
+        
+        $sum = ($_SESSION['cart'][$index]['count'] * $price_product) + ($_SESSION['cart'][$index]['count'] * array_sum($_SESSION['cart'][$index]['array_option_value']));
+
+         $_SESSION['cart'][$index]['total_sum'] = $sum;
+         $_SESSION['cart'][$index]['one_price'] = $price_product;
+      }
 
 
       $this->autoRender = false;
@@ -107,6 +150,12 @@ class CartsController extends AppController
       $data = $this->request->getData();
 
       unset($_SESSION['cart'][$data['id_product']]);
+
+      foreach ($_SESSION['cart'] as $key => $value) {
+        if ($value['product']['id'] == $data['id_product']) {
+          unset($_SESSION['cart'][$key]);
+        }
+      }
     }
 
     public function list()
@@ -119,7 +168,7 @@ class CartsController extends AppController
       
       foreach ($_SESSION['cart'] as $key => $value) {
          $sum = ($value['count'] * $value['product']['price']) + ($value['count'] * array_sum($value['array_option_value']));
-         $_SESSION['cart'][$key]['total_sum'] = $sum;
+        // $_SESSION['cart'][$key]['total_sum'] = $sum;
          $sum = 0;
       }
 
@@ -135,9 +184,11 @@ class CartsController extends AppController
       
       
       foreach ($_SESSION['cart'] as $key => $value) {
-         $sum = ($value['count'] * $value['product']['price']) + array_sum($value['array_option_value']);
-         $_SESSION['cart'][$key]['total_sum'] = $sum;
-         $sum = 0;
+        if (!isset($_SESSION['cart'][$key]['total_sum'])) {
+            $sum = ($value['count'] * $value['product']['price']) + array_sum($value['array_option_value']);
+            $_SESSION['cart'][$key]['total_sum'] = $sum;
+            $sum = 0;
+          }
       }
 
       $this->response->body(json_encode($_SESSION['cart']));

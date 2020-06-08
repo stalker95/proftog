@@ -16,6 +16,8 @@
          
        </div>
      </div>
+                <?php  if (!empty($products)): ?>
+    <p class="products_container_title">Товари</p>
      <div class="box">
       <div class="box-body table-responsive no-padding">
        <div class="box-header">
@@ -36,6 +38,7 @@
             </div>
               
            </div>
+
               <table class="table table-bordered table-striped" id="example1">
                  <thead>
                 <tr>
@@ -76,7 +79,7 @@
                       <?php
                         echo   $this->Html->link('<i class="fa fa-pencil"></i>', ['action' => 'edit', $product->id], ['class'=>'btn change__user','escape' => false]);
                          echo   $this->Html->link('<i class="fa fa-copy"></i>', ['action' => 'copy-element', $product->id], ['class'=>'btn copy_product','escape' => false]);
-                        echo  $this->Form->postLink('<i class="fa fa-trash"></i>', ['action' => 'delete', $product->id], ['class'=>'btn  delete__user','escape' => false,'confirm' => __('Ви справді хочете видалити категорію # {0}?', $product->id)]);  ?>
+                        echo  $this->Form->postLink('<i class="fa fa-trash"></i>', ['action' => 'delete', $product->id], ['class'=>'btn  delete__user','escape' => false,'confirm' => __('Ви справді хочете видалити товар?', $product->title)]);  ?>
                     </td>
                     </tr>
                 <?php endforeach; ?>
@@ -95,6 +98,81 @@
                 <?= $this->Paginator->last(__('last') . ' >>') ?>
                 </ul>
           <?php  endif;  } ?>
+        <?php   endif; ?>
+
+         <?php  if (!empty($categories_admin)): ?>
+    <p class="products_container_title">Категорії</p>
+     <div class="box">
+      <div class="box-body table-responsive no-padding">
+       <div class="box-header">
+        <div class="create__new__user">
+         <!-- <button class="btn delete_form_checked  btn-dangeres save__changes__form__playlist" data-toggle="modal" data-target="#mediaGallery" >
+                     Delete
+          </button> -->
+          <!--<?php   echo  $this->Html->link('Додати ',['action'=>'add'],['class'=>'btn btn-primary create__new__user']); ?> -->
+           <?php /*   <div class="search-form-find">
+               <?= $this->Form->create('Search',['url'   => array(
+               'controller' => 'products','action' => 'search'
+                 )]);
+                echo  $this->Form->control('name',array('label' => false,'class'=>'form-control','min'=>6));
+                echo  $this->Form->end(); 
+             ?>
+               <p class="search-form-find-title"> Пошук </p>
+            </div> */ ?>
+            </div>
+              
+           </div>
+
+              <table class="table table-bordered table-striped" id="example1">
+                 <thead>
+                <tr>
+                  <th class="first-check"> <label class="custom-checkbox">
+                          <input type="checkbox" id="delete-all">
+                          <span class="checkmark"></span>
+                    </label></th>
+                  <th>ID</th>
+                  <th>Ім'я</th>
+                  <th>Батьківська категорія</th>
+                  <th>Позиція</th>
+                  <th>Зображення</th>
+                  <th>Дії</th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php   foreach ($categories_admin as $category): ?>
+                  <tr>
+                    <td class="first-check"> <label class="custom-checkbox">
+                          <input type="checkbox" id="delete-all" value="<?= $category->id ?>" class='delete_item'>
+                          <span class="checkmark"></span>
+                    </label></td>
+                    <td><?= $category->id ?></td>
+                    <td><?= $category->name ?></td>
+                    <td><?php  if (isset($category->parent_category->name)) { echo $category->parent_category->name; } else {echo "---"; } ?></td>
+                    <td><?= $category->position ?></td>
+                    <td><img style="max-width: 100px; max-height: 100px;" src="<?= $this->Url->build('/categories/'.$category->picture, ['fullBase' => true]) ?>" alt="" class="img-fluid"></td>
+                    <td class='table__flex'>
+                      <?php
+                        echo   $this->Html->link('<i class="fa fa-pencil"></i>', ['controller'=>'category','action' => 'edit', $category->id], ['class'=>'btn change__user','escape' => false]);
+                        echo  $this->Form->postLink('<i class="fa fa-trash"></i>', ['controller'=>'category','action' => 'delete', $category->id], ['class'=>'btn  delete__user','escape' => false,'confirm' => __('Ви справді хочете видалити категорію {0}  ? ', $category->name)]);  ?>
+                    </td>
+                    </tr>
+                <?php endforeach; ?>
+              </tbody>
+              </table>
+            </div>
+             <?php
+              $params = $this->Paginator->params();
+              if (isset($params['pageCount'])){
+              if ($params['pageCount'] > 1): ?>
+                <ul class="pagination pagination-sm">
+                    <?= $this->Paginator->first('<< ' . __('first')) ?>
+                    <?= $this->Paginator->prev('< ' . __('previous')) ?>
+                    <?= $this->Paginator->numbers() ?>
+                    <?= $this->Paginator->next(__('next') . ' >') ?>
+                <?= $this->Paginator->last(__('last') . ' >>') ?>
+                </ul>
+          <?php  endif;  } ?>
+        <?php   endif; ?>
           </div>
         </div>
       </div>

@@ -4,12 +4,15 @@
 #    RequestHeader unset Proxy
 #</IfModule>
 
-php_value upload_max_filesize 100M
-php_value post_max_size 100M
+#php_value upload_max_filesize 100M
+#php_value post_max_size 100M
 
 <IfModule mod_rewrite.c>
     RewriteEngine on
     RewriteRule    ^(\.well-known/.*)$ $1 [L]
     RewriteRule    ^$    webroot/    [L]
     RewriteRule    (.*) webroot/$1    [L]
+
+    
 </IfModule>
+

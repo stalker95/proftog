@@ -81,6 +81,21 @@
     </div>
   </div>
 </div>
+
+<div class="playlist__managment--item">
+  <div class="playlist__managment--item__left">
+    <p>Статус</p>
+  </div>
+  <div class="playlist__managment--item__right">
+    <div class="playlist--item--sub">
+      <select name="status" id="">
+        <option value="0" <?php   if($category->status == 0) { echo "selected"; } ?> >Активний</option>
+        <option value="1" <?php   if($category->status == 1) { echo "selected"; } ?>>Не активний</option>
+      </select>   
+    </div>
+  </div>
+</div>
+
 <div class="playlist__managment--item">
   <div class="playlist__managment--item__left">
     <p>Опис</p>

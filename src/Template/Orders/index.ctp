@@ -170,7 +170,7 @@
                 <?= $value['count']; ?> шт.
               </div>
               <div class="orders_products_price">
-                <span class="translate_price" data-currency="<?=$value['product']['currency_id'] ?>"><?= ($value['count'] * $value['product']['price']) + array_sum($value['array_option_value']);  ?></span> грн
+                <span class="translate_price" data-currency="<?=$value['product']['currency_id'] ?>"><?= ($value['count'] * $value['one_price']) + array_sum($value['array_option_value']);  ?></span> грн
               </div>
             </div>
          <?php  endforeach; ?>
@@ -201,28 +201,28 @@
                   <input type="radio" name="type_delivery" class="type_delivery" value="2">
                   <span class="checkmark"></span>
                 </label>
-                <input type="text" name="adress_delivery" class="adress_delivery" placeholder="Вкажіть реквізити доставки" value="<?php if (!empty($_user)) { echo $_user->new_post_city." ".$_user->new_post_delivery; } ?>">
+                <input type="text" name="adress_delivery_new" class="adress_delivery" placeholder="Вкажіть реквізити доставки" value="<?php if (!empty($_user)) { echo $_user->new_post_city." ".$_user->new_post_delivery; } ?>">
                 <p class="message_display"></p>
 
                 <label class="orders_delivery_item">МістЕкспес
                   <input type="radio" name="type_delivery" class="type_delivery" value="3">
                   <span class="checkmark"></span>
                 </label>
-                <input type="text" name="adress_delivery" class="adress_delivery" placeholder="Вкажіть реквізити доставки">
+                <input type="text" name="adress_delivery_mist" class="adress_delivery" placeholder="Вкажіть реквізити доставки">
                 <p class="message_display"></p>
 
                 <label class="orders_delivery_item">Інтайм
                   <input type="radio" name="type_delivery" class="type_delivery" value="4">
                   <span class="checkmark"></span>
                 </label>
-                <input type="text" name="adress_delivery" class="adress_delivery" placeholder="Вкажіть реквізити доставки">
+                <input type="text" name="adress_delivery_in" class="adress_delivery" placeholder="Вкажіть реквізити доставки">
                 <p class="message_display"></p>
 
                  <label class="orders_delivery_item">Делівері
                   <input type="radio" name="type_delivery" class="type_delivery" value="5">
                   <span class="checkmark"></span>
                 </label>
-                <input type="text" name="adress_delivery" class="adress_delivery" placeholder="Вкажіть реквізити доставки">
+                <input type="text" name="adress_delivery_del" class="adress_delivery" placeholder="Вкажіть реквізити доставки">
                 <p class="message_display"></p>
 
               </div>
@@ -361,7 +361,7 @@
   								<p><?= $value['count'] ?> шт</p>
   							</div>
   							<div class="orders_bascket_item_right_count_price">
-  								<p><span class="translate_price total_basket_submit" data-currency="<?= $value['product']['currency_id'] ?>" ><?=  ($value['count'] * $value['product']['price']) + (array_sum($value['array_option_value']) * $value['count']); ?></span> грн</p>
+  								<p><span class="translate_price total_basket_submit" data-currency="<?= $value['product']['currency_id'] ?>" ><?=  ($value['count'] * $value['one_price']) + (array_sum($value['array_option_value']) * $value['count']); ?></span> грн</p>
   							</div>
   						</div>
   					</div>
@@ -833,10 +833,14 @@ $(document).ready(function() {
           $(".message_submit_quick_order").html("");
           
           
-          if ($('.type_payment:checked').val() == 2 || $('.type_payment:checked').val() == 3) {
+          if ($('.type_payment:checked').val() == 3 ) {
 
           liqpay_work(data);
         }
+
+       if ($('.type_payment:checked').val() == 4 ) {
+      //  buy_parst(data);
+       }
 
           if ($('.type_payment:checked').val() == 1 || $('.type_payment:checked').val() == 4 && data.status == "true")
            {
@@ -852,6 +856,8 @@ $(document).ready(function() {
              $(".button_confirm_bascket").addClass('disabled');
              $(".orders_bascket_container").text('');
              $(".total_of_bascket_submit").text('0');
+
+             $(".code_order").text("00"+data.order);
 
               $("#after_add_bascket").modal({
                   show: true
@@ -901,6 +907,68 @@ $(document).ready(function() {
 
   }
 
+  function buy_parst(data)
+  {
+    var signature = ''
+    $.ajax({
+        url: currency_url+'orders/get-data-parts',
+        type: 'POST',
+        data: {json_string: ''},
+        success: function(data){ 
+          buy_parts_send(data.signature);
+        }
+  });
+    
+  }
+
+function buy_parts_send(signature)
+{
+    var url = 'https://payparts2.privatbank.ua/ipp/v2/payment/create';
+    var json_string = '{'+
+    '"storeId": "BDCF7CE5E48F497DB45A",'+
+    '"orderId": "34234324",'+
+    '"amount": 400.00,'+
+    '"partsCount": 2,'+
+    '"merchantType": "PP",'+
+    '"scheme": 1111,'+
+    '"products": ['+
+        '{'+
+            '"name": "Телевизор",'+
+            '"count": 2,'+
+            '"price": 100.00'+
+        '},'+
+        '{'+
+            '"name": "Микроволновка",'+
+            '"count": 1,'+
+            '"price": 200.00'+
+        '}'+
+    '],'+
+    '"recipientId":"qwerty1234",'+
+    '"responseUrl": "https://payparts2.privatbank.ua/ipp/sandbox/test",'+
+    '"redirectUrl": "https://payparts2.privatbank.ua/ipp/sandbox/test",'+
+    '"signature": "+3p+X0FHuCuIHu5+94607DKUsec="'+
+'}';
+     $.ajax({
+     url: url,
+    type: "POST",
+    beforeSend: function(jqXHR, settings) {
+                   jqXHR.setRequestHeader("Content-Type", "application/json; charset=UTF-8;");
+                   jqXHR.setRequestHeader("Accept", "application/json;");
+                   jqXHR.setRequestHeader("Accept-Encoding", "UTF-8;");
+
+  },
+    data: JSON.stringify(JSON.parse(json_string)),
+    headers: {
+        'Accept':'application/json; charset=utf-8',
+        'Accept-Encoding':'UTF-8;',
+        'Content-Type':'application/json; charset=UTF-8;',
+    },
+    processData: false,
+    success: function(data){ 
+    }
+  }); 
+
+}
 
   function confirm_order(action, data_id) {
          $.ajax({

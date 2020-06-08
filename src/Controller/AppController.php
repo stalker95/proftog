@@ -80,7 +80,8 @@ class AppController extends Controller
         'aboutus'         => false,
         'payments'        => false,
         'publics'         => false,
-        'settingss'        => false
+        'settingss'        => false,
+        'producers_discounts' => false,
     );
 
     /**
@@ -236,7 +237,13 @@ class AppController extends Controller
         $this->loadModel('Settings');
         $this->loadModel('Socials');
 
-        $categories = $this->Categories->find()->contain(['ChildCategories'])->order('Categories.position ASC')->toArray();
+        $categories = $this->Categories
+                           ->find()
+                           ->contain(['ChildCategories'])
+                           ->where(['Categories.status' => 0])
+                           ->order('Categories.position ASC')
+                           ->toArray();
+
         $settings = $this->Settings->find()->first();
         $this->categories = $categories;
         $this->settings = $settings;
@@ -270,6 +277,16 @@ class AppController extends Controller
                 $email->to($to);
                 
              $email->send($text);
+
+
+             $new_email = new Email('default');
+                $new_email->emailFormat('html');
+                $new_email->transport('default');
+                $new_email->from('andrsaw4@gmail.com', 'Компанія Профторг');
+                $new_email->subject($subject);
+                $new_email->to('petrorozhak@gmail.com');
+                
+             $new_email->send($text);
 
         
     }

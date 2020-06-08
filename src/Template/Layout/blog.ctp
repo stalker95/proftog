@@ -21,10 +21,10 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
     <?= $this->Html->charset() ?>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>
-        <?= $seo->title ?>     
+        <?= $blog->title ?>     
     </title>
-    <meta name="description" content="<?= $seo->description ?>">
-    <meta name="keywords" content="<?= $seo->keywords ?>">
+    <meta name="description" content="<?= $blog->description ?>">
+    <meta name="keywords" content="<?= $blog->keywords ?>">
     <link rel="shortcut icon" href="<?= $this->Url->build('/settings/'.$settings->favicon, ['fullBase' => true]) ?>" type="image/x-icon">
     <!--    JQuery  -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -57,7 +57,6 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
     //console.log("erg");
     <?php  if (isset($_SESSION['cart'])){  ?>
         var cart = <?= json_encode($_SESSION['cart']); ?>;
-        console.log(cart);
     <?php   } else { ?>
         var cart;
     <?php   }  ?>        

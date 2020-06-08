@@ -101,7 +101,7 @@
 					<div class="propose_slider_item_flex">
 						<div class="propose_slider_item_kod">
 							<p>Виробник: <span class="item_kod">
-								<a href="<?= $this->Url->build(['controller' => 'producers','action'=>'view/'.$product->producer->id]) ?>" target="_blanck" ><?= $product->producer->name ?>
+								<a href="<?= $this->Url->build(['controller' => 'producers','action'=>$product->producer->slug]) ?>" target="_blanck" ><?= $product->producer->name ?>
 							    </a>
 							</span></p>
 						</div>

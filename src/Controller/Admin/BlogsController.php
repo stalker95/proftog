@@ -84,6 +84,8 @@ class BlogsController extends AppController
              $uploadPath = 'uploads/files/';
              $blog = $this->Blogs->patchEntity($blog, $this->request->getData());
              $blog->image = $fileName;
+             $blog->created = date("Y-m-d H:i:s");
+             $blog->user_id = $this->user->id;
             if ($this->Blogs->save($blog)) {
 
 
@@ -133,8 +135,7 @@ class BlogsController extends AppController
             $blog->image = $old_picture;
             if ($this->Blogs->save($blog)) {
 
-                 if (!empty($this->request->getData('image.tmp_name')['error'])) {
-                    var_dump("erg");
+ if ($this->request->getData('image.error')['error'] == 0) {
             $mm_dir = new Folder(WWW_ROOT . DS . 'blogs', true, 0777);
             $target_path = $mm_dir->pwd() . DS;
                     $this->Blogs->updateAll(['image' => ""], ['id' => $blog->id]);    

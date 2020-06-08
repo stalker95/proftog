@@ -7,9 +7,9 @@
 		<div class="breadcrums_list_item">
 			<a href="<?= $this->Url->build(['controller' => 'main','action'    =>  'index'],['fullBase' => true]) ?>">Головна</a>
 			<span> / </span>
-			<a href="<?= $this->Url->build(['controller' => 'actions','action'    =>  'index/'], ['fullBase' => true]) ?>">Акції</a>
+			<a href="<?= $this->Url->build(['controller' => 'promotions','action'    =>  'index/'], ['fullBase' => true]) ?>">Акції</a>
 			<span> / </span>
-			<a href="<?= $this->Url->build(['controller' => 'actions','action'    =>  'view/'.$action->id]) ?>"><?= $action->title ?></a>
+			<a href="<?= $this->Url->build(['controller' => 'promotions','action'    =>  'view/'.$action->slug]) ?>"><?= $action->title ?></a>
 		</div>
 	</div>
 </div>
@@ -119,16 +119,16 @@
 						<?= $this->element('price_product', array("item" => $value)); ?>
 					</div>
 					<div class="product_buttons">
-						<button class="product_buttons_item add_product_to_bascket" data-product="<?= $value['id'] ?>">
+						<button type="button" class="product_buttons_item add_product_to_bascket" data-product="<?= $value['id'] ?>">
 							<img src="<?= $this->Url->build('/img/back.svg', ['fullBase' => true]) ?>" alt="">
 						</button>
 						<a href="<?= $this->Url->build(['controller' => 'products','action'=>$value['slug']]) ?>" class="product_buttons_item" >
 							<i class="fa fa-eye"></i>
 						</a>
-						<button class="product_buttons_item add_product_to_wishlist" data-product="<?= $value['id'] ?>">
+						<button type="button" class="product_buttons_item add_product_to_wishlist" data-product="<?= $value['id'] ?>">
 							<img src="<?= $this->Url->build('/img/favorite.svg', ['fullBase' => true]) ?>" alt="">
 						</button>
-						<button class="product_buttons_item add_product_to_compare" data-product="<?= $value['id'] ?>">
+						<button type="button" class="product_buttons_item add_product_to_compare" data-product="<?= $value['id'] ?>">
 							<i class="fa fa-exchange"></i>
 						</button>
 					</div>
@@ -139,6 +139,11 @@
 
 	          	</div>
 	          	 <?php
+	          	 $this->Paginator->options([
+    'url' => [
+        'controller' => 'promotions',
+        'action' => $action->slug]
+    ]);
               $params = $this->Paginator->params();
               if ($params['pageCount'] > 1): ?>
                 <ul class="pagination pagination-sm">

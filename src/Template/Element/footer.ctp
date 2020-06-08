@@ -12,7 +12,7 @@
 			</div>
 			<div class="malling_right">
 				<div class="mailing_form">
-					<form action="">
+					<form action="" class='create_new_customer'>
 						<input type="text" placeholder="Введіть ваш email">
 						<input type="submit" value="Підписатися">
 					</form>
@@ -68,7 +68,13 @@
 							<i class="fa fa-phone"></i>
 						</div>
 						<div class="footer_contacts_title">
-							<p><?= $settings->phones ?></p>
+							<p>
+								<?php
+                    			$arr = explode('<br>', $settings->phones);
+								   foreach($arr as $item): if (!empty($item)): ?>
+                                     <a href="tel:<?= $item ?>" > <?= $item."<br>" ?> </a>
+                                   <?php endif; endforeach; ?>
+                            </p>
 						</div>
 					</div>
 					<div class="footer_contacts_item">
@@ -81,7 +87,7 @@
 					</div>
 					<div class="footer_contacts_item">
 						<div class="footer_contacts_icon">
-							<i class="fa fa-clock"></i>
+							<i class="far fa-clock"></i>
 						</div>
 						<div class="footer_contacts_title">
 							<p><?= $settings->time ?></p>

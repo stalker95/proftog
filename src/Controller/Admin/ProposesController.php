@@ -58,7 +58,7 @@ class ProposesController extends AppController
             }
             $this->Flash->admin_error(__('Пропозицію не збережно. Спробуйте пізніше'));
         }
-        $product_id = $this->Proposes->Products->find('list', ['limit' => 200]);
+        $product_id = $this->Proposes->Products->find('list');
         $this->nav_['proposes'] = true; 
         $this->set(compact('propose', 'product_id'));
     }

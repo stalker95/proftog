@@ -19,6 +19,7 @@ class SettingsController extends AppController
         $this->loadComponent('Flash');
 
         $this->loadModel('Playlist');
+        $this->loadModel('Advantages');
         $this->loadModel('Settings');
         $this->loadModel('Socials');
 
@@ -38,13 +39,29 @@ class SettingsController extends AppController
     {
         $settingssa = $this->Settings->find()->first();
         $old_picture = $settingssa->logo;
+        $advantages = $this->Advantages
+                           ->find()
+                           ->toArray();
 
         $phones_before = explode('<br>', $settingssa->phones);
+
+
+
 
         $socials = $this->Socials->find()->toArray();
 
         $old_picture_favicon = $settingssa->favicon;
         if ($this->request->is(['patch', 'post', 'put'])) {
+            $advantages = $this->request->getData('advantages_hidden');
+            $advantages_name = $this->request->getData('advantages_name');
+            $advantages_svg = $this->request->getData('advantages_svg');
+            
+            foreach ($advantages as $key => $value) {
+                $advantage = $this->Advantages->get($value);
+                $advantage->title = $advantages_name[$key];
+                $advantage->svg = $advantages_svg[$key];
+                $this->Advantages->save($advantage);
+            }
             $settingssa = $this->Settings->patchEntity($settingssa, $this->request->getData());
             $settingssa->logo = $old_picture;
             $settingssa->favicon = $old_picture_favicon;
@@ -123,9 +140,10 @@ class SettingsController extends AppController
             $this->Flash->admin_error(__('Зміни не збережено. Спробуйте пізніше'));
         }
         $this->nav_['settingss'] = true;
-        $this->set('settingssa',$settingssa);
-        $this->set('socialsa',$socials);
-        $this->set('phones',$phones_before);
+        $this->set('settingssa', $settingssa);
+        $this->set('socialsa', $socials);
+        $this->set('phones', $phones_before);
+        $this->set('advantages', $advantages);
         
     }
 

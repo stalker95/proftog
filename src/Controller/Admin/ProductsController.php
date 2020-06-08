@@ -316,12 +316,19 @@ class ProductsController extends AppController
 
      public function search($name = null)
     {
+      $this->loadModel('Categories');
            $this->nav_['products'] = true;
      if ($this->request->is(['get', 'post', 'put'])) {
         $name = $this->getRequest()->getData('name');
+        $name = trim($name);
         $products = $this->Products->find()->contain(['Categories'])->where([
                 'Products.title LIKE'=>'%'.$name.'%',          
         ])->toArray();
+
+        $categories_admin = $this->Categories->find()->contain('ParentCategories')->where([
+                'Categories.name LIKE'=>'%'.$name.'%',          
+        ])->toArray();
+          $this->set('categories_admin',$categories_admin);
           $this->set('products',$products);
      }
     }

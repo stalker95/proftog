@@ -18,30 +18,18 @@
 			<div class="col-md-9">
 				<div class="">
 					<div class="advantages">
-						<div class="advantages_item">
-							<div class="advantages_item_left">
-								<img src="<?= $this->Url->build('/img/delivery.svg', ['fullBase' => true]) ?>" alt="">
-							</div>
+
+						<?php foreach ($advanteges as $key => $value): ?>
+							<div class="advantages_item">
+								<div class="advantages_item_left">
+									<?= $value['svg'] ?>
+								</div>
 							<div class="advantages_item_right">
-								<p>Доставка обладнання в найкортші терміни</p>
+								<p><?= $value['title'] ?></p>
 							</div>
 						</div>
-						<div class="advantages_item">
-							<div class="advantages_item_left">
-								<img src="<?= $this->Url->build('/img/manager.svg', ['fullBase' => true]) ?>" alt="">
-							</div>
-							<div class="advantages_item_right">
-								<p>Професійне консультування</p>
-							</div>
-						</div>
-						<div class="advantages_item">
-							<div class="advantages_item_left">
-								<img src="<?= $this->Url->build('/img/garanted.svg', ['fullBase' => true]) ?>" alt="">
-							</div>
-							<div class="advantages_item_right">
-								<p>Гарантія на весь товар</p>
-							</div>
-						</div>
+						<?php endforeach; ?>
+						
 					</div>
 					<div class="center_slider">
 						<div class="slider_arrow_left">
@@ -59,7 +47,7 @@
 										<?= $value['title'] ?> 
 									</p>
 
-									<a href="<?= $this->Url->build(['controller' => 'actions','action'=>$value['slug']]) ?>" class="center_slider_link">Детальніше</a>
+									<a href="<?= $this->Url->build(['controller' => 'promotions','action'=>$value['slug']]) ?>" class="center_slider_link">Детальніше</a>
 								</div>
 								<div class="center_slider_item_right">
 									<img class="lazy_load" data-load="<?= $this->Url->build('/actions/'.$value['image'], ['fullBase' => true]) ?>" src="" alt="">
@@ -175,7 +163,7 @@
 				<p>Хіти продаж</p>				
 			</div>
             <div class="section_title">
-            	<a href="<?= $this->Url->build(['controller' => 'categories','action'=>'index/']) ?>" target="_blanck">Переглянути усі категорії</a>
+            	<a href="<?= $baseUrl ?>categories/" target="_blanck">Переглянути усі категорії</a>
             </div>
 		</div>
 		<div class="row">
@@ -212,7 +200,7 @@
 						<?= $this->element('rating_product', array("item" => $item)); ?>
 					</div>
 					<div class="propose_slider_item_title">
-						<p><a href="<?= $this->Url->build(['controller' => 'products','action'=>'view/'.$item['slug']]) ?>"><?= $item['title'] ?></a></p>
+						<p><a href="<?= $this->Url->build(['controller' => 'products','action'=>$item['slug']]) ?>"><?= $item['title'] ?></a></p>
 					</div>
 					<div class="propose_slider_item_kod">
 						<p>Код товару <span class="item_kod"><?= $item['cod'] ?></span></p>
@@ -270,16 +258,35 @@
                <?php 	foreach ($blogs as $key => $value): ?>
 				<div class="news_slider_item">
 					<div class="news_slider_item_image">
-						<img src="<?= $this->Url->build('/blogs/'.$value['image'], ['fullBase' => true]) ?>" alt="">
+						<a href="<?= $this->Url->build(['controller' => 'blog','action' => $value['slug']]) ?>">
+							<img src="<?= $this->Url->build('/blogs/'.$value['image'], ['fullBase' => true]) ?>" alt="">
+						</a>
 					</div>
 					<div class="news_slider_item_data">
 						<p><?= $value['created']->day ?> <?= $value['month'] ?>, <?= $value['created']->year ?></p>
 					</div>
 				    <div class="news_slider_item_title">
-				    	<p><?= $value['title'] ?></p>
+				    	<p><a href="<?= $this->Url->build(['controller' => 'blog','action' => $value['slug']]) ?>"><?= $value['title'] ?></a></p>
+				    </div>
+				    <div class="news_slider_item_description">
+				    	<p><?php 
+	          				if (strlen($value['description']) > 200){
+	          				$first_string = substr($value['description'], 200);
+
+	          				$first_empty = strpos($first_string, ' ');
+
+	          			}
+	          				if (strlen($value['description']) > 200){ ?>
+	          					<?= substr($value['description'], 0, 200 + $first_empty);
+	          				echo "<span class='thre_comas'>...</span>"; ?>
+	          				<?php 	} else { ?>
+	          					<?= $value['description'] ?>
+	          				<?php 	} ?>
+	          					
+	          				</p>
 				    </div>
 				    <div class="news_slider_item_link">
-				    	<a href="<?= $this->Url->build(['controller' => 'blogs','action' => 'view', 'param1'=>$value['slug']], ['fullBase' => true]) ?>">Детальніше</a>
+				    	<a href="<?= $this->Url->build(['controller' => 'blog','action' => $value['slug']]) ?>">Детальніше</a>
 				    </div>
 				</div>
                 <?php 	endforeach; ?>
@@ -379,6 +386,8 @@ $('.producer_slider').slick({
   infinite: true,
   slidesToShow: 5,
   slidesToScroll: 1,
+  autoplay: true,
+  autoplaySpeed: 4000,
   responsive: [
   {
     breakpoint: 993,

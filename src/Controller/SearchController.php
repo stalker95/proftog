@@ -35,8 +35,20 @@ class SearchController extends AppController
         $data = $this->request->getData();
 
         $name = $data['search'];
+        $name = trim($name);
 
-        $products = $this->Products->find()->where(['title LIKE'=>'%'.$name.'%'])->toArray();
+        $title_a = str_replace($name, "%".$name."%", $name);
+
+
+        $products = $this->Products
+        ->find('all')
+        ->select(['title','slug','image', 'currency_id', 'price'])
+        ->where(['title LIKE' => '%'.$name.'%'])
+        ->orWhere(['title LIKE' => '%'.$name.' %'])
+        ->orWhere(['title LIKE' => '%'.$name.'  %'])
+        ->orWhere(['title LIKE' => $name.'%'])
+        ->orWhere(['title LIKE' => $name.' %'])
+        ->toArray();
 
       $this->autoRender = false;
       $this->RequestHandler->renderAs($this, 'json');

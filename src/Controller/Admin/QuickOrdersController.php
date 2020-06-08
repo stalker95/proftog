@@ -16,7 +16,7 @@ class QuickOrdersController extends AppController
     public function beforeFilter(Event $event)
     {
         parent::beforeFilter($event);
-        $this->Auth->allow(['index','add','quickOrder']);
+        $this->Auth->allow(['index','add','quickOrder', 'changeNotes']);
     }
     /**
      * Index method
@@ -166,7 +166,49 @@ class QuickOrdersController extends AppController
          
       } 
 
-     $this->Flash->admin_success(__('Категорії видалено'));
+     $this->Flash->admin_success(__('Швидкі замовлення видалено'));
      return $this->redirect(['action' => 'index']);
     }
+
+    public function changeOrder()
+    {
+        $this->autoRender = false;
+      $this->RequestHandler->renderAs($this, 'json');
+      $this->response->disableCache();
+      $this->response->type('application/json');
+        $data = $this->request->getData();
+        //debug($data);
+        $record = $this->QuickOrders->get($data['id_order']);
+        $record->status = $data['status'];
+
+        debug($record);
+
+        if ($this->QuickOrders->save($record)) {
+           $this->response->body(json_encode(array('status' => 'true')));
+        }
+    }
+
+    public function changeNotes()
+    {
+
+      $this->autoRender = false;
+      $this->RequestHandler->renderAs($this, 'json');
+      $this->response->disableCache();
+      $this->response->type('application/json');
+      $this->loadModel('QuickOrders');
+
+      $data = $this->request->getData();
+
+      $id = $data['id'];
+
+      $quick_order = $this->QuickOrders->get($id);
+
+      $quick_order->notes = $data['text'];
+      $this->QuickOrders->save($quick_order);
+            $this->response->body(json_encode(array('status' => $quick_order)));
+ 
+
+    }
+
+
 }

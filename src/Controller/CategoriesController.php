@@ -62,6 +62,8 @@ class CategoriesController extends AppController
      */
     public function view($slug = null)
     {
+      $slug = $this->request->params['param1'];
+      
         $category = $this->Categories->find()->contain(['ParentCategories','ParentCategories.ParentCategories'])->where(['Categories.slug' => $slug])->first();
         //debug($category);
 
@@ -87,7 +89,7 @@ class CategoriesController extends AppController
         $products = $this->Paginate(
                     $this->Products
                          ->find()
-                         ->contain(['ActionsProducts','ActionsProducts.Actions','Producers','Discounts','Rewiev'])
+                         ->contain(['ActionsProducts','ActionsProducts.Actions','Producers','Producers.ProducersDiscounts','Discounts','Rewiev'])
                          ->where(['category_id' => $category->id]))
                          ->toArray();
                     //     debug($products);
@@ -162,7 +164,7 @@ class CategoriesController extends AppController
             
             $query_for_products = $this->Products
                                         ->find()
-                                        ->contain(['Actions','Discounts','Rewiev','ActionsProducts','ActionsProducts.Actions'])
+                                        ->contain(['Actions','Discounts','Rewiev','ActionsProducts','ActionsProducts.Actions','Producers','Producers.ProducersDiscounts'])
                                         ->where(['category_id' => $category->id])
                                         ->where(['price * 30 >=' => $this->request['?']['start_price']])
                                         ->where(['price * 30 <=' => $this->request['?']['end_price']]);

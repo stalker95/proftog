@@ -48,7 +48,7 @@
                     <td class='table__flex'>
                       <?php
                         echo   $this->Html->link('<i class="fa fa-pencil"></i>', ['action' => 'edit', $optionsItem->id], ['class'=>'btn change__user','escape' => false]);
-                        echo  $this->Form->postLink('<i class="fa fa-trash"></i>', ['action' => 'delete', $optionsItem->id], ['class'=>'btn  delete__user','escape' => false,'confirm' => __('Ви справді хочете видалити Опцію # {0}?', $optionsItem->id)]);  ?>
+                        echo  $this->Form->postLink('<i class="fa fa-trash"></i>', ['action' => 'delete', $optionsItem->id], ['class'=>'btn  delete__user','escape' => false,'confirm' => __('Ви справді хочете видалити {0} опцію ? ', $optionsItem->name)]);  ?>
                     </td>
                     </tr>
                 <?php endforeach; ?>

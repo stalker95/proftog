@@ -248,7 +248,7 @@
                        <td> 
                         <div class="">
                           <div class='input-group date datetimepicker' >
-                            <input type='text' class="" name="date_begin[]" required="required" value="<?= $value['start_data'] ?>" />
+                            <input type='text' class="" name="date_begin[]" required="required" value="<?php echo $value['start_data']->i18nFormat('YYY-MM-dd'); ?>" />
                             <span class="input-group-addon">
                               <span class="glyphicon glyphicon-calendar"></span>
                             </span>
@@ -258,7 +258,7 @@
                        <td>
                         <div class="">
                           <div class='input-group date datetimepicker' >
-                            <input type='text' class="" name="date_end[]" required="required" value="<?= $value['end_data'] ?>" />
+                            <input type='text' class="" name="date_end[]" required="required" value="<?= $value['end_data']->i18nFormat('YYY-MM-dd'); ?>" />
                             <span class="input-group-addon">
                               <span class="glyphicon glyphicon-calendar"></span>
                             </span>
@@ -648,7 +648,7 @@ $('body').on('click', ".delete_row", function() {
 
 $(document).ready(function() {
   $('body').on('click', ".datetimepicker", function() {
-    $(this).datetimepicker();
+    $(this).datetimepicker({format: 'YYYY-MM-DD hh:mm'});
   });
        
        

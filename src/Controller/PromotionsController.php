@@ -53,7 +53,8 @@ class PromotionsController extends AppController
 
 
         foreach ($actions as $key => $value):
-         $datetime1 = date_create($value['date_end']); 
+         $datetime1 = $value['date_end']; 
+       //  debug($value['date_end']);
          $datetime2 = date_create($data_today); 
   
          // calculates the difference between DateTime objects 
@@ -82,7 +83,7 @@ class PromotionsController extends AppController
      */
     public function view($slug = null)
     {
-        debug($slug);
+        $slug = $this->request->params['param1'];
         $action = $this->Actions->find()->where(['slug' => $slug])->first();
         $actions_products = $this->ActionsProducts->find()->select('products_id')->where(['action_id' => $action->id])->toArray();
        // debug($actions_products);
@@ -171,7 +172,7 @@ if (!empty($id_products)):
 
   //  debug($id_products);
 
-        $products = $this->Paginate($this->Products->find()->contain(['Rewiev','Discounts','Actions'])->where(['id IN ' => $id_products]))->toArray();
+        $products = $this->Paginate($this->Products->find()->contain(['Rewiev','Discounts','Actions','Producers', 'Producers.ProducersDiscounts'])->where(['Products.id IN ' => $id_products]))->toArray();
        // debug($products);
         $this->set(compact('products'));
 

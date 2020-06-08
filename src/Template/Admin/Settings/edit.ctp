@@ -28,6 +28,9 @@
               <div class="products_add_tabs_item">
                 <p>Контатні данні</p>
               </div>
+              <div class="products_add_tabs_item">
+                <p>Переваги</p>
+              </div>
             </div>
                       <div class="products_container">
             <div class="product_container_item" style="display: block;">
@@ -211,10 +214,31 @@
    </div>
 
 </div>
-     <?=   $this->Form->end() ?>
+
         </div>
+  <div class="product_container_item">
+
+    <?php foreach ($advantages as $key => $value): ?>
+    <div class="col-md-6">
+
+      <div class="advanteges_item">
+        <p>Перевага 1</p>
+        <input type="hidden" name="advantages_hidden[]" value="<?= $value['id'] ?>">
+        <textarea name="advantages_name[]" id="" ><?= $value['title'] ?></textarea>
+      </div>
+      
+    </div>
+    <div class="col-md-6">
+      <div class="advanteges_item">
+        <p>SVG іконка</p>
+        <textarea name="advantages_svg[]" id="" ><?= $value['svg'] ?></textarea>
       </div>
     </div>
+  <?php endforeach; ?>
+  </div>
+      </div>
+    </div>
+         <?=   $this->Form->end() ?>
       </div>
 
 </div>

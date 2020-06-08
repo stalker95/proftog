@@ -78,7 +78,7 @@
                       <?php
                         echo   $this->Html->link('<i class="fa fa-pencil"></i>', ['action' => 'edit', $product->id], ['class'=>'btn change__user','escape' => false]);
                          echo   $this->Html->link('<i class="fa fa-copy"></i>', ['action' => 'copy-element', $product->id], ['class'=>'btn copy_product','escape' => false]);
-                        echo  $this->Form->postLink('<i class="fa fa-trash"></i>', ['action' => 'delete', $product->id], ['class'=>'btn  delete__user','escape' => false,'confirm' => __('Ви справді хочете видалити категорію # {0}?', $product->id)]);  ?>
+                        echo  $this->Form->postLink('<i class="fa fa-trash"></i>', ['action' => 'delete', $product->id], ['class'=>'btn  delete__user','escape' => false,'confirm' => __('Ви справді хочете видалити товар {0} ? ', $product->title)]);  ?>
                     </td>
                     </tr>
                 <?php endforeach; ?>

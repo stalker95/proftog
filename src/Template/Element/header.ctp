@@ -5,26 +5,43 @@
         <div class="header_top_inside d-flex">
         <div class="header_top_left">
             <div class="header_top-item">
+              <div> 
                 <a href="<?= $this->Url->build(['controller' => 'wishlist','action'=>'index']) ?>">
                    <i class="fa fa-heart"></i>
                     Список бажань (<?php if (isset($_SESSION['wishlist'])){ echo count($_SESSION['wishlist']); } else { echo "0"; } ?>) 
                 </a>
+                <div class="empty_element" >
+                  <div class="empty_element_left">
+                    <img src="<?= $this->Url->build('/img/heart.svg', ['fullBase' => true]) ?>" alt="">
+                  </div>
+                  <div class="empty_element_right">
+                    <p>Ваш список бажань порожній</p>
+                    <p>Якщо бажаєте додати товари у списки бажань, авторизуйтесь </p>
+                  </div>
+                </div>
+                </div>
+                <div> 
                 <a href="<?= $this->Url->build(['controller' => 'compares','action'=>'index']) ?>">
                     <i class="fa fa-exchange"></i>
                     Список порівнянь
                 </a>
+              </div>
             </div>
         </div>
         <div class="header_top_right">
             <div class="header_top-item">
-                <a href=".">
+                <div>
                     <i class="fa fa-map-marker"></i>
-                    <?= $settings->address ?>  
-                </a>
-                <a href="tel:093 000 000">
+                    <a href="https://www.google.com.ua/maps/search/%D0%BC.%D0%9B%D1%8C%D0%B2%D1%96%D0%B2,+%D0%B2%D1%83%D0%BB.+%D0%A2.%D0%A8%D0%B5%D0%B2%D1%87%D0%B5%D0%BD%D0%BA%D0%B0+%D0%B1.134%D0%90/@49.8633733,24.0249216,17z/data=!3m1!4b1?hl=uk" target="_blanck"><?= $settings->address ?> </a>
+                </div>
+                <div>
                    <i class="fa fa-phone"></i>
-                    <?= str_replace('<br>', ' ', $settings->phones) ?>  
-                </a>     
+                    <?php
+                   $arr = explode('<br>', $settings->phones);
+                    foreach($arr as $item): if (!empty($item)): ?>
+                      <a href="tel:<?= $item ?>" > <?= $item ?> </a>
+                   <?php endif; endforeach; ?>
+                </div>     
             </div>
         </div>
         </div>
@@ -38,7 +55,9 @@
                         <i class="fa fa-heart"></i>
                     </div>
                     <div class="header_mobile_list_title">
+                      <a href="<?= $this->Url->build(['controller' => 'wishlist','action'=>'index']) ?>">
                         Список бажань (<?php if (isset($_SESSION['wishlist'])  AND is_array($_SESSION['wishlist'])) {echo count($_SESSION['wishlist']);} else { echo "0"; } ?>) 
+                      </a>
                     </div>
                 </div>
                 <div class="header_mobile_list_item">
@@ -46,24 +65,27 @@
                         <i class="fa fa-exchange"></i>
                     </div>
                     <div class="header_mobile_list_title">
-                        м.Львів вул Зелена 15
+                       <a href="<?= $this->Url->build(['controller' => 'compares','action'=>'index']) ?>">
+                    Список порівнять 
+                </a>
                     </div>
+
                 </div>
                 <div class="header_mobile_list_item">
                     <div class="header_mobile_list_image">
-                        <i class="fa fa-exchange"></i>
+                        <i class="fa fa-map-marker"></i>
                     </div>
                     <div class="header_mobile_list_title">
-                        м.Львів вул Зелена 15
+                    <?= $settings->address ?>  
                     </div>
                 </div>
 
                 <div class="header_mobile_list_item">
                     <div class="header_mobile_list_image">
-                        <i class="fa fa-exchange"></i>
+                        <i class="fa fa-phone"></i>
                     </div>
                     <div class="header_mobile_list_title">
-                        м.Львів вул Зелена 15
+                    <?php $phones = explode('<br>', $settings->phones); echo $phones[0]; ?>  
                     </div>
                 </div>
             </div>
@@ -123,7 +145,8 @@
                                 <p class="header_center-link-subtitle"><span class="count_of_bascket"><?php if (isset($_SESSION['cart'])  AND is_array($_SESSION['cart'])) {echo count($_SESSION['cart']);} else { echo "0"; } ?></span> товар</p>
                             </div>
                         </a>
-                        <a href="<?= $this->Url->build(['controller' => 'cabinet','action'    =>  'cabinet']) ?>" class="header_center-link">
+                        <?php if (!isset($user->firstname)): ?> 
+                        <a data-toggle="modal" data-target="#auth_modal" class="header_center-link">
                             <div class="header_center-link_circle">
                                 <i class="fa fa-user"></i>
                             </div>
@@ -132,6 +155,17 @@
                                 <p class="header_center-link-subtitle"> <?php   if (isset($user->firstname)) { echo strstr($user->mail, '@', true);;} ?>  </p>
                             </div>      
                         </a>
+                        <?php  else: ?>
+                          <a href="<?= $this->Url->build(['controller' => 'cabinet','action'=>'cabinet']) ?>" class="header_center-link">
+                            <div class="header_center-link_circle">
+                                <i class="fa fa-user"></i>
+                            </div>
+                            <div class="header_center-link-description">
+                                <p class="header_center-link-title">Кабінет</p>
+                                <p class="header_center-link-subtitle"> <?php   if (isset($user->firstname)) { echo strstr($user->mail, '@', true);;} ?>  </p>
+                            </div>      
+                        </a>
+                        <?php endif; ?>
                 </div>
                  <div class="header_buttons_mobile">
                 <div class="header_search">
@@ -148,7 +182,7 @@
                     <div class="header_bascet_top">
                         <img src="<?= $this->Url->build('/img/back.svg', ['fullBase' => true]) ?>" alt="">     
                     </div>
-                    <div class="header_bascket_list">
+                    <div class="header_bascket_list ">
                                 <?php if (isset($_SESSION['cart']) AND !empty($_SESSION['cart']) ) { ?>
             <div class="bascket_container"> 
         <?php } else { ?>
@@ -197,7 +231,7 @@
                </div>
                <div class="bascket_item_right_prices">
                  <div class="bascket_item_price">
-                   <p><span class="translate_price" data-currency="<?=$value['product']['currency_id'] ?>"><?= $value['product']['price']  ?></span> грн</p>
+                   <p><span class="translate_price" data-currency="<?=$value['product']['currency_id'] ?>"><?= $value['one_price']  ?></span> грн</p>
                  </div>
                  <div class="bascket_item_buttons">
                    <div class="bascket_item_buttons_inside">
@@ -211,7 +245,7 @@
                    </div>
                  </div>
                  <div class="bascket_item_price_total">
-                   <p><span class="translate_price total_basket" data-currency="<?=$value['product']['currency_id'] ?>"><?= ($value['count'] * $value['product']['price']) + (array_sum($value['array_option_value']) * $value['count']); ?></span> грн</p>
+                   <p><span class="translate_price total_basket" data-currency="<?=$value['product']['currency_id'] ?>"><?= ($value['count'] * $value['one_price']) + (array_sum($value['array_option_value']) * $value['count']); ?></span> грн</p>
                  </div>
                </div>
              </div>
@@ -257,7 +291,7 @@
                                 <li><a href="<?= $this->Url->build(['controller' => 'main','action'    =>  'index']) ?>">Головна</a></li>
                                 <li><a href="<?= $this->Url->build(['controller' => 'about','action'   =>  'index']) ?>">Про нас</a></li>
                                 <li><a href="<?= $this->Url->build(['controller' => 'promotions','action' =>  '/']) ?>">Акції</a></li>
-                                <li><a href="<?= $baseUrl ?>blogs/">Блог</a></li>
+                                <li><a href="<?= $baseUrl ?>blog/">Блог</a></li>
                                 <li><a href="">Відгуки</a></li>
                                 <li><a href="<?= $this->Url->build(['controller' => 'contacts','action'=>'index']) ?>">Контакти</a></li>
                             </ul>
@@ -298,7 +332,7 @@
              <li><a href="<?= $this->Url->build(['controller' => 'main','action'    =>  'index']) ?>">Головна</a></li>
              <li><a href="<?= $this->Url->build(['controller' => 'about','action'   =>  'index']) ?>">Про нас</a></li>
              <li><a href="<?= $this->Url->build(['controller' => 'promotions','action' =>  '/']) ?>">Акції</a></li>
-             <li><a href="<?= $baseUrl ?>blogs/">Блог</a></li>
+             <li><a href="<?= $baseUrl ?>blog/">Блог</a></li>
              <li><a href="">Відгуки</a></li>
              <li><a href="<?= $this->Url->build(['controller' => 'contacts','action'=>'index']) ?>">Контакти</a></li>
          </ul> 

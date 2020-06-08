@@ -72,20 +72,27 @@ Router::scope('/', function (RouteBuilder $routes) {
      * to use (in this case, src/Template/Pages/home.ctp)...
      */
     $routes->connect('/', ['controller' => 'Main', 'action' => 'index']);
-    $routes->connect('/categories/*', array('controller' => 'categories', 'action' => 'view'));
+    $routes->connect('/categories/:param1', array('controller' => 'categories', 'action' => 'view'));
+    //$routes->connect('/categories/:param1', array('controller' => 'categories', 'action' => 'view'));
     $routes->connect('/products/*', array('controller' => 'products', 'action' => 'view'));
     $routes->connect('/actions/*', array('controller' => 'actions', 'action' => 'view'));
     $routes->connect('/actions/index', array('controller' => 'actions', 'action' => 'index'));
+    $routes->connect('/categories/', array('controller' => 'categories', 'action' => 'index'));
     $routes->connect('/categories/index', array('controller' => 'categories', 'action' => 'index'));
     $routes->connect('/producers/*', array('controller' => 'producers', 'action' => 'view'));
+  //  $routes->connect('/categories/:param1', array('controller' => 'categories', 'action' => 'view'));
 
-   // $routes->connect('/blogs/*', array('controller' => 'blogs', 'action' => 'view'));
+   // $routes->connect('/blog/*', array('controller' => 'blog', 'action' => 'view'));
 
-    $routes->connect('/promotions/*', array('controller' => 'promotions', 'action' => 'view'));
+    $routes->connect('/promotions/:param1', array('controller' => 'promotions', 'action' => 'view'));
     $routes->connect('/promotions/index', array('controller' => 'promotions', 'action' => 'index'));
-  //  $routes->connect('/blogs/*', array('controller' => 'blogs', 'action' => 'view'));
-    $routes->connect('/blogs/index', array('controller' => 'blogs', 'action' => 'index'));
+    $routes->connect('/promotions/', array('controller' => 'promotions', 'action' => 'index'));
+         $routes->connect('/blog/', array('controller' => 'blog', 'action' => 'index'));
 
+   $routes->connect('/blog/:param1', array('controller' => 'blog', 'action' => 'view'));
+   
+    $routes->connect('/blog/index', array('controller' => 'blog', 'action' => 'index'));
+    $routes->connect('/blog/category/*', array('controller' => 'blog', 'action' => 'category'));
 
 
     /**
@@ -128,6 +135,4 @@ Router::scope('/', function (RouteBuilder $routes) {
  * });
  * ```
  */
-Router::connect('/blogs/:param1/',
-    array('controller'=>'BlogsController', 'action'=>'view'), 
-    array('pass' => array('param1', '')));
+//Router::connect('/blog/',array('controller'=>'blog','action'=>'index'));

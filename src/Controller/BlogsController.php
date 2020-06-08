@@ -16,8 +16,9 @@ class BlogsController extends AppController
     public function beforeFilter(Event $event)
     {
         parent::initialize();
-        $this->Auth->allow(['index','register','view']);
+        $this->Auth->allow(['index','register','view', 'category']);
         $this->loadModel('BlogCategories');
+        $this->loadComponent('Paginator');
     }
     /**
      * Index method
@@ -48,16 +49,16 @@ class BlogsController extends AppController
        
 
 
-
+        $latest_news = $this->Blogs->find()->order(['id DESC'])->limit(8)->toArray();
         $blogCategories = $this->BlogCategories->find()->toArray();
-        $blogs = $this->Paginate($this->Blogs->find())->toArray();
+        $blogs = $this->paginate($this->Blogs->find()->contain(['Users']))->toArray();
 
         foreach ($blogs as $key => $value) {
             $_mD = date("m", strtotime($value['created']));
             $blogs[$key]['month'] = $_monthsList[$_mD];
         }
 
-        $this->set(compact('blogs', 'blogCategories'));
+        $this->set(compact('blogs', 'blogCategories', 'latest_news'));
     }
 
     /**
@@ -69,7 +70,9 @@ class BlogsController extends AppController
      */
     public function view($slug = null)
     {
-        debug($slug);
+      $slug = $this->request->params['param1'];
+              $latest_news = $this->Blogs->find()->order(['id DESC'])->limit(8)->toArray();
+
          $_monthsList = array(
             "01" => "Січня",
             "02" => "Лютого",
@@ -84,7 +87,7 @@ class BlogsController extends AppController
             "11" => "Листопада",
             "12" => "Грудня"
         );
-        $blog = $this->Blogs->find()->contain(['BlogCategories'])->where(['Blogs.slug' => $slug])->first();
+        $blog = $this->Blogs->find()->contain(['BlogCategories','Users'])->where(['Blogs.slug' => $slug])->first();
 
         $prev_post = $this->Blogs
                           ->find()
@@ -109,6 +112,7 @@ class BlogsController extends AppController
                              ->toArray();
 
         $_mD = date("m", strtotime($blog->created));
+        $blog->month = $_monthsList[$_mD];
 
         foreach ($other_posts as $key => $value) {
            $_mDD = date("m", strtotime($value['created']));
@@ -122,16 +126,23 @@ class BlogsController extends AppController
 
         $this->set('blog', $blog);
         $this->set('blogCategories', $blogCategories);
-        $this->set(compact('next_post', 'prev_post', 'other_posts'));
+        $this->set(compact('next_post', 'prev_post', 'other_posts', 'latest_news'));
     }
 
     public function category($slug = null)
     {
-        $blog_category = $this->BlogCategories->find()->where(['slug' => $slug])->first();
-        $blogs = $this->Blogs->find()->contain(['BlogCategories'])->where(['category_id' => $blog_category->id])->toArray();
-        
-        $this->set('blogs', $blogs);
+              $latest_news = $this->Blogs->find()->order(['id DESC'])->limit(8)->toArray();
 
+      $this->paginate = [
+                'limit' => '2'
+            ];
+        $blog_category = $this->BlogCategories->find()->where(['slug' => $slug])->first();
+        $blogs = $this->Paginate($this->Blogs->find()->contain(['BlogCategories', 'Users'])->where(['category_id' => $blog_category->id]))->toArray();
+                $blogCategories = $this->BlogCategories->find()->toArray();
+
+        $this->set('blogs', $blogs);
+        $this->set('blogCategories', $blogCategories);
+        $this->set('latest_news', $latest_news);
     }
 
 }
