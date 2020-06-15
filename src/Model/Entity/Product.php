@@ -214,13 +214,13 @@ class Product extends Entity
       
       $discounts = $this->Discounts->find()->where(['product_id' => $product_id])->toArray();
       
-      if (!empty($prices)) {
+
       foreach ($discounts as $key => $value) {
         $discount = $this->Discounts->get($value['id']);
         $this->Discounts->delete($discount);
-      }
       
-
+      
+if (!empty($prices)) {
        foreach ($prices as $key => $value) {
                     $discounts = $this->Discounts->newEntity();
                     $discounts->price = $value;
@@ -232,6 +232,7 @@ class Product extends Entity
                 }
       }
     }
+  }
 
     public function copyElement($id = null)
     {

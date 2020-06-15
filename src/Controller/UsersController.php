@@ -19,7 +19,7 @@ class UsersController extends AppController
     {
         
         parent::initialize();
-        $this->Auth->allow(['forgot','resetpassword','logout','login','registerAjax','authAjax', 'remember', 'rememberPassword']);
+        $this->Auth->allow(['forgot','resetpassword','logout','login','registerAjax','follow','authAjax','checkAuth', 'remember', 'rememberPassword']);
         $this->nav_['users'] = true;
     }
 
@@ -95,7 +95,9 @@ class UsersController extends AppController
     }
     public function logout()
     {
-        return $this->redirect($this->Auth->logout());
+                $this->autoRender = false;
+        $this->Auth->logout();
+         return $this->redirect(['action'=>'login']);
     }
 
     public function registerMain()
@@ -180,6 +182,9 @@ class UsersController extends AppController
         $user->lastname = $user_surname;
         $user->password = $pass;
         $user->mail = $email;
+        $user->type_registry = 0;
+        $user->date_of_birth = date("Y-m-d H:i:s");
+        $user->created = date("Y-m-d H:i:s");
 
         
         if ($this->Users->save($user)) {
@@ -309,6 +314,62 @@ class UsersController extends AppController
         return $this->response;
 
        }
+    }
+
+    public function checkAuth()
+    {
+      $this->autoRender = false;
+
+       $this->RequestHandler->renderAs($this, 'json');  
+       $this->response->disableCache();
+       $this->response->type('application/json'); 
+
+      if($this->Auth->user('id') == null) {
+       $this->response->body(json_encode(array('status' => false)));
+        return $this->response;
+      } else {
+        $this->response->body(json_encode(array('status' => true)));
+      }
+
+      return $this->response;
+    }
+
+    public function follow()
+    {
+
+      $this->autoRender = false;
+      $this->loadModel('Users');
+      $this->loadModel('Settings');
+      $settings = $this->Settings->find()->first();
+
+       $this->RequestHandler->renderAs($this, 'json');  
+       $this->response->disableCache();
+       $this->response->type('application/json'); 
+
+       $data = $this->request->getData();
+        $this->response->body(json_encode(array('status' => true)));
+
+       $_user = $this->Users
+                     ->find()
+                     ->where(['mail' => $data['user_email']])
+                     ->first();
+
+       if (empty($_user)) {
+         $new_user = $this->Users->newEntity();
+         $new_user->firstname = " ";
+         $new_user->mail = $data['user_email'];
+         $new_user->date_of_birth = date("Y-m-d H:i:s");
+         $new_user->created = date("Y-m-d H:i:s");
+         $new_user->type_registry = 1;
+         $this->Users->save($new_user);
+         $subject = "Нова підписка на розсилку";
+         $text = "Користувач з поштою: ".$data['user_email']." підписався на розсилку.";
+         $this->sendEmail($settings->email, $subject, $text);
+        $this->response->body(json_encode(array('status' => true, 'email' => $data['user_email'])));
+       } else {
+        $this->response->body(json_encode(array('status' => true, 'email' => $data['user_email'])));
+       }
+
     }
 
 }

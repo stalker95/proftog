@@ -73,6 +73,10 @@ class ProductsController extends AppController
         $product = $this->Products->newEntity();
         $first_options = $this->Options->find()->order('rand()')->toArray();
         $attributes = $this->Attributes->find()->contain('AttributesItems')->toArray();
+
+        $find_product = $this->Products->find()->where(['cod' => $this->request->getData('cod')])->first();
+
+
         
        if ($this->request->is('post')) {
 
@@ -82,7 +86,11 @@ class ProductsController extends AppController
          return;
         }
       }
-      */
+      */  if (!empty($find_product)):
+            $this->Flash->admin_error(__('Товар з таким самим кодом уже існує'));
+            return $this->redirect(['action' => 'index']);
+        endif;
+
 
                 $fileName = time().str_replace(" ", "", $this->request->getData('file.name'));
                 $uploadPath = 'uploads/files/';

@@ -4,7 +4,7 @@
 		<div class="breadcrums_list_item">
 			<a href="<?= $this->Url->build(['controller' => 'main','action'    =>  'index']) ?>">Головна</a>
 			<span> / </span>
-			<a href="<?= $this->Url->build(['controller' => 'cabinet','action'    =>  'index']) ?>">Особистий кабінет</a>
+			<a href="<?= $this->Url->build(['controller' => 'cabinet','action'    =>  'wishlist']) ?>">Список бажань</a>
 			
 			
 		</div>
@@ -46,7 +46,12 @@
 					</div>
         		</div>
             <div class="delete_wishlist delete_form_checked" style="display: none;">
-              <button data-toggle="modal" data-target="#mediaGallery" >Видалити</button>
+               <?= $this->Form->create('Delete',['url'   => array(
+               'controller' => 'cabinet','action' => 'deletechecked'
+           )])  ?>
+           <div class="delete_form_checked_inputs"> </div>
+           <button type="submit" >Видалити</button>
+           <?=   $this->Form->end() ?>
             </div>
 
         		<div class="wishlist_right">
@@ -70,20 +75,20 @@
               <p>Список бажань пустий</p>
             <?php endif; ?>
         		<?php foreach ($wishlist as $key => $value): ?>
-        		<div href="<?php echo $this->Url->build(['controller' => 'products','action'=>'view/'.$value['product']['slug']]) ?>" class="propose_slider_item <?= $this->element('action_product', array("item" => $value['product']['actions'])); ?>">
+        		<div href="<?php echo $this->Url->build(['controller' => 'products','action'=> $value['product']['slug']]) ?>" class="propose_slider_item <?= $this->element('action_product', array("item" => $value['product']['actions'])); ?>">
         			<div class="filter_elements_items">
         				<input id="information_<?= $key ?>" name="info" type="checkbox" value="<?= $value['product']['id'] ?>" class="delete_item">
             	<label for="information_<?= $key ?>"></label>
         			</div>
 	          			<div class="propose_slider_item_action"><p>Акція</p></div>
-					<a href="<?= $this->Url->build(['controller' => 'products','action'=>'view/'.$value['product']['slug']]) ?>" class="propose_slider_item_image">
+					<a href="<?= $this->Url->build(['controller' => 'products','action'=>$value['product']['slug']]) ?>" class="propose_slider_item_image">
 						<img src="<?= $this->Url->build('/products/'.$value['product']['image'], ['fullBase' => true]) ?> " alt="">
 					</a>
 					<div class="propose_slider_item_stars">
 						<?= $this->element('rating_product', array("item" => $value['product'])); ?>
 					</div>
 					<div class="propose_slider_item_title">
-						<p><a href="<?= $this->Url->build(['controller' => 'products','action'=>'view/'.$value['product']['slug']]) ?>"><?= $value['product']['title'] ?></a></p>
+						<p><a href="<?= $this->Url->build(['controller' => 'products','action' => $value['product']['slug']]) ?>"><?= $value['product']['title'] ?></a></p>
 					</div>
 					<div class="propose_slider_item_kod">
 						<p>Код товару <span class="item_kod"><?= $value['product']['cod'] ?></span></p>
@@ -103,7 +108,7 @@
             <button class="product_buttons_item add_product_to_bascket" data-product="<?= $value['product']['id'] ?>">
               <img src="<?= $this->Url->build('/img/back.svg', ['fullBase' => true]) ?>" alt="">
             </button>
-            <a href="<?= $this->Url->build(['controller' => 'products','action'=>'view/'.$value['product']['slug']]) ?>" class="product_buttons_item" >
+            <a href="<?= $this->Url->build(['controller' => 'products','action'=>$value['product']['slug']]) ?>" class="product_buttons_item" >
               <i class="fa fa-eye"></i>
             </a>
            

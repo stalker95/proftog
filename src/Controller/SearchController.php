@@ -48,6 +48,7 @@ class SearchController extends AppController
         ->orWhere(['title LIKE' => '%'.$name.'  %'])
         ->orWhere(['title LIKE' => $name.'%'])
         ->orWhere(['title LIKE' => $name.' %'])
+        ->orWhere(['cod LIKE' => '%'.$name.'%' ])
         ->toArray();
 
       $this->autoRender = false;

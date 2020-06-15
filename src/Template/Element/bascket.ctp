@@ -113,6 +113,7 @@
   <?php   } ?>
 </div> 
 </div>
+
 <div class="modal fade"  id="after_add_bascket" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="false">
   <div class="modal-dialog basket_modal modal-dialog-centered" role="document">
         <div class="modal-content ">
@@ -198,3 +199,162 @@
     </div>
 </div>
 </div> 
+
+<div class="modal fade"  id="added_wishlist" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="false">
+  <div class="modal-dialog  modal-dialog-centered" role="document">
+        <div class="modal-content ">
+     <div class="modal-header ">
+      <div class="modal-header_left">
+        <img src="<?= $this->Url->build('/img/35c3623714226214e0d47ead41c6053b.png', ['fullBase' => true]) ?>" alt="">
+        <p>Товар додано в список бажаних.</p>
+      </div>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+    <div class=" quick_buy_modal">
+      <div class="modal-body quick_buy_form added_to_cart_modal">
+        <div class="added_to_cart_modal_message_top">
+          <p>Всі додані товари в список бажаних ви можете переглянути <a href="<?= $this->Url->build(['controller' => 'cabinet','action'    =>  'wishlist']) ?>" >тут</a></p>
+          
+        </div>
+        <div class="to_home_page_link">
+          <a href="<?= $this->Url->build(['controller' => 'main','action'    =>  '/']) ?>" class="to_home_page">Повернутись на головну</a>
+        </div>
+        
+      </div>
+    </div>
+</div>
+  </div>
+</div> 
+
+<div class="modal fade"  id="added_compare" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="false">
+  <div class="modal-dialog  modal-dialog-centered" role="document">
+        <div class="modal-content ">
+     <div class="modal-header ">
+      <div class="modal-header_left">
+        <img src="<?= $this->Url->build('/img/35c3623714226214e0d47ead41c6053b.png', ['fullBase' => true]) ?>" alt="">
+        <p>Товар додано в список порівнянь.</p>
+      </div>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+    <div class=" quick_buy_modal">
+      <div class="modal-body quick_buy_form added_to_cart_modal">
+        <div class="added_to_cart_modal_message_top">
+          <p>Всі додані товари в список порівнянь ви можете переглянути <a href="" class="link_to_compare">тут</a></p>
+          
+        </div>
+        <div class="to_home_page_link">
+          <a href="<?= $this->Url->build(['controller' => 'main','action'    =>  '/']) ?>" class="to_home_page">Повернутись на головну</a>
+        </div>
+        
+      </div>
+    </div>
+</div>
+  </div>
+</div> 
+
+<div class="modal fade"  id="wish_auth_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="false">
+  <div class="modal-dialog  modal-dialog-centered" role="document">
+        <div class="modal-content ">
+     <div class="modal-header ">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body quick_buy_form added_to_cart_modal">
+    <div class="user_form">
+        <div class="user_authorization">
+            <form action="" class="wish_auth_modal">
+                <label for="login">Логін або Email</label>
+                <input type="email" name="email" class="login_input" required="required">
+
+                <label for="password">Пароль </label>
+                <input type="password" name="password" class="login_input"  required="required">
+                
+                <div class="user_form_checkbox">
+                    <input type="checkbox"> Запам'ятати мене
+                </div>
+                <div class="user_form_checkbox">
+                  <a href="<?= $this->Url->build(['controller' => 'users','action'    =>  'remember']) ?>">Забули пароль?</a>
+                </div>
+                <div class="users_bottom_register">
+
+ <button class="login_submit">
+                      <svg class="loader_svg" version="1.1" id="loader-1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                             width="35px" height="23px" viewBox="0 0 50 50" style="enable-background:new 0 0 50 50;margin: auto;" xml:space="preserve">
+                        <path fill="#fff" d="M25.251,6.461c-10.318,0-18.683,8.365-18.683,18.683h4.068c0-8.071,6.543-14.615,14.615-14.615V6.461z">
+                            <animateTransform attributeType="xml"
+                                    attributeName="transform"
+                                        type="rotate"
+                                        from="0 25 25"
+                                        to="360 25 25"
+                                        dur="0.6s"
+                                        repeatCount="indefinite"/>
+                        </path>
+                    </svg>
+                    <span class="hide_submit">Увійти</span>
+                </button> 
+                <a href="<?= $this->Url->build(['controller' => 'users','action'    =>  'login']) ?>" class="new_user_register">Реєстрація</a>
+
+                </div>
+                                <output class="display_message_register"></output>
+                  
+            </form>
+        </div>
+      </div>
+      </div>
+    </div>
+</div>
+</div> 
+
+<div class="modal  fade" id="added_after_follow" tabindex="-1" role="dialog" aria-labelledby="basketlabel" aria-hidden="true">
+  <div class="modal-dialog  modal-dialog-centered" role="document">
+    
+      <div class="modal-content ">
+              <div class="modal-body  quick_buy_form ">
+                  <div class="empty_basckets">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                    <div class="new_follower_container">
+                      <div>
+                        <p>Дякуємо що ви з нами.</p>
+                        <p>Ваша пошта <span class="email_follower"></span> пройде модерацію і Ви отримуватиме листи із <a href="<?= $this->Url->build(['controller' => 'promotions','action'    =>  '/']) ?>">Акціями</a> та новинками нашого магазину. </p>
+                        </div>
+                    </div>
+                  </div>
+              </div>
+        </div>
+      </div>
+    </div>
+
+  <div class="modal  fade" id="added_after_rewiev" tabindex="-1" role="dialog" aria-labelledby="basketlabel" aria-hidden="true">
+  <div class="modal-dialog  modal-dialog-centered" role="document">
+        <div class="modal-content ">
+     <div class="modal-header ">
+      <div class="modal-header_left">
+        <img src="<?= $this->Url->build('/img/35c3623714226214e0d47ead41c6053b.png', ['fullBase' => true]) ?>" alt="">
+        <p>Ваш відгук додано. </p>
+      </div>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+    <div class=" quick_buy_modal">
+      <div class="modal-body quick_buy_form added_to_cart_modal">
+        <div class="added_to_cart_modal_message_top">
+          <p>Дякуємо за  відгук. Ваш відгук буде опубліковано після модерації</p>
+          
+        </div>
+        <div class="to_home_page_link">
+          <a href="<?= $this->Url->build(['controller' => 'main','action'    =>  '/']) ?>" class="to_home_page">Повернутись на головну</a>
+        </div>
+        
+      </div>
+    </div>
+</div>
+  </div>
+    </div>

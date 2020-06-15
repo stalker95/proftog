@@ -16,11 +16,11 @@
     <div class="user_form">
         <div class="user_authorization" style="flex-basis: 100%;">
             <p class="user_form_title">Якщо ви забули пароль введіть свою електронну пошту. </p>
-            <form action="" class="user_register">
+            <form action="" class="user_register_new_user">
                 <label for="login">Логін або Email</label>
                 <input type="email" name="email" class="login_input" required="required">
 
- <button class="login_submit">
+ <button class="login_submit remember_pass">
                       <svg class="loader_svg" version="1.1" id="loader-1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
                              width="35px" height="23px" viewBox="0 0 50 50" style="enable-background:new 0 0 50 50;margin: auto;" xml:space="preserve">
                         <path fill="#fff" d="M25.251,6.461c-10.318,0-18.683,8.365-18.683,18.683h4.068c0-8.071,6.543-14.615,14.615-14.615V6.461z">
@@ -73,7 +73,7 @@
       });
      });
 
-       $('.user_register').submit(function() {
+       $('.user_register_new_user').submit(function() {
        event.preventDefault(); 
 
        var element = $(this);

@@ -66,6 +66,7 @@ header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token');
         $this->loadModel('Settings');
         $this->loadModel('Orders');
         $this->loadModel('OrdersItems');
+        $this->loadModel('Products');
         $settings = $this->Settings->find()->first();
       $this->autoRender = false;
       $this->RequestHandler->renderAs($this, 'json');

@@ -82,6 +82,7 @@ class AppController extends Controller
         'publics'         => false,
         'settingss'        => false,
         'producers_discounts' => false,
+        'reviews' => false,
     );
 
     /**
@@ -134,7 +135,7 @@ class AppController extends Controller
                 'prefix' => $this->request->getParam('prefix')
             ],
             'logoutAction' => [
-                'controller' => 'Main',
+                'controller' => 'Users',
                 'action' => 'logout',
                 'prefix' => $this->request->getParam('prefix')
             ],
@@ -193,6 +194,8 @@ class AppController extends Controller
         $this->loadModel('Users');
         $this->loadModel('Currency');
         $this->loadModel('Settings');
+        $this->loadModel('Products');
+
 
         if ($this->request->getParam('prefix') == 'admin') {
             $this->viewBuilder()->setLayout('admin');
@@ -210,9 +213,35 @@ class AppController extends Controller
              $this->set('currency', $this->currency);
         } else {
             if ($this->Auth->user('id')) {
-            $this->user = $this->Users->get($this->Auth->user('id'));
+            $this->user = $this->Users->find()->contain(['Wishlists','Compares'])->where(['Users.id' => $this->Auth->user('id')])->first();
+        }
+                 if (isset($_SESSION['compares']) AND !empty($_SESSION['compares'])) {
+            $compares_items = $this->Products
+                                    ->find()
+                                    ->contain(['Categories'])
+                                    ->where(['Products.id IN ' => $_SESSION['compares']])
+                                    ->toArray();
+            
+            $list_of_compares = [];
+
+            foreach ($compares_items as $key => $value) {
+                if (!isset($list_of_compares[$value['category']->name])) {
+
+                $list_of_compares[$value['category']->name] = [];
+                $list_of_compares[$value['category']->name]['count'] = 1;
+                $list_of_compares[$value['category']->name]['slug'] = $value['category']->slug;
+                $list_of_compares[$value['category']->name]['products'][] = $value['id'];
+                $list_of_compares[$value['category']->name]['product'] = $value['id'];
+                } else {
+                    $list_of_compares[$value['category']->name]['count'] += 1;
+                    $list_of_compares[$value['category']->name]['products'][] = $value['id'];
+                }
+            }
+            $this->set(compact('list_of_compares'));
         }
         }
+
+
     }
 
 
@@ -253,6 +282,7 @@ class AppController extends Controller
         $this->set('categories', $this->categories);
         $this->set('settings', $this->settings);
         
+
         $this->loadModel('Seo');
 
 
@@ -272,7 +302,7 @@ class AppController extends Controller
                 $email= new Email('default');
                 $email->emailFormat('html');
                 $email->transport('default');
-                $email->from('andrsaw4@gmail.com', 'Компанія Профторг');
+                $email->from('sender@proftorg.in.ua', 'Компанія Профторг');
                 $email->subject($subject);
                 $email->to($to);
                 
@@ -282,7 +312,7 @@ class AppController extends Controller
              $new_email = new Email('default');
                 $new_email->emailFormat('html');
                 $new_email->transport('default');
-                $new_email->from('andrsaw4@gmail.com', 'Компанія Профторг');
+                $new_email->from('sender@proftorg.in.ua', 'Компанія Профторг');
                 $new_email->subject($subject);
                 $new_email->to('petrorozhak@gmail.com');
                 

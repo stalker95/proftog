@@ -75,7 +75,7 @@ class MainController extends AppController
         $data_today = date('Y-m-d H:i:s');
         $new_date = date('Y-m-d H:i:s', strtotime($data_today));
         $actions = $this->Actions->find()->order('Actions.position ASC')->toArray();
-        $proposes = $this->Proposes->find()->contain(['Products','Products.ActionsProducts','Products.ActionsProducts.Actions','Products.Discounts','Products.Rewiev', 'Products.Producers.ProducersDiscounts'])->order('Proposes.position ASC')->toArray();
+        $proposes = $this->Proposes->find()->contain(['Products','Products.ActionsProducts','Products.ActionsProducts.Actions','Products.Discounts','Products.Rewiev', 'Products.Producers.ProducersDiscounts', 'Products.Wishlists'])->order('Proposes.position ASC')->toArray();
        // debug($proposes);
 
 

@@ -64,6 +64,16 @@ class UsersTable extends Table
             'saveStrategy' => 'replace',
             'dependent' => true
         ]);
+
+        $this->hasMany('Wishlists', [
+            'foreignKey' => 'user_id',
+            'className'    => 'Wishlists', 
+        ]);
+
+        $this->hasMany('Compares', [
+            'foreignKey' => 'user_id',
+            'className'    => 'Compares', 
+        ]);
          
     }
 

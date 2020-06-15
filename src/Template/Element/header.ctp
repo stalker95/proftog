@@ -6,25 +6,71 @@
         <div class="header_top_left">
             <div class="header_top-item">
               <div> 
-                <a href="<?= $this->Url->build(['controller' => 'wishlist','action'=>'index']) ?>">
+
+                <?php if (!isset($user->firstname)): ?> 
+                <div class="empty_link">
                    <i class="fa fa-heart"></i>
-                    Список бажань (<?php if (isset($_SESSION['wishlist'])){ echo count($_SESSION['wishlist']); } else { echo "0"; } ?>) 
+                    Список бажань (0) 
+                </div>
+                <?php else:  ?> 
+                  <a href="<?= $this->Url->build(['controller' => 'cabinet','action'=>'wishlist']) ?>">
+                   <i class="fa fa-heart"></i>
+                    Список бажань (<?php if (isset($user->firstname) and isset($user->wishlists) ) { echo count($user->wishlists); } else { echo "0"; } ?>) 
                 </a>
+               <?php endif; ?>    
+
+               <?php if (!isset($user->firstname)): ?> 
                 <div class="empty_element" >
                   <div class="empty_element_left">
                     <img src="<?= $this->Url->build('/img/heart.svg', ['fullBase' => true]) ?>" alt="">
                   </div>
                   <div class="empty_element_right">
                     <p>Ваш список бажань порожній</p>
-                    <p>Якщо бажаєте додати товари у списки бажань, авторизуйтесь </p>
+                    <p>Якщо бажаєте додати товари у списки бажань, <a   data-toggle="modal" data-target="#wish_auth_modal" >авторизуйтесь</a> </p>
                   </div>
                 </div>
+                 <?php endif; ?> 
                 </div>
-                <div> 
-                <a href="<?= $this->Url->build(['controller' => 'compares','action'=>'index']) ?>">
-                    <i class="fa fa-exchange"></i>
-                    Список порівнянь
-                </a>
+                <div class="relative compares_cont"> 
+                <?php if (!isset($_SESSION['compares'])): ?> 
+                  <div class="empty_link">
+                   <i class="fa fa-exchange"></i>
+                    Список бажань (0) 
+                </div>
+                <?php   else: ?>   
+                    <a class="display_list_of_compares" >
+                        <i class="fa fa-exchange"></i>
+                        Список порівнянь (<span class="total_compares"><?php echo count($_SESSION['compares']); ?></span>)
+                    </a>
+                <?php   endif; ?>
+                
+                <?php if ((!isset($_SESSION['compares']) OR empty($_SESSION['compares'])) ): ?> 
+                <div class="empty_element" style="width: 353%;">
+                  <div class="empty_element_left">
+                    <img src="<?= $this->Url->build('/img/compare.svg', ['fullBase' => true]) ?>" alt="">
+                  </div>
+                  <div class="empty_element_right">
+                    <p>Немає товарів у порівнянні</p>
+                    <p>Додавайте товари до порівняння характеристик та обирайте товар, який вам підійте найкраще</a> </p>
+                  </div>
+                </div>
+                <?php else: ?>
+                  <div class="lists_of_compares" style="display: none;">
+
+                  	<?php 	if (isset($list_of_compares)): ?>
+                  		<?php 	foreach ($list_of_compares as $key => $value): ?>
+                    		<div class="list_of_compares_item">
+                    			<a href="<?= $this->Url->build(['controller' => 'compares','action'=>$value['slug']]) ?>"> <?= $key ?> 
+                            (<span class="count_item_compare"><?= $value['count'] ?></span>)</a>
+                    		
+                        <i class="fa fa-close delete_compares_item" data-item="<?= $value['product'] ?>"></i>
+                        </div>
+                    	<?php 	endforeach; ?>
+                	<?php 	endif; ?>
+
+                    
+                  </div>
+               <?php endif; ?> 
               </div>
             </div>
         </div>
@@ -32,7 +78,7 @@
             <div class="header_top-item">
                 <div>
                     <i class="fa fa-map-marker"></i>
-                    <a href="https://www.google.com.ua/maps/search/%D0%BC.%D0%9B%D1%8C%D0%B2%D1%96%D0%B2,+%D0%B2%D1%83%D0%BB.+%D0%A2.%D0%A8%D0%B5%D0%B2%D1%87%D0%B5%D0%BD%D0%BA%D0%B0+%D0%B1.134%D0%90/@49.8633733,24.0249216,17z/data=!3m1!4b1?hl=uk" target="_blanck"><?= $settings->address ?> </a>
+                    <a href="https://www.google.com.ua/maps/place/%D0%B2%D1%83%D0%BB%D0%B8%D1%86%D1%8F+%D0%A8%D0%B5%D0%B2%D1%87%D0%B5%D0%BD%D0%BA%D0%B0,+134%D0%90,+%D0%9B%D1%8C%D0%B2%D1%96%D0%B2,+%D0%9B%D1%8C%D0%B2%D1%96%D0%B2%D1%81%D1%8C%D0%BA%D0%B0+%D0%BE%D0%B1%D0%BB%D0%B0%D1%81%D1%82%D1%8C,+79000/@49.8515487,23.9883276,15.91z/data=!4m5!3m4!1s0x473add959b4e9853:0x1e974cb7733d982a!8m2!3d49.8531415!4d23.9909787?hl=uk" target="_blank"><?= $settings->address ?> </a>
                 </div>
                 <div>
                    <i class="fa fa-phone"></i>
@@ -88,6 +134,75 @@
                     <?php $phones = explode('<br>', $settings->phones); echo $phones[0]; ?>  
                     </div>
                 </div>
+            </div>
+            <div class="header_mobile_links">
+                            <div> 
+
+                <?php if (!isset($user->firstname)): ?> 
+                <div class="empty_link">
+                   <i class="fa fa-heart"></i>
+                     (0) 
+                </div>
+                <?php else:  ?> 
+                  <a href="<?= $this->Url->build(['controller' => 'cabinet','action'=>'wishlist']) ?>">
+                   <i class="fa fa-heart"></i>
+                    (<?php if (isset($user->firstname) and isset($user->wishlists) ) { echo count($user->wishlists); } else { echo "0"; } ?>) 
+                </a>
+               <?php endif; ?>    
+
+               <?php if (!isset($user->firstname)): ?> 
+                <div class="empty_element" >
+                  <div class="empty_element_left">
+                    <img src="<?= $this->Url->build('/img/heart.svg', ['fullBase' => true]) ?>" alt="">
+                  </div>
+                  <div class="empty_element_right">
+                    <p>Ваш список бажань порожній</p>
+                    <p>Якщо бажаєте додати товари у списки бажань, <a   data-toggle="modal" data-target="#wish_auth_modal" >авторизуйтесь</a> </p>
+                  </div>
+                </div>
+                 <?php endif; ?> 
+                </div>
+                <div class="compares_cont"> 
+                <?php if (!isset($_SESSION['compares'])): ?> 
+                  <div class="empty_link">
+                   <i class="fa fa-exchange"></i>
+                     (0) 
+                </div>
+                <?php   else: ?>   
+                    <a class="display_list_of_compares" >
+                        <i class="fa fa-exchange"></i>
+                         (<span class="total_compares"><?php echo count($_SESSION['compares']); ?></span>)
+                    </a>
+                <?php   endif; ?>
+                
+                <?php if ((!isset($_SESSION['compares']) OR empty($_SESSION['compares'])) ): ?> 
+                <div class="empty_element" >
+                  <div class="empty_element_left">
+                    <img src="<?= $this->Url->build('/img/compare.svg', ['fullBase' => true]) ?>" alt="">
+                  </div>
+                  <div class="empty_element_right">
+                    <p>Немає товарів у порівнянні</p>
+                    <p>Додавайте товари до порівняння характеристик та обирайте товар, який вам підійте найкраще</a> </p>
+                  </div>
+                </div>
+                <?php else: ?>
+                  <div class="lists_of_compares" style="display: none;">
+
+                    <?php   if (isset($list_of_compares)): ?>
+                      <?php   foreach ($list_of_compares as $key => $value): ?>
+                        <div class="list_of_compares_item">
+                          <a href="<?= $this->Url->build(['controller' => 'compares','action'=>$value['slug']]) ?>"> <?= $key ?> 
+                            (<span class="count_item_compare"><?= $value['count'] ?></span>)</a>
+                        
+                        <i class="fa fa-close delete_compares_item" data-item="<?= $value['product'] ?>"></i>
+                        </div>
+                      <?php   endforeach; ?>
+                  <?php   endif; ?>
+
+                    
+                  </div>
+               <?php endif; ?> 
+              </div>
             </div>
         </div>
        </div>
@@ -156,15 +271,30 @@
                             </div>      
                         </a>
                         <?php  else: ?>
-                          <a href="<?= $this->Url->build(['controller' => 'cabinet','action'=>'cabinet']) ?>" class="header_center-link">
+                          <a href="<?= $this->Url->build(['controller' => 'cabinet','action'=>'cabinet']) ?>" class="header_center-link cabinet_link_user">
                             <div class="header_center-link_circle">
                                 <i class="fa fa-user"></i>
                             </div>
                             <div class="header_center-link-description">
                                 <p class="header_center-link-title">Кабінет</p>
-                                <p class="header_center-link-subtitle"> <?php   if (isset($user->firstname)) { echo strstr($user->mail, '@', true);;} ?>  </p>
+                                <p class="header_center-link-subtitle"> <?php   if (isset($user->firstname)) { echo strstr($user->mail, '@', true);;} ?> <i class="fa fa-chevron-down"></i>  </p>
                             </div>      
                         </a>
+                        <div class="sub_menu_for_cabinet" style="display: none;">
+                          <ul>
+                            <li>
+                              <a href="<?= $this->Url->build(['controller' => 'cabinet','action'=>'cabinet']) ?>">
+                                Особистий кабінет
+                              </a>
+                            </li>
+                            <li>
+                              <a href="<?= $this->Url->build(['controller' => 'users','action'=>'logout']) ?>">
+                                Вихід
+                              </a>
+                            </li>
+                            
+                          </ul>
+                        </div>
                         <?php endif; ?>
                 </div>
                  <div class="header_buttons_mobile">

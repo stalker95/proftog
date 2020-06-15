@@ -125,7 +125,10 @@
 						<a href="<?= $this->Url->build(['controller' => 'products','action'=>$value['slug']]) ?>" class="product_buttons_item" >
 							<i class="fa fa-eye"></i>
 						</a>
-						<button type="button" class="product_buttons_item add_product_to_wishlist" data-product="<?= $value['id'] ?>">
+						<button type="button" class="product_buttons_item <?= $this->element('wishlist_item', 
+						array("item" => $value['wishlists'], 
+						      'product' => $value['id'],
+						      'user' => $user)); ?>" data-product="<?= $value['id'] ?>">
 							<img src="<?= $this->Url->build('/img/favorite.svg', ['fullBase' => true]) ?>" alt="">
 						</button>
 						<button type="button" class="product_buttons_item add_product_to_compare" data-product="<?= $value['id'] ?>">

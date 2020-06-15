@@ -11,4 +11,7 @@
 	<li>
 		<a class="<?php if ($item == 'review'): ?> active  <?php 	endif; ?>" href="<?php echo $this->Url->build(['controller' => 'cabinet', 'action' => 'review', '_full' => true,  'plugin' => false]); ?>">Мої відгуки</a>
 	</li>
+		<li>
+		<a  href="<?php echo $this->Url->build(['controller' => 'users', 'action' => 'logout', '_full' => true,  'plugin' => false]); ?>">Вийти</a>
+	</li>
 </ul>

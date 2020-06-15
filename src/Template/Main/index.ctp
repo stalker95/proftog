@@ -129,7 +129,10 @@
 						<a href="<?= $this->Url->build(['controller' => 'products','action'=>$value['product']['slug']]) ?>" class="product_buttons_item" >
 							<i class="fa fa-eye"></i>
 						</a>
-						<button class="product_buttons_item add_product_to_wishlist" data-product="<?= $value['product']['id'] ?>">
+						<button class="product_buttons_item  <?= $this->element('wishlist_item', 
+						array("item" => $value['product']['wishlists'], 
+						      'product' => $value['product']['id'],
+						      'user' => $user)); ?>" data-product="<?= $value['product']['id'] ?>">
 							<img src="<?= $this->Url->build('/img/favorite.svg', ['fullBase' => true]) ?>" alt="">
 						</button>
 						<button class="product_buttons_item add_product_to_compare" data-product="<?= $value['product']['id'] ?>"> 
@@ -188,9 +191,9 @@
 		<div class="col-sm-8 col-md-9">
 			<div class="sales_list">
 				<?php foreach ($products as $key => $value): if (!empty($value)):?>
-					<?php  ?>
 				<div class="sales_list_item">
 					<?php foreach ($value['products'] as $key_two => $item): ?>
+						<?php 	debug($item); ?>
 			<div class="propose_slider_item <?php if (!empty($item['actions_products'])): ?> propose_slider_item_show_action <?php endif; ?>">
 				<div class="propose_slider_item_action"><p>Акція</p></div>
 					<a href="<?= $this->Url->build(['controller' => 'products','action'=>$item['slug']]) ?>" class="propose_slider_item_image">
@@ -430,20 +433,7 @@ $(".slider_arrow_right").click(function() {
  $(this).parent().parent().parent().find('.slick-next.slick-arrow').first().trigger('click')
 });
 
-$(".add_product_to_wishlist").click(function() {
-   
-   var id_product = $(this).attr("data-product");
 
-   $.ajax({
-        url: '<?= $this->Url->build(['controller' => 'wishlist', 'action' => 'add', '_full' => true]) ?>',
-        method: 'POST',
-      	data: { "id_product": id_product},
-      	success: function(data){ 
-        	alert("Додано");
-        }
-    });
-
-});
 
 	<?php echo $this->Html->scriptEnd(); ?>
 </script>

@@ -5,8 +5,9 @@
 <div class="breadcrums">
 	<div class="breadcrums_list">
 		<div class="breadcrums_list_item">
-			<a href="<?= $this->Url->build(['controller' => 'main','action'    =>  'index']) ?>">Головна</a>
+			<a href="<?= $this->Url->build(['controller' => 'main','action'    =>  '/']) ?>">Головна</a>
 			<span> / </span>
+      <a href="<?= $this->Url->build(['controller' => 'orders','action'    =>  'index']) ?>">Оформлення замовлення</a>
 			
 			
 		</div>

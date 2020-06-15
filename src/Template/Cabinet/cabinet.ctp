@@ -4,7 +4,7 @@
 		<div class="breadcrums_list_item">
 			<a href="<?= $this->Url->build(['controller' => 'main','action'    =>  'index']) ?>">Головна</a>
 			<span> / </span>
-			<a href="<?= $this->Url->build(['controller' => 'cabinet','action'    =>  'index']) ?>">Особистий кабінет</a>
+			<a href="<?= $this->Url->build(['controller' => 'cabinet','action'    =>  'cabinet']) ?>">Особистий кабінет</a>
 			
 			
 		</div>
@@ -305,7 +305,7 @@
       </div>
       <div class="modal-body quick_buy_form change_password_form">
         <form action="" class="quick_buy_form_submit">
-        	<p class="quick_buy_form_title">Заповніть данні і наш менеджер звяжеться з вами</p>
+        	<p class="quick_buy_form_title">Для зміни паролю введіть старий пароль та двічі новий</p>
         	<input type="password" name="old_password" placeholder="Старий пароль" required="true">
         	<input type="password" name="new_password" placeholder="Новий пароль" required="true">
         	<input type="password" name="confirm_new_password" placeholder="Підвердіть пароль ">

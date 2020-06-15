@@ -37,7 +37,9 @@
                   <th>First Nmae</th>
                   <th>Last name</th>
                   <th>Email</th>
-                  <th>Реєстрація</th>
+                  <th>Телефон</th>
+                  <th>Дата реєстрації</th>
+                  <th>Тип реєстрації</th>
                   <th>Дії</th>
                 </tr>
                 </thead>
@@ -54,7 +56,11 @@
                     <td><?= $user['firstname'] ?></td>
                     <td><?= $user['lastname'] ?></td>
                     <td><?= $user['mail'] ?></td>
+                    <td><?= $user['phone'] ?></td>
                     <td><?= $user['created'] ?></td>
+                    <td><?php   if ($user['type_registry'] == 0): ?>Особистий кабінет <?php  endif; ?>
+                      <?php   if ($user['type_registry'] == 1): ?>Підписка<?php  endif; ?>
+                    </td>
                     <td class='table__flex'>
                       <?php
                         echo   $this->Html->link('<i class="fa fa-pencil"></i>', ['action' => 'edit', $user->id], ['class'=>'btn change__user','escape' => false]);

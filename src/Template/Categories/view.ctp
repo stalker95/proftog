@@ -31,7 +31,7 @@
 		<div class="row">
 			<div class="col-md-3">
 				<?= $this->element('catalog_categories'); ?>
-				<?php if ($category->parent_id != 0 ): ?>
+	          	<?php if (empty($category->child_categories )): ?>
 				<?= $this->element('filter_block', 
 						   array('max_price'         => $max_price, 
 				      			 'min_price'         => $min_price, 
@@ -79,7 +79,7 @@
 	          		</div>
 	          	</div>
 
-	          	<?php if ($category->parent_id == 0 ): ?>
+	          	<?php if (!empty($category->child_categories )): ?>
 	          		<div class="categories_child_list">
 	          				<?php foreach ($child_categories as $key => $value): ?>
 	          					<div class="categories_child_list_item">
@@ -99,7 +99,7 @@
 	          		</div>
 	            <?php endif; ?>
 
-	          	<?php if ($category->parent_id != 0 ): ?>
+	          	<?php if (empty($category->child_categories )): ?>
 	          	<div class="products_sort">
 	          		<div class="sort_by">
 	          			<!--Сортувати за 
@@ -177,7 +177,10 @@
 						<a href="<?= $this->Url->build(['controller' => 'products','action' => $value['slug']]) ?>" class="product_buttons_item" >
 							<i class="fa fa-eye"></i>
 						</a>
-						<button type="button" class="product_buttons_item add_product_to_wishlist" data-product="<?= $value['id'] ?>">
+						<button type="button" class="product_buttons_item <?= $this->element('wishlist_item', 
+						array("item" => $value['wishlists'], 
+						      'product' => $value['id'],
+						      'user' => $user)); ?>" data-product="<?= $value['id'] ?>">
 							<img src="<?= $this->Url->build('/img/favorite.svg', ['fullBase' => true]) ?>" alt="">
 						</button>
 						<button type="button" class="product_buttons_item add_product_to_compare" data-product="<?= $value['id'] ?>">

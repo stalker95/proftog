@@ -94,9 +94,6 @@ Router::scope('/', function (RouteBuilder $routes) {
     $routes->connect('/blog/index', array('controller' => 'blog', 'action' => 'index'));
     $routes->connect('/blog/category/*', array('controller' => 'blog', 'action' => 'category'));
 
-$routes->connect('/compares/:param1', array('controller' => 'compares', 'action' => 'index'));
-$routes->connect('/compares/add', array('controller' => 'compares', 'action' => 'add'));
-$routes->connect('/compares/remove', array('controller' => 'compares', 'action' => 'remove'));
 
     /**
      * ...and connect the rest of 'Pages' controller's URLs.

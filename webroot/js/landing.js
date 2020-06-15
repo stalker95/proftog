@@ -1,8 +1,5 @@
 $(document).ready(function() {
 
-
-
-
   setTimeout(function() {
     $(".lazy_load").each(function() {
       var data = $(this).attr('data-load');
@@ -677,13 +674,17 @@ $(document).ready(function() {
 
    
    var id_product = $(this).attr("data-product");
+   var element = $(this);
 
    $.ajax({ 
         url: currency_url+'/wishlist/add',
         method: 'POST',
         data: { "id_product": id_product},
         success: function(data){ 
-          alert("Додано");
+         $("#added_wishlist").modal({
+              show: true
+            }); 
+         $(element).removeClass('add_product_to_wishlist');
         }
     });
      $(this).parent().parent().parent().parent().remove();
@@ -691,39 +692,10 @@ $(document).ready(function() {
 
 });
 
-  $("body").on("click",'.add_product_to_compare', function() {
-
-   
-   var id_product = $(this).attr("data-product");
-
-   $.ajax({ 
-        url: currency_url+'/compares/add',
-        method: 'POST',
-        data: { "id_product": id_product},
-        success: function(data){ 
-          alert("Додано");
-        }
-    });
-
-});
 
 
- $("body").on("click",'button.add_product_to_wishlist', function() {
 
-   
-   var id_product = $(this).attr("data-product");
 
-   $.ajax({ 
-        url: currency_url+'/wishlist/add',
-        method: 'POST',
-        data: { "id_product": id_product},
-        success: function(data){ 
-          alert("Додано");
-        }
-    });
-     update_bascket();
-
-});
 
  $("body").on("click",'.popup_bascket_item_delete', function() {
   var id_product = $(this).attr("data-product");
@@ -866,5 +838,242 @@ $(document).ready(function() {
         }
      });
      });
+  
+
+  $('.header_top-item div').mouseover(function() {
+     $(this).find('.empty_element').css('display', 'flex');
+  });
+  $('.header_top-item div').mouseout(function() {
+     $(this).find('.empty_element').css('display', 'none');
+  });
+
+
+  $('.header_mobile_links div').mouseover(function() {
+     $(this).find('.empty_element').css('display', 'flex');
+  });
+  $('.header_mobile_links div').mouseout(function() {
+     $(this).find('.empty_element').css('display', 'none');
+  });
 
 })
+
+
+$(document).ready(function() {
+  var id_product;
+  var element;
+  var logget_header = true;
+  $("body").on("click",'button.add_product_to_wishlist', function() {
+
+   
+    id_product = $(this).attr("data-product");
+    element = $(this);
+
+   $.ajax({ 
+        url: currency_url+'/users/check-auth',
+        method: 'POST',
+        success: function(data){ 
+          if (data.status == false) {
+            logget_header = false;
+            $("#wish_auth_modal").modal({
+              show: true
+            }); 
+          } else {
+                      add_product_wislist(element, id_product);
+
+          }
+        }
+    });
+
+});
+
+
+ $('.wish_auth_modal').submit(function() {
+       event.preventDefault(); 
+
+       var elements = $(this);
+       $(this).parent().find('.hide_submit').css("display",'none');
+       $(this).parent().find(".loader_svg").css('display','block');
+       $.ajax({
+        url: currency_url +'/users/auth-ajax' ,
+        type: 'POST',
+        data: $(this).serialize(),
+        success: function(data){ 
+                   $(elements).parent().find('.hide_submit').css("display",'block');
+       $(elements).parent().find(".loader_svg").css('display','none');
+        if (data.status == false ) {
+            $(elements).parent().find('.display_message_register').html('<p class="display_message_register_alert btn-danger"><strong>Увага</strong> '+data.message+'</p>');
+          }
+         if (data.status == true) {
+           $('#wish_auth_modal').modal('hide');
+          
+          // window.location.href = currency_url+'/cabinet/cabinet';
+          if (logget_header == false) {
+          add_product_wislist(element, id_product);
+        } else {
+          $(".header_top-item .empty_element").remove();
+        } 
+         }
+        }
+     });
+     });
+
+  function add_product_wislist(element, id_product) {
+
+   $.ajax({ 
+        url: currency_url+'/wishlist/add',
+        method: 'POST',
+        data: { "id_product": id_product},
+        success: function(data){ 
+          $("#added_wishlist").modal({
+              show: true
+            }); 
+          $(element).removeClass('add_product_to_wishlist');
+          $(element).addClass('added_product_to_wishlist');
+          $(".header_top-item .empty_element").remove();
+        }
+    });
+     update_bascket();
+  }
+
+$(".header_top-item .empty_element .empty_element_right a").click(function() {
+   $(".header_top-item .empty_element").css('display', 'none');
+});
+
+
+$(".create_new_customer").submit(function() {
+       event.preventDefault(); 
+       $.ajax({
+        url: currency_url +'/users/follow' ,
+        type: 'POST',
+        data: $(this).serialize(),
+        success: function(data){ 
+                   
+         if (data.status == true) {
+           $(".email_follower").text(data.email);
+           $('#added_after_follow').modal({
+              show: true
+            }); 
+
+        }}
+
+      });
+    
+});
+
+
+
+  $("body").on("click",'.add_product_to_compare', function() {
+
+   
+   var id_product = $(this).attr("data-product");
+   var element = $(this);
+
+   $.ajax({ 
+        url: currency_url+'/compares/add',
+        method: 'POST',
+        data: { "id_product": id_product},
+        success: function(data){ 
+          $("#added_compare").modal({
+              show: true
+          }); 
+          $('.link_to_compare').attr('href', currency_url+'/compares/'+data.category);
+          $(element).removeClass('add_product_to_compare');
+
+          var html = "";
+          var total = 0;
+          if ($("div").is(".lists_of_compares")) {
+            
+            if (data.list_of_compares.length >= 1) {
+            for( i=0; i< data.list_of_compares.length; i++) {
+                html = html +'<div class="list_of_compares_item">'+
+                          '<a href="'+currency_url+'/compares/'+data.list_of_compares[i]['slug']+'">'+data.list_of_compares[i]['category_name']+' (<span class="count_item_compare">'+data.list_of_compares[i]['count']+'</span>)</a>'+
+                        '<i class="fa fa-close delete_compares_item" data-item="'+data.list_of_compares[i]['product']+'"></i>'+
+                        '</div>';
+                        total = total + data.list_of_compares[i]['count'];
+            }
+          
+          }
+          
+     $(".total_compares").text(total);
+
+     
+          $(".lists_of_compares").html(html);
+        } else {
+
+          var html = "";
+          var total = 0;
+          $(".empty_element").eq(1).remove();
+          $(".display_list_of_compares").append('<div class="lists_of_compares" style="display: none;"></div>');
+          if (data.list_of_compares.length >= 1) {
+            for( i=0; i< data.list_of_compares.length; i++) {
+                html = html +'<div class="list_of_compares_item">'+
+                          '<a href="'+currency_url+'/compares/'+data.list_of_compares[i]['slug']+'">'+data.list_of_compares[i]['category_name']+' (<span class="count_item_compare">'+data.list_of_compares[i]['count']+'</span>)</a>'+
+                        '<i class="fa fa-close delete_compares_item" data-item="'+data.list_of_compares[i]['product']+'"></i>'+
+                        '</div>';
+                        total = total + data.list_of_compares[i]['count'];
+            }
+          
+          }
+           $(".lists_of_compares").html(html);
+           $(".total_compares").text(total);
+        }
+        }
+    });
+
+});
+  
+});
+
+   $('.cabinet_link_user').mouseover(function() {
+     $(".sub_menu_for_cabinet").fadeIn('fast');
+   });
+
+   $('.sub_menu_for_cabinet').mouseover(function() {
+     //alert('erg');
+  //   $(".sub_menu_for_cabinet").fadeIn('fast');
+   });
+
+   $('.sub_menu_for_cabinet').mouseleave(function() {
+     $(".sub_menu_for_cabinet").fadeOut('fast');
+   });
+
+
+
+
+   $('.display_list_of_compares').mouseover(function() {
+     $(".lists_of_compares").fadeIn('fast');
+   });
+
+   $('.lists_of_compares').mouseover(function() {
+     //alert('erg');
+  //   $(".sub_menu_for_cabinet").fadeIn('fast');
+   });
+
+   $('.lists_of_compares').mouseleave(function() {
+     $(".lists_of_compares").fadeOut('fast');
+   });
+
+
+  $("body").on("click",".delete_compares_item", function(){
+     var key = $(this).attr('data-item');
+     var element = $(this).parent().parent();
+       $.ajax({ 
+        url: currency_url+'/compares/remove',
+        method: 'POST',
+        data: { "key": key},
+        success: function(data){ 
+         
+        }
+    });
+       $(this).parent().remove();
+     var total = 0;
+
+     $(element).find(".count_item_compare").each(function() {
+       total = total + parseInt($(this).text());
+     });
+     $(".total_compares").text(total);
+
+     if (total == 0) {
+       $('.lists_of_compares').css('display', 'none');
+     }
+   }); 

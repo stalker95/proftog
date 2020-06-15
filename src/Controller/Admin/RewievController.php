@@ -1,5 +1,5 @@
 <?php
-namespace App\Controller;
+namespace App\Controller\Admin;
 
 use App\Controller\AppController;
 use Cake\Event\Event;
@@ -16,7 +16,15 @@ class RewievController extends AppController
     public function beforeFilter(Event $event)
     {
         parent::beforeFilter($event);
-        $this->Auth->allow(['insertComment','add']);
+        $this->Auth->allow(['insertComment','add', 'changeOrder']);
+    }
+
+    public function index() 
+    {
+       $rewievs = $this->Paginate($this->Rewiev->find()->contain(['Products'])->order(['Rewiev.id DESC']))->toArray();
+        $this->nav_['reviews'] = true; 
+
+        $this->set(compact('rewievs'));
     }
    
    public function insertComment()
@@ -25,7 +33,6 @@ class RewievController extends AppController
       $this->RequestHandler->renderAs($this, 'json');
       $this->response->disableCache();
       $this->response->type('application/json');
-      $this->loadModel('Settings');
 
       $data = $this->request->getData();
 
@@ -50,19 +57,43 @@ class RewievController extends AppController
       $rewiev->user_email = $user_email;
       $rewiev->rewiev_text = $commnet;
       $rewiev->product_id  = $id_product;
-      $rewiev->rating  = $data['rating'];
-      $rewiev->created = date("Y-m-d H:i:s");
       $this->Rewiev->save($rewiev);
-
-      $subject = "Новий коментар до товару";
-      $product = $this->Products->get($id_product);
-
-      $subject = "Новий коментар до товару: ". $product->title;
-      $text = "Користувач ".$data['user_name']." залишив коментар під товаром ". $product->title;
-      $settings = $this->Settings->find()->first();
-
-      $this->sendEmail($settings->email, $subject, $text);
       $this->response->body(json_encode(array('status' => true,'message'=>'Комантар додано')));
       return $this->response;
    }
+
+   public function changeOrder()
+    {
+        $this->autoRender = false;
+      $this->RequestHandler->renderAs($this, 'json');
+      $this->response->disableCache();
+      $this->response->type('application/json');
+        $data = $this->request->getData();
+        //debug($data);
+        $record = $this->Rewiev->get($data['id_order']);
+        $record->status = $data['status'];
+
+        debug($record);
+
+        if ($this->Rewiev->save($record)) {
+           $this->response->body(json_encode(array('status' => 'true')));
+        }
+    }
+
+    public function deletechecked() {
+            if (!$this->user->is_abs()):
+            $this->Flash->admin_error(__('У вас не має прав'));
+             return $this->redirect(['controller'=>'dashboard','action' => 'index']);
+        endif;
+     $ids=$this->request->getData('ids');
+     $this->request->allowMethod(['post', 'delete']);
+     
+      foreach ($ids as  $value) {
+        $blog = $this->Rewiev->get($value);
+        $this->Rewiev->delete($blog);   
+         }
+
+     $this->Flash->admin_success(__('Відгуки  видалено'));
+     return $this->redirect(['action' => 'index']);
+    }
 }

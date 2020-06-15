@@ -58,7 +58,7 @@ class ProducersController extends AppController
             ->contain(['Actions' => [
                                                                      'conditions' => [
                                                                        'Actions.date_end >' => $new_date
-            ]],'Producers','Producers.ProducersDiscounts','Discounts'
+            ]],'Producers','Producers.ProducersDiscounts','Discounts','Wishlists','Rewiev'
         ])->where(['producer_id' => $producer->id]))->toArray();
 
 

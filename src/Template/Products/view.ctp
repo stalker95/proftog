@@ -71,21 +71,7 @@
 						<p><?= $product->title ?></p>
 					</div>
 					<div class="product_stars">
-						<div class="product-star-item">
-							<img src="<?= $this->Url->build('/img/iconfinder_star_yellow.svg', ['fullBase' => true]) ?> " alt=""> 	
-						</div>
-						<div class="product-star-item">
-							<img src="<?= $this->Url->build('/img/iconfinder_star_yellow.svg', ['fullBase' => true]) ?> " alt=""> 	
-						</div>
-						<div class="product-star-item">
-							<img src="<?= $this->Url->build('/img/iconfinder_star_yellow.svg', ['fullBase' => true]) ?> " alt=""> 	
-						</div>
-						<div class="product-star-item">
-							<img src="<?= $this->Url->build('/img/iconfinder_star_yellow.svg', ['fullBase' => true]) ?> " alt=""> 	
-						</div>
-						<div class="product-star-item">
-							<img src="<?= $this->Url->build('/img/gray_star.svg', ['fullBase' => true]) ?> " alt=""> 	
-						</div>
+						<?= $this->element('rating_product', array("item" => $product)); ?>
 					</div>
 
 					<div class="propose_slider_item_flex">
@@ -139,7 +125,7 @@
 							<i class="fa fa-heart"></i>
 							В обрані
 						</button>
-						<button>
+						<button class="add_product_to_compare" data-product="<?= $product['id'] ?>">
 							<i class="fa fa-exchange"></i>
 							Порівняти
 						</button>
@@ -217,10 +203,18 @@
                         	<iframe src="<?= $product->video ?>" style="width: 100%;height: 400px;" frameborder="0"></iframe>
                         </div>
                          <div class="product_tabs_item">
+                         	<?php if (empty($product->rewiev)): ?>
                             <p class="product_tabs_item_title">Відгуків про даний товар не має </p>
                             <p class="product_tabs_item_first">Станьте першим, хто оцінить продукт <?= $product->title ?></p>
                             <p class="product_tabs_item_email">Ваш email адресу не буде опубліковано. Заповніть відповідні поля.
                             </p>
+                        <?php else: ?>
+                        <?php foreach ($product->rewiev as $key => $value): ?>
+                        	<p>Користувач: <?= $value['user_name']; ?></p>
+                        	<p>Текст: <?= $value['rewiev_text']; ?></p>
+                        	<p>Оцінка: <?= $value['rating']; ?></p>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
                         	<div class="products_tabs_item_form">
                         	  <form action="" class="review_product">
                         		<p class="products_tabs_item_form_title">Оцінка</p>
@@ -228,27 +222,30 @@
                         			<input type="hidden" name="id_product" value="<?= $product->id ?>">
                         			<fieldset class="rating">
     									<input type="radio" id="star5" name="rating" value="5" /><label class = "full" for="star5" title="Awesome - 5 stars"></label>
-    									<input type="radio" id="star4half" name="rating" value="4.5" /><label class="half" for="star4half" title="Pretty good - 4.5 stars"></label>
+    									
     									<input type="radio" id="star4" name="rating" value="4" /><label class = "full" for="star4" title="Pretty good - 4 stars"></label>
-    									<input type="radio" id="star3half" name="rating" value="3.5" /><label class="half" for="star3half" title="Meh - 3.5 stars"></label>
+    									
     									<input type="radio" id="star3" name="rating" value="3" /><label class = "full" for="star3" title="Meh - 3 stars"></label>
-    									<input type="radio" id="star2half" name="rating" value="2.5" /><label class="half" for="star2half" title="Kinda bad - 2.5 stars"></label>
+    									
     									<input type="radio" id="star2" name="rating" value="2" /><label class = "full" for="star2" title="Kinda bad - 2 stars"></label>
-    									<input type="radio" id="star1half" name="rating" value="1.5" /><label class="half" for="star1half" title="Meh - 1.5 stars"></label>
+    									
     									<input type="radio" id="star1" name="rating" value="1" checked /><label class = "full" for="star1" title="Sucks big time - 1 star"></label>
-    									<input type="radio" id="starhalf" name="rating" value="0.5" /><label class="half" for="starhalf" title="Sucks big time - 0.5 stars"></label>
+    									
 								</fieldset>
                         		</div>
                         		<div class="products_tabs_item_form_textarea">
                         			<p>Ваш відгук <span class="important_star">*</span></p>
-                        			<textarea name="comment" id="" cols="30" rows="10" class="clear_input"></textarea>
+                        			<textarea name="comment" id="" cols="30" rows="10" class="clear_input" required="required"></textarea>
                         		</div>
                         		<div class="products_tabs_item_form_inputs">
                         			<label for="user_name">Ваше ім'я <span class="important_star">*</span><br>
-                        				<input type="text" name="user_name" id="user_name" class="clear_input">
+                        				<input type="text" name="user_name" 
+                        				<?php 	if (isset($user->firstname)): ?> value="<?= $user->firstname." ".$user->lastname ?>" <?php 	endif; ?>
+                        				 id="user_name" class="clear_input" required="required">
                         			</label>
-                        			<label for="user_email">Email <span class="important_star">*</span><br>
-                        				<input type="email" name="user_email" id="user_email" class="clear_input">
+                        			<label for="user_email">Email <span class="important_star"  >*</span><br>
+
+                        				<input type="email" name="user_email" id="user_email" class="clear_input" required="required" <?php 	if (isset($user->firstname)): ?> value="<?= $user->mail ?>" <?php 	endif; ?>>
                         			</label>
                         		</div>
                         		<div class="products_tabs_item_form_submit">
@@ -324,15 +321,15 @@
                         			<input type="hidden" name="id_product" value="<?= $product->id ?>">
                         			<fieldset class="rating">
     									<input type="radio" id="star5" name="rating" value="5" /><label class = "full" for="star5" title="Awesome - 5 stars"></label>
-    									<input type="radio" id="star4half" name="rating" value="4.5" /><label class="half" for="star4half" title="Pretty good - 4.5 stars"></label>
+    									
     									<input type="radio" id="star4" name="rating" value="4" /><label class = "full" for="star4" title="Pretty good - 4 stars"></label>
-    									<input type="radio" id="star3half" name="rating" value="3.5" /><label class="half" for="star3half" title="Meh - 3.5 stars"></label>
+    									<
     									<input type="radio" id="star3" name="rating" value="3" /><label class = "full" for="star3" title="Meh - 3 stars"></label>
-    									<input type="radio" id="star2half" name="rating" value="2.5" /><label class="half" for="star2half" title="Kinda bad - 2.5 stars"></label>
+    									
     									<input type="radio" id="star2" name="rating" value="2" /><label class = "full" for="star2" title="Kinda bad - 2 stars"></label>
-    									<input type="radio" id="star1half" name="rating" value="1.5" /><label class="half" for="star1half" title="Meh - 1.5 stars"></label>
+    									
     									<input type="radio" id="star1" name="rating" value="1" checked /><label class = "full" for="star1" title="Sucks big time - 1 star"></label>
-    									<input type="radio" id="starhalf" name="rating" value="0.5" /><label class="half" for="starhalf" title="Sucks big time - 0.5 stars"></label>
+    									
 								</fieldset>
                         		</div>
                         		<div class="products_tabs_item_form_textarea">
@@ -341,10 +338,10 @@
                         		</div>
                         		<div class="products_tabs_item_form_inputs">
                         			<label for="user_name">Ваше ім'я <span class="important_star">*</span><br>
-                        				<input type="text" name="user_name" id="user_name" class="clear_input">
+                        				<input type="text" name="user_name" id="user_name" class="clear_input" <?php 	if (isset($user->firstname)): ?> value="<?= $user->firstname." ".$user->lastname ?>" <?php 	endif; ?>>
                         			</label>
                         			<label for="user_email">Email <span class="important_star">*</span><br>
-                        				<input type="email" name="user_email" id="user_email" class="clear_input">
+                        				<input type="email" name="user_email" id="user_email" class="clear_input"  <?php 	if (isset($user->firstname)): ?> value="<?= $user->mail ?>" <?php 	endif; ?>>
                         			</label>
                         		</div>
                         		<div class="products_tabs_item_form_submit">
@@ -403,13 +400,16 @@
 					</div>
 
 					<div class="product_buttons">
-						<button type="button" class="product_buttons_item add_product_to_bascket" data-product="<?= $value['id'] ?>">
+						<button type="button" class="product_buttons_item " data-product="<?= $value['id'] ?>">
 							<img src="<?= $this->Url->build('/img/back.svg', ['fullBase' => true]) ?>" alt="">
 						</button>
 						<a href="<?= $this->Url->build(['controller' => 'products','action' => $value['slug']]) ?>" class="product_buttons_item" >
 							<i class="fa fa-eye"></i>
 						</a>
-						<button type="button" class="product_buttons_item add_product_to_wishlist" data-product="<?= $value['id'] ?>">
+						<button type="button" class="product_buttons_item <?= $this->element('wishlist_item', 
+						array("item" => $value['wishlists'], 
+						      'product' => $value['id'],
+						      'user' => $user)); ?>" data-product="<?= $value['id'] ?>">
 							<img src="<?= $this->Url->build('/img/favorite.svg', ['fullBase' => true]) ?>" alt="">
 						</button>
 						<button type="button" class="product_buttons_item add_product_to_compare" data-product="<?= $value['id'] ?>">
@@ -578,7 +578,9 @@ if (currency == 2) {
         type: 'POST',
         data: $(this).serialize(),
         success: function(data){ 
-             alert("Комантар додано");
+             $("#added_after_rewiev").modal({
+              show: true
+            }); 
              $(".clear_input").val("");
              $(".clear_input").text("");
              console.log(data);

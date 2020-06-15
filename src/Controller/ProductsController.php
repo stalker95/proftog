@@ -39,7 +39,11 @@ class ProductsController extends AppController
 
 
 
-        $product = $this->Products->find()->contain(['AttributesProducts','Categories','Categories.ParentCategories','Categories.ParentCategories.ParentCategories','Rewiev','Producers','Producers.ProducersDiscounts','Discounts','ProductsGallery'])->where(['Products.slug' => $slug])->first();
+        $product = $this->Products->find()->contain(['AttributesProducts','Categories','Categories.ParentCategories','Categories.ParentCategories.ParentCategories','Rewiev'=> [
+                                                                     'conditions' => [
+                                                                       'Rewiev.status' => 2
+            ]
+        ],'Producers','Producers.ProducersDiscounts','Discounts','ProductsGallery'])->where(['Products.slug' => $slug])->first();
 
         if (!in_array($product->id, $_SESSION['visits'])) {
             array_push($_SESSION['visits'], $product->id);
@@ -72,7 +76,7 @@ class ProductsController extends AppController
         $products = $this->Products
                          ->find('all')
                          ->limit(10)
-                         ->contain(['ActionsProducts','ActionsProducts.Actions', 'Discounts', 'Rewiev', 'Producers', 'Producers.ProducersDiscounts'])
+                         ->contain(['ActionsProducts','ActionsProducts.Actions', 'Discounts', 'Rewiev','Wishlists', 'Producers', 'Producers.ProducersDiscounts'])
                          ->where(['category_id' => $product->category_id])
                          ->where(['Products.id !=' => $product->id])
                          ->toArray();

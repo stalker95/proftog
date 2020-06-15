@@ -175,7 +175,15 @@
             </a>
         </li> 
 <?php endif; ?>
-        
+
+ <?php if ($user->is_admin() OR $user->is_abs()): ?>
+        <li class="<?= $nav_['reviews'] ? 'active' : '' ?>">
+            <a href="<?php echo $this->Url->build(['controller' => 'rewiev', 'action' => 'index', '_full' => true, 'prefix' => 'admin', 'plugin' => false]); ?>">
+                 <i class="fa fa-comment" style="font-size: 17px;margin-right: 5px;"></i> <span><?php echo __('Відгуки'); ?></span>
+            </a>
+        </li> 
+<?php endif; ?>  
+
 
      <li class="<?php if ($nav_['settingss'] OR $nav_['currencys'] OR $nav_['managers'] OR $nav_['socials'] OR $nav_['producers_discounts'] )  { echo 'active'; } ?> treeview">
           <a href="#">

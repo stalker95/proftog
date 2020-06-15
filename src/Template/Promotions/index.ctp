@@ -59,9 +59,10 @@
           <img src="<?= $this->Url->build('/actions/'.$value['image'], ['fullBase' => true]) ?>" alt="x100f" />
         </div>
         <div class="promo-description">
+        	 <span class="promo-number">0<?= $key+1 ?></span>
           <p class="promo-name"><?= $value['title'] ?></p>
-          <p class="promo-price">До завершення акції <?= $value['days_left'] ?> днів </p>
-          <a href="<?= $this->Url->build(['controller' => 'promotions','action' => $value['slug']], ['fullBase' => true]) ?>">Перейти</a>
+          <p class="promo-price promotions_days">З <?= $value['day_begin'] ?> <?= $value['month_begin'] ?> до <?= $value['day_end'] ?> <?= $value['month_end'] ?></p>
+          <a class="promotions_read_more" href="<?= $this->Url->build(['controller' => 'promotions','action' => $value['slug']], ['fullBase' => true]) ?>">Детальніше</a>
         </div>
       </div>
   <?php endforeach; ?>

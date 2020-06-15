@@ -77,12 +77,15 @@ class ActionsController extends AppController
         if ($this->request->is('post')) {
             $producers = $this->request->getData('producers_id');
            // debug($producers);
+            if (!empty($producers)) {
             $products_id = $this->Products->find()->where(['producer_id IN ' => $producers])->toArray();
+        }
             $action = $this->Actions->patchEntity($action, $this->request->getData());
             $action->slug = str_replace(" ", "-", $action->slug);
             $action->slug = str_replace(" ", "-", $this->request->getData('slug'));
             $action->slug = strtolower($action->slug);
-            $action->date_end = date("Y-m-d H:i:s", strtotime($this->request->getData('date_end')));    
+            $action->date_end = date("Y-m-d H:i:s", strtotime($this->request->getData('date_end'))); 
+            $action->created = date("Y-m-d H:i:s");   
             if ($this->Actions->save($action)) { 
                  
                  if (!empty($this->request->getData('product_id'))) {

@@ -111,7 +111,7 @@ class CartsController extends AppController
     $start_data = date("d-m-Y", strtotime($values['start_data']));
     if ($date_compare1 < $date_compare2 AND $date_compare1 > $start_data) {
               echo "2";
-                  $price_product = $price_product - $values['price'];
+                  $price_product = $values['price'];
               break;
             }
         endforeach; 

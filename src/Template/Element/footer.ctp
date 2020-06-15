@@ -13,7 +13,7 @@
 			<div class="malling_right">
 				<div class="mailing_form">
 					<form action="" class='create_new_customer'>
-						<input type="text" placeholder="Введіть ваш email">
+						<input type="email" placeholder="Введіть ваш email" name="user_email">
 						<input type="submit" value="Підписатися">
 					</form>
 				</div>

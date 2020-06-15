@@ -64,13 +64,13 @@ class CategoriesController extends AppController
     {
       $slug = $this->request->params['param1'];
       
-        $category = $this->Categories->find()->contain(['ParentCategories','ParentCategories.ParentCategories'])->where(['Categories.slug' => $slug])->first();
+        $category = $this->Categories->find()->contain(['ParentCategories','ParentCategories.ParentCategories','ChildCategories'])->where(['Categories.slug' => $slug])->first();
         //debug($category);
 
-        if ($category->parent_id == 0) {
+         if (!empty($category->child_categories )): 
           $child_categories = $this->Categories->find()->contain(['ChildCategories'])->where(['Categories.parent_id' => $category->id])->order(['Categories.position' => 'ASC'])->toArray();
           $this->set(compact('child_categories'));
-        }
+        endif;
         $id = $category->id;
 
         $attributes_items = $this->AttributesItems->newEntity();
@@ -89,7 +89,7 @@ class CategoriesController extends AppController
         $products = $this->Paginate(
                     $this->Products
                          ->find()
-                         ->contain(['ActionsProducts','ActionsProducts.Actions','Producers','Producers.ProducersDiscounts','Discounts','Rewiev'])
+                         ->contain(['ActionsProducts','ActionsProducts.Actions','Producers','Producers.ProducersDiscounts','Discounts','Rewiev','Wishlists'])
                          ->where(['category_id' => $category->id]))
                          ->toArray();
                     //     debug($products);
@@ -164,7 +164,7 @@ class CategoriesController extends AppController
             
             $query_for_products = $this->Products
                                         ->find()
-                                        ->contain(['Actions','Discounts','Rewiev','ActionsProducts','ActionsProducts.Actions','Producers','Producers.ProducersDiscounts'])
+                                        ->contain(['Actions','Discounts','Rewiev','ActionsProducts','ActionsProducts.Actions','Producers','Producers.ProducersDiscounts','Wishlists'])
                                         ->where(['category_id' => $category->id])
                                         ->where(['price * 30 >=' => $this->request['?']['start_price']])
                                         ->where(['price * 30 <=' => $this->request['?']['end_price']]);

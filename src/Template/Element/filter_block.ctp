@@ -50,27 +50,32 @@
           
  		 		</div>
  		 	<?php endif;	endforeach; ?>
-  <?php   if ($producers_page) { ?>   
- 		 		<div class="filter_elements_items_item">
- 		 			<p class="filter_elements_items_item_title">Виробники</p>
- 		 			<?php 	foreach ($producers_list as $keys => $item):  ?>
+
+               
+ 		 	
+ 		 </div>
+
+       <?php   if ($producers_page) { ?>   
+             <div class="filter_elements_items">
+        <div class="filter_elements_items_item">
+          <p class="filter_elements_items_item_title">Виробники</p>
+          <?php   foreach ($producers_list as $keys => $item):  ?>
                     <input id="producer_<?= $item['name'] ?>_<?= $item['id'] ?>" 
                            name="producer_<?= $item['name'] ?>_<?= $item['id'] ?>" 
                            type="checkbox" 
                            <?php if (isset($selected_values["producer_".$item['name']."_".$item['id'].""])): ?>
-                           	checked
+                            checked
                            <?php endif; ?>
                            >
- 		 			<label for="producer_<?= $item['name'] ?>_<?= $item['id'] ?>"><?= $item['name'] ?> (<?= $item['count'] ?>)</label>
- 		 			<?php 	endforeach; ?>
+          <label for="producer_<?= $item['name'] ?>_<?= $item['id'] ?>"><?= $item['name'] ?> (<?= $item['count'] ?>)</label>
+          <?php   endforeach; ?>
           <div class="filter_button">
             <button class="button_filter">Застосувати фільтр</button>
           </div>
- 		 		</div>
+        </div>
+      </div>
       <?php } ?>
-               
- 		 	
- 		 </div>
+
            <?php   endif; ?>
 
 	</div>

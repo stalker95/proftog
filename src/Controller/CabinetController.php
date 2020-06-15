@@ -158,9 +158,9 @@ class CabinetController extends AppController
      foreach ($ids as $key => $value) {
        $user_wishlist = $this->Wishlists->find()->where(['user_id' => $_user->id])->where(['product_id' => $value])->first();
        $this->Wishlists->delete($user_wishlist);
-       return $this->redirect(['action' => 'wishlist']);
 
      }
+       return $this->redirect(['action' => 'wishlist']);
 
     }
 
