@@ -14,8 +14,17 @@ setTimeout(function(){
      $('header .propose_item').eq(11).find('.propose_item_list_item_float').eq(1).css('left','4%').css('top','69%');
     $('main .propose_item').eq(11).find('.propose_item_list_item_float').eq(1).css('left','4%').css('top','69%');
 
-    $('header .propose_item').eq(10).find('.propose_item_list_item_float').eq(1).css('left','4%').css('top','69%');
-    $('main .propose_item').eq(10).find('.propose_item_list_item_float').eq(1).css('left','4%').css('top','69%');
+    
+
+ $('.propose_item.Lіnіyi.rozdachі').each(function() {
+    $(this).find('.propose_item_list_item_float').eq(1).css('left','2%').css('top','5%');
+      $(this).find('.propose_item_list_item_float').eq(0).css('right','-2%');
+ });
+
+ $('.propose_item.Kukhonnyi.inventar.ta.aksesuary').each(function() {
+    $(this).find('.propose_item_list_item_float').eq(1).css('left','4%').css('top','54%');
+ });
+
 
 }, 500);
 
@@ -659,8 +668,12 @@ function set_new_price_tovar(element, product, new_count) {
    if (value_of_options == "undefined" || value_of_options == "NaN") {
        value_of_options = 0;
    }
-
+   
+   if (product['is_empty_price']) {
+     var final_price = value_of_options * new_count;
+   } else {
    var final_price = (price_product + value_of_options) * new_count;
+   }
 
    $(element).parent().parent().parent().find('.total_basket').text(parseInt(final_price));
 }
@@ -1003,7 +1016,7 @@ $(".create_new_customer").submit(function() {
           var html = "";
           var total = 0;
           $(".empty_element").eq(1).remove();
-          $(".display_list_of_compares").append('<div class="lists_of_compares" style="display: none;"></div>');
+          $(".compares_cont").append('<div class="lists_of_compares" style="display: none;"></div>');
           if (data.list_of_compares.length >= 1) {
             for( i=0; i< data.list_of_compares.length; i++) {
                 html = html +'<div class="list_of_compares_item">'+
@@ -1054,6 +1067,22 @@ $(".create_new_customer").submit(function() {
    });
 
 
+
+
+   $('.compares_cont').mouseover(function() {
+     $(".lists_of_compares").fadeIn('fast');
+   });
+
+   $('.lists_of_compares').mouseover(function() {
+     //alert('erg');
+  //   $(".sub_menu_for_cabinet").fadeIn('fast');
+   });
+
+   $('.lists_of_compares').mouseleave(function() {
+     $(".lists_of_compares").fadeOut('fast');
+   });
+
+
   $("body").on("click",".delete_compares_item", function(){
      var key = $(this).attr('data-item');
      var element = $(this).parent().parent();
@@ -1074,6 +1103,15 @@ $(".create_new_customer").submit(function() {
      $(".total_compares").text(total);
 
      if (total == 0) {
-       $('.lists_of_compares').css('display', 'none');
+       $('.lists_of_compares').remove();
+       $(".compares_cont").append('<div class="empty_element" style="width: 353%; display: flex;">'+
+                  '<div class="empty_element_left">'+
+                    '<img src="http://rojac/img/compare.svg" alt="">'+
+                  '</div>'+
+                  '<div class="empty_element_right">'+
+                    '<p>Немає товарів у порівнянні</p>'+
+                    '<p>Додавайте товари до порівняння характеристик та обирайте товар, який вам підійте найкраще </p>'+
+                  '</div>'+
+                '</div>');
      }
    }); 

@@ -20,6 +20,7 @@ class ProductsController extends AppController
         $this->Auth->allow(['index','view']);
         $this->loadModel('AttributesProducts');
         $this->loadModel('AttributesItems');
+        $this->loadModel('Categories');
     }
     /**
      * View method
@@ -30,6 +31,7 @@ class ProductsController extends AppController
      */
     public function view($slug = null)
     {
+        $data = date("Y-m-d H:i:s");
 
         if (!isset($_SESSION['visits'])) {
             $_SESSION['visits'] = [];
@@ -39,17 +41,44 @@ class ProductsController extends AppController
 
 
 
-        $product = $this->Products->find()->contain(['AttributesProducts','Categories','Categories.ParentCategories','Categories.ParentCategories.ParentCategories','Rewiev'=> [
+        $product = $this->Products->find()->contain(['AttributesProducts','Categories','Categories.ParentCategories.ParentCategories.ParentCategories','Rewiev'=> [
                                                                      'conditions' => [
                                                                        'Rewiev.status' => 2
             ]
-        ],'Producers','Producers.ProducersDiscounts','Discounts','ProductsGallery'])->where(['Products.slug' => $slug])->first();
+        ],'Producers','Producers.ProducersDiscounts','Discounts','ProductsGallery','ProductsOptions.OptionsItems.Options'])->where(['Products.slug' => $slug])->first();
+      if (isset($product['category']['parent_category'])) {
+        $parent_category = $this->Categories->find()->where(['id' => $product['category']['parent_category']['id']])->first();
+      //  debug($parent_category);
+        $this->set(compact('parent_category'));
+      }   
+        $price_product = $product->price;
+        $discount = false;
+        $persent_discount = 100;
 
-        if (!in_array($product->id, $_SESSION['visits'])) {
-            array_push($_SESSION['visits'], $product->id);
+        if (!empty($product['products_options']) AND isset($product['products_options'])) {
+            $price_product = $product['products_options'][0]->value;    
         }
 
+        foreach ($product['discounts'] as $key => $values): 
+                $date_compare1= date("Y-m-d H:i:s", strtotime($data));
+                // date now
+                $date_compare2= date("Y-m-d H:i:s", strtotime($values['end_data']->i18nFormat('YYY-MM-dd')));
+                $start_data = date("Y-m-d H:i:s", strtotime($values['start_data']->i18nFormat('YYY-MM-dd')));
 
+                if ($date_compare1 < $date_compare2 AND $date_compare1 > $start_data) {
+                    $product_discount = $values['price'];
+                    $discount = true;
+                    break;
+                }
+
+
+        endforeach; 
+         
+         if (isset($product_discount)) {
+         $persent = $price_product / 100; 
+                 $difference = ($price_product - ($product_discount)) / $persent;  
+                 $persent_discount = round($difference);
+             }
 
         $attributes_products = $this->AttributesProducts->find()->contain(['AttributesItems'  => [
                                                                      'conditions' => [
@@ -70,13 +99,15 @@ class ProductsController extends AppController
                                     
                                     ->toArray();
 
-        $option_group = $product->getOptionsGroup($product->id);
+        $option_group = $product->getOptionsGroup($product->id, $persent_discount);
+       // debug($option_group);
+
         $option_group_json = json_encode($option_group);
 
         $products = $this->Products
                          ->find('all')
                          ->limit(10)
-                         ->contain(['ActionsProducts','ActionsProducts.Actions', 'Discounts', 'Rewiev','Wishlists', 'Producers', 'Producers.ProducersDiscounts'])
+                         ->contain(['ActionsProducts','ActionsProducts.Actions', 'Discounts', 'Rewiev','Wishlists', 'Producers','Producers.ProducersDiscounts', 'Producers.ProducersDiscounts','ProductsOptions.OptionsItems.Options'])
                          ->where(['category_id' => $product->category_id])
                          ->where(['Products.id !=' => $product->id])
                          ->toArray();
@@ -87,7 +118,7 @@ class ProductsController extends AppController
         }
       
         $this->set('product', $product);
-        $this->set(compact('attributes_products','option_group','option_group_json', 'products', 'main_attributes'));
+        $this->set(compact('attributes_products','option_group','option_group_json', 'products', 'main_attributes', 'discount'));
     }
 
 }

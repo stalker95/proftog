@@ -5,8 +5,12 @@
 	$price_product = $item['price'];
 	$old_price = $item['price'];
 	$products_discount = $item['price'];
+	$product_discount;
 	$discount = false;
 	//echo "1";
+	//debug($item['products_options']);
+
+	
 
 	if (isset($item->producer->producers_discounts[0]['discount'])) {
 		$price_discount = $item->producer->producers_discounts[0]['discount'];
@@ -19,7 +23,7 @@
 		$start_data = date("Y-m-d H:i:s", strtotime($values['start_data']->i18nFormat('YYY-MM-dd')));
 
 		if ($date_compare1 < $date_compare2 AND $date_compare1 > $start_data) {
-			$products_discount = $values['price'];
+			$product_discount = $values['price'];
 			$discount = true;
 			break;
 		}
@@ -30,11 +34,15 @@
 	 		$persent = $item->producer->producers_discounts[0]['discount'];
 	 		$price_product =  $price_product - ($price_product * ($persent / 100)) ;
 	 }
+
+	 if (!empty($item['products_options']) AND isset($item['products_options'])) {
+      $price_product = $item['products_options'][0]->value;    
+	}
 ?>
 	 	<?php if ($discount == true ) { ?>
 	<p>
 		<span class="translate_price" data-currency="<?= $item['currency_id'] ?>">
-			<?= $products_discount ?>
+			<?= $product_discount ?> 
 		</span>   грн 
 	</p>
 
@@ -48,8 +56,10 @@
 		<?php 
 		
 		$persent = $price_product / 100; 
-		$difference = ($price_product - ($products_discount)) / $persent;  
-		echo round($difference).'%</p>';;	
+		$difference = ($price_product - ($product_discount)) / $persent;  
+		echo round($difference).'%</p>';
+
+	
 			?>
 	<?php 	 } else { ?>
 	<p>

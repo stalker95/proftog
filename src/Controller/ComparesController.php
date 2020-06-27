@@ -15,7 +15,7 @@ class ComparesController extends AppController
     public function beforeFilter(Event $event)
     {
         parent::beforeFilter($event);
-        $this->Auth->allow(['index','add', 'remove', 'delete']);
+        $this->Auth->allow(['index','add', 'remove', 'delete', 'deleteAllCategory']);
         $this->loadModel('Categories');
         $this->loadModel('Products');
         
@@ -245,6 +245,27 @@ $list_of_compares = [];
 
       unset($_SESSION['compares'][$key]);
       $this->response->body(json_encode(array('result' => $_SESSION['compares'])));
+    }
+
+    public function deleteAllCategory($slug = null)
+    {
+        $this->loadModel('Products');
+      $this->loadModel('Categories');
+      
+     // debug($_SESSION['compares']);
+
+
+      $category = $this->Categories->find()->where(['slug' => $slug])->first();
+
+      $products = $this->Products->find()->where(['category_id' => $category->category_id])->toArray();
+
+      foreach ($products as $keys => $value) {
+        $key_two = array_search($value['id'], $_SESSION['compares']);
+        if (!empty($key_two)) {
+          unset($_SESSION['compares'][$key_two]);
+        }
+      }
+      $this->redirect($this->referer());
     }
 
 }

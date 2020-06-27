@@ -34,14 +34,17 @@ class CartsController extends AppController
     {
       session_start();
       $this->loadModel('Products');
+      $this->loadModel('ProductsOptions');
       $data = $this->request->getData();
       //debug($data);
       
       $options_name = [];
       $options_items = [];
-
-      array_push($options_name, $data['total_options_name']);
-      array_push($options_items, $data['total_options']);
+      
+      if (isset($data['total_options_name']) OR isset($data['total_options'])) {
+          array_push($options_name, $data['total_options_name']);
+          array_push($options_items, $data['total_options']);
+      }
       
       $names = implode("_", $options_name[0]);
       $types = implode("_", $options_items[0]);
@@ -52,9 +55,15 @@ class CartsController extends AppController
       $index = $data["product_id"].'_'.$names.'_'.$types;
 
       $product = $this->Products->find()->where(['id' => $data["product_id"]])->first();
+      $products_options = $this->ProductsOptions->find()->contain(['OptionsItems.Options'])->where(['ProductsOptions.product_id' => $product->id])->first();
+
+      if (!empty($products_options)) {
+          array_push($options_name, $products_options['options_item']->option->name);
+          array_push($options_items, $products_options['options_item']->name);
+          $price_product_default_option = $products_options->value;
+     }
       
       if (!isset($_SESSION['cart'][$index])) {
-        var_dump("e4rgerg");
 
          $_SESSION['cart'][$index] = [];
          $_SESSION['cart'][$index]['count'] = $data['count_id_bascket'];
@@ -65,17 +74,25 @@ class CartsController extends AppController
       $_SESSION['cart'][$index]['array_option_item'] = [];
       $_SESSION['cart'][$index]['array_option_value'] = [];
 
+      if (isset($data['array_options_name'])) {
+
       foreach ($data['array_options_name'] as $key => $value):
        array_push($_SESSION['cart'][$index]['array_options_name'], $value);
        array_push($_SESSION['cart'][$index]['array_option_item'], $data['total_options_name'][$key]);
        array_push($_SESSION['cart'][$index]['array_option_value'], $data['total_options'][$key]);
       endforeach;
+    }
+
+    if (isset($products_options)) {
+      array_push($_SESSION['cart'][$index]['array_options_name'], $products_options['options_item']->option->name);
+      array_push($_SESSION['cart'][$index]['array_option_item'],  $products_options['options_item']->name);
+      array_push($_SESSION['cart'][$index]['array_option_value'], $products_options->value);
+    }
 
 
       }
       else {
         $_SESSION['cart'][$index]['count'] = $_SESSION['cart'][$index]['count'] + $data['count_id_bascket'];
-        var_dump("reg");
       }
       
       $products_discount = $this->Producers
@@ -90,7 +107,7 @@ class CartsController extends AppController
                                ->where(['Products.id' => $_SESSION['cart'][$index]['product']['id']])
                                ->first();
 
-        debug($products_discount->producers_discounts[0]['discount']);
+       // debug($products_discount->producers_discounts[0]['discount']);
       
       $persent = 0;
       $price_product = $_SESSION['cart'][$index]['product']['price'];
@@ -103,24 +120,31 @@ class CartsController extends AppController
         
         $fina_discount = 0;
         $data = date("Y-m-d H:i:s");
-        debug($product_discount);
         foreach ($product_discount['discounts'] as $key => $values): 
-           $date_compare1= date("d-m-Y", strtotime($data));
+          $date_compare1= date("Y-m-d H:i:s", strtotime($data));
         // date now
-    $date_compare2= date("d-m-Y", strtotime($values['end_data']));
-    $start_data = date("d-m-Y", strtotime($values['start_data']));
+    $date_compare2= date("Y-m-d H:i:s", strtotime($values['end_data']->i18nFormat('YYY-MM-dd')));
+    $start_data = date("Y-m-d H:i:s", strtotime($values['start_data']->i18nFormat('YYY-MM-dd')));
     if ($date_compare1 < $date_compare2 AND $date_compare1 > $start_data) {
-              echo "2";
                   $price_product = $values['price'];
               break;
             }
         endforeach; 
-        
+
+    if (isset($products_options)) {
+      $price_product = $products_options->value;
+    }
+
         $sum = ($_SESSION['cart'][$index]['count'] * $price_product) + ($_SESSION['cart'][$index]['count'] * array_sum($_SESSION['cart'][$index]['array_option_value']));
+        if (isset($products_options)) {
+          $sum = $products_options->value;
+          $_SESSION['cart'][$index]['is_empty_price'] = true;
+        }
 
          $_SESSION['cart'][$index]['total_sum'] = $sum;
          $_SESSION['cart'][$index]['one_price'] = $price_product;
       }
+      debug($_SESSION['cart'][$index]);
 
 
       $this->autoRender = false;
@@ -182,7 +206,7 @@ class CartsController extends AppController
       $this->response->disableCache();
       $this->response->type('application/json');
       
-      
+      if (!isset($_SESSION['cart'])) {
       foreach ($_SESSION['cart'] as $key => $value) {
         if (!isset($_SESSION['cart'][$key]['total_sum'])) {
             $sum = ($value['count'] * $value['product']['price']) + array_sum($value['array_option_value']);
@@ -190,6 +214,7 @@ class CartsController extends AppController
             $sum = 0;
           }
       }
+    }
 
       $this->response->body(json_encode($_SESSION['cart']));
       return $this->response;

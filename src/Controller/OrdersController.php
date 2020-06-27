@@ -112,6 +112,10 @@ header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token');
         $oplata = "Наложений платіж";
       }
 
+      if ($datas['type_radio'] == 5) {
+        $oplata = "Безготівковий розрахунок";
+      }
+
        
       $otrumuvach = "";
       if ($datas['type_user_delivery'] != 1) {
@@ -220,7 +224,7 @@ header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token');
 
       //  $change_count->
         $this->OrdersItems->save($ordersItems);
-         $table  = $table."<tr><td style='border-right:1px solid #000;'>".$value['product']['title']."</td>
+         $table  = $table."<tr><td style='border-right:1px solid #000;'><a href='http://" . $_SERVER['SERVER_NAME']."/products/".$value['product']['slug']."'>".$value['product']['title']."</a></td>
          <td>".$value['count']."</td>
          <td>".$options."</td>
          <td>".$price."</td></tr>";
@@ -232,6 +236,8 @@ header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token');
       $table = $table."</tbody></table><br>". "
                           <p style='text-align: right;'>Підсумок : <strong>".$total."</strong></p>
                        ";
+      $order->total = $total;
+      $this->Orders->save($order);
        
        $final = $textfirst.$table;
        if ( $order->oplata_id != 2 OR  $order->oplata_id !=3 ) {
@@ -444,6 +450,10 @@ header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token');
         $oplata = "Наложений платіж";
       }
 
+      if ($order->oplata_id == 5) {
+        $oplata = "Безготівковий розрахунок";
+      }
+
       $dostavka = "";
       if ($order->delivery_id == 1) {
         $dostavka = "Самовивіз";
@@ -508,7 +518,7 @@ header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token');
 
         endif;
 
-         $table  = $table."<tr><td style='border-right:1px solid #000;'>".$value['product']['title']."</td>
+         $table  = $table."<tr><td style='border-right:1px solid #000;'><a href='http://" . $_SERVER['SERVER_NAME']."/products/".$value['product']['slug']."'>".$value['product']['title']."</a></td>
          <td>".$value['count']."</td>
          <td>".$options."</td>
          <td>".$price."</td></tr>";

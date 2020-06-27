@@ -6,7 +6,7 @@
   <title><?php echo __('Admin') ?> | <?= $this->fetch('title') ?></title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-  <?= $this->Html->meta('favicon.ico', $baseUrl.'favicon.ico', ['type' => 'icon']); ?>
+    <link rel="shortcut icon" href="<?= $this->Url->build('/settings/'.$settings->favicon, ['fullBase' => true]) ?>" type="image/x-icon">
   <!-- Bootstrap 3.3.7 -->
   <!-- <link rel="stylesheet" href="admin/bootstrap/dist/css/bootstrap.min.css"> -->
   <!-- Font Awesome -->
@@ -380,10 +380,10 @@ var flickerAPI = "https://api.privatbank.ua/p24api/pubinfo?json&exchange&coursid
    $(".translate_price").each(function() {
         var price= parseInt($(this).text());
         if ($(this).attr('data-currency') == 2) {
-        $(this).text(price * global_curs);
+        $(this).text((price * global_curs).toFixed(2));
       }
       if ($(this).attr('data-currency') == 3) {
-        $(this).text(price * global_curs_dollar);
+        $(this).text((price * global_curs_dollar).toFixed(2));
       }
         $(this).css("opacity","1");
     });

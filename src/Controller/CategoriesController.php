@@ -89,7 +89,11 @@ class CategoriesController extends AppController
         $products = $this->Paginate(
                     $this->Products
                          ->find()
-                         ->contain(['ActionsProducts','ActionsProducts.Actions','Producers','Producers.ProducersDiscounts','Discounts','Rewiev','Wishlists'])
+                         ->contain(['ActionsProducts','ActionsProducts.Actions','Producers','Producers.ProducersDiscounts','Discounts','Rewiev'=> [
+                                                                     'conditions' => [
+                                                                       'Rewiev.status' => 2
+            ]
+        ],'Wishlists','ProductsOptions.OptionsItems.Options'])
                          ->where(['category_id' => $category->id]))
                          ->toArray();
                     //     debug($products);
@@ -164,7 +168,11 @@ class CategoriesController extends AppController
             
             $query_for_products = $this->Products
                                         ->find()
-                                        ->contain(['Actions','Discounts','Rewiev','ActionsProducts','ActionsProducts.Actions','Producers','Producers.ProducersDiscounts','Wishlists'])
+                                        ->contain(['Actions','Discounts','Rewiev'=> [
+                                                                     'conditions' => [
+                                                                       'Rewiev.status' => 2
+            ]
+        ],'ActionsProducts','ActionsProducts.Actions','Producers','Producers.ProducersDiscounts','Wishlists','ProductsOptions.OptionsItems.Options'])
                                         ->where(['category_id' => $category->id])
                                         ->where(['price * 30 >=' => $this->request['?']['start_price']])
                                         ->where(['price * 30 <=' => $this->request['?']['end_price']]);
@@ -206,7 +214,6 @@ class CategoriesController extends AppController
         //  debug($attibutes_items);
 
           
-
           $min_value  = $this->request['?']['start_price'];
           $max_value  = $this->request['?']['end_price'];
           $this->set('min_price', $min_value);

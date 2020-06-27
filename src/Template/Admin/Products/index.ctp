@@ -72,13 +72,19 @@
                     
                     <td><?= $product->category->name ?></td>
                     <td>
-                      <span class="translate_price_two" data-currency="<?= $product->currency_id ?>"><?= $product->price ?></span>
+                      <span class="translate_price_two" data-currency="<?= $product->currency_id ?>">
+                        <?php if (!empty($product['products_options'])): ?>
+                          <?= $product['products_options'][0]['value']; ?>
+                        <?php else: ?>
+                          <?= $product->price ?>
+                        <?php endif; ?>
+                        </span>
                    грн</td>
                     <td class='table__flex'>
                       <?php
                         echo   $this->Html->link('<i class="fa fa-pencil"></i>', ['action' => 'edit', $product->id], ['class'=>'btn change__user','escape' => false]);
                          echo   $this->Html->link('<i class="fa fa-copy"></i>', ['action' => 'copy-element', $product->id], ['class'=>'btn copy_product','escape' => false]);
-                        echo  $this->Form->postLink('<i class="fa fa-trash"></i>', ['action' => 'delete', $product->id], ['class'=>'btn  delete__user','escape' => false,'confirm' => __('Ви справді хочете видалити товар {0} ? ', $product->title)]);  ?>
+                         echo "<button class='btn  delete__user' data-toggle='modal' data-target='#mediaGallery_".$product->id."'><i class='fa fa-trash'></i></button>"; ?>
                     </td>
                     </tr>
                 <?php endforeach; ?>
@@ -99,6 +105,36 @@
           </div>
         </div>
       </div>
+
+
+
+<?php   foreach ($products as $product): ?>
+
+  <div class="modal fade" id="mediaGallery_<?= $product->id ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabels" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="gallery-box form__inline" style="text-align: center;">
+          <h2 style="text-align: center;">Ви хочете видалити товар <?= $product->title ?> ?</h2>
+          <button class="close_modal_form close__modal" >Ні</button>
+           <?= $this->Form->create('Delete',['url'   => array(
+               'controller' => 'products','action' => 'delete/'.$product->id
+           )])  ?>
+           <div class="delete_form_checked_inputs"> </div>
+           <?=  $this->Form->submit('Так ',['class'=>'btn  btn-dangeres save__changes__form__playlist','style'=>'margin-top:0px;margin-left:auto;margin-right:auto;']); ?>
+           <?=   $this->Form->end() ?>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<?php endforeach; ?>
 
 <div class="modal fade" id="mediaGallery" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabels" aria-hidden="true">
   <div class="modal-dialog" role="document">
@@ -123,6 +159,7 @@
     </div>
   </div>
 </div>
+
     </section>
   <script>
 

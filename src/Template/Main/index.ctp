@@ -192,8 +192,7 @@
 			<div class="sales_list">
 				<?php foreach ($products as $key => $value): if (!empty($value)):?>
 				<div class="sales_list_item">
-					<?php foreach ($value['products'] as $key_two => $item): ?>
-						<?php 	debug($item); ?>
+					<?php foreach ($value as $key_two => $item): ?>
 			<div class="propose_slider_item <?php if (!empty($item['actions_products'])): ?> propose_slider_item_show_action <?php endif; ?>">
 				<div class="propose_slider_item_action"><p>Акція</p></div>
 					<a href="<?= $this->Url->build(['controller' => 'products','action'=>$item['slug']]) ?>" class="propose_slider_item_image">

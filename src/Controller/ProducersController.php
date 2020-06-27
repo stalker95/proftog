@@ -58,7 +58,11 @@ class ProducersController extends AppController
             ->contain(['Actions' => [
                                                                      'conditions' => [
                                                                        'Actions.date_end >' => $new_date
-            ]],'Producers','Producers.ProducersDiscounts','Discounts','Wishlists','Rewiev'
+            ]],'Producers','Producers.ProducersDiscounts','Discounts','Wishlists','Rewiev'=> [
+                                                                     'conditions' => [
+                                                                       'Rewiev.status' => 2
+            ]
+        ]
         ])->where(['producer_id' => $producer->id]))->toArray();
 
 
@@ -76,7 +80,11 @@ class ProducersController extends AppController
 
             $query_for_products = $this->Products
                                         ->find()
-                                        ->contain(['Actions','Discounts','Rewiev','ActionsProducts','ActionsProducts.Actions','Producers','Producers.ProducersDiscounts'])
+                                        ->contain(['Actions','Discounts','Rewiev'=> [
+                                                                     'conditions' => [
+                                                                       'Rewiev.status' => 2
+            ]
+        ],'ActionsProducts','ActionsProducts.Actions','Producers','Producers.ProducersDiscounts'])
                                         ->where(['price * 30 >=' => $this->request['?']['start_price']])
                                         ->where(['producer_id' => $producer->id])
                                         ->where(['price * 30 <=' => $this->request['?']['end_price']]);

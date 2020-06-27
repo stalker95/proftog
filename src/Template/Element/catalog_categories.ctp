@@ -13,7 +13,7 @@
                     <div class="propose_list">
                     <?php foreach ($categories as $key => $value): ?>
                     <?php   if ($value['parent_id'] == 0): ?>
-                     <div class="propose_item">
+                     <div class="propose_item <?= $value['slug']  ?>  ">
                         <div class="propose_item_title">
                             <a href="<?= $this->Url->build(['controller' => 'categories','action'=>$value['slug']]) ?>"><?= $value['name'] ?></a>
                         </div>
@@ -23,7 +23,7 @@
                         <div class="propose_item_list">
                             <?php  foreach ($value['child_categories'] as $key => $item):?>
                                 <div class="propose_item_list_item ">
-                                    <a class="category__title__propose" href="<?= $this->Url->build(['controller' => 'categories','action'=>$item['slug']]) ?>"><?= $item['name']; ?></a>
+                                    <a class="category__title__propose <?= $item['slug'] ?>   " href="<?= $this->Url->build(['controller' => 'categories','action'=>$item['slug']]) ?>"><?= $item['name']; ?></a>
                                 
                            
                                 <?php foreach ($categories as $key => $item_two): ?>

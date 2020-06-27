@@ -137,9 +137,63 @@ class CabinetController extends AppController
     public function wishlist()
     {
         $this->loadModel('Wishlists');
+        $this->loadModel('ActionsProducts');
+
         $id = $this->Auth->user('id');
         
-       $wishlist = $this->Wishlists->find()->contain(['Products','Products.Actions','Products.Rewiev','Products.Discounts'])->where(['user_id' => $id])->toArray();
+       $wishlist = $this->Wishlists->find()->contain(['Products','Products.ActionsProducts.Actions','Products.Rewiev'=> [
+                                                                     'conditions' => [
+                                                                       'Rewiev.status' => 2
+            ]
+        ],'Products.Discounts'])->where(['user_id' => $id])->toArray();
+      // debug($wishlist);
+      // debug($this->request->query['_method']);
+      
+       if (isset($this->request->query['_method']) AND $this->request->query['_method'] == "POST") {
+           
+            
+            $query_for_products = $this->Wishlists->find()->contain(['Products','Products.ActionsProducts.Actions','Products.Rewiev'=> [
+                                                                     'conditions' => [
+                                                                       'Rewiev.status' => 2
+            ]
+        ],'Products.Discounts'])->where(['user_id' => $id]);
+
+            if ($this->request->query['sort_by'] == "За спаданням ціни") {
+                $wishlist = $this->Paginate($query_for_products->order('Products.price DESC'))->toArray();
+            }
+
+            if ($this->request->query['sort_by'] == "За рейтингом") {
+                $wishlist = $this->Paginate($query_for_products->contain([
+                                'Products.Rewiev' => function ($q) {
+                                  return $q->order(['rating'=>'DESC'])->where(['status' => 2]);
+                                }
+                              ]))->toArray();
+            }
+
+            if ($this->request->query['sort_by'] == "За зростанням ціни") {
+                $wishlist = $this->Paginate($query_for_products->order('Products.price ASC'))->toArray();
+            }
+
+            if ($this->request->query['sort_by'] == "Акційні") {
+                $products_actions = $this->ActionsProducts->find()->toArray();
+                $id_products_actions = array_column($products_actions, 'products_id');
+                
+                $this->set('actions', true);
+                //debug($id_products_actions);
+                $wishlist = $this->Paginate($query_for_products->where(['Products.id IN ' => $id_products_actions]))
+                ->toArray();
+            }
+            //debug($products);
+
+            //$wishlist = $this->Paginate($query_for_products)->toArray();
+
+          $data = $this->request->getData();
+          $selected_values = $this->request['?'];
+
+          $this->set('selected_values', $selected_values);
+          $this->set('sort_by', $this->request->query['sort_by']);
+          $this->set(compact('wishlist'));
+        } 
 
        $this->set(compact('wishlist'));
 

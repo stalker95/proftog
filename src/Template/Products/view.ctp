@@ -9,6 +9,11 @@
 			<span> / </span>
 			<a href="<?= $this->Url->build(['controller' => 'categories','action'    =>  '/index']) ?>">Категорії</a>
 			<span> / </span>
+			
+			<?php if (!empty($product->category['parent_category']['parent_category']['parent_category'])): ?>
+				<a href="<?= $this->Url->build(['controller' => 'categories','action'    =>  $category['parent_category']['parent_category']['parent_category']['slug']]) ?>"><?= $product['category']['parent_category']['parent_category']['parent_category']['name'] ?></a>
+							<span> / </span>
+			<?php endif; ?>
 			<?php if (!empty($product->category['parent_category']['parent_category'])): ?>
 				<a href="<?= $this->Url->build(['controller' => 'categories','action'    =>  $category['parent_category']['parent_category']['slug']]) ?>"><?= $product['category']['parent_category']['parent_category']['name'] ?></a>
 							<span> / </span>
@@ -140,8 +145,8 @@
 								
 								<select name="" id="" class="change_price">
 									<option value="">Виберіть опцію</option>
-									<?php foreach ($value as $key => $item): ?>
-										<option value="<?= $item['name'] ?>"><?= $item['name'] ?></option>
+									<?php foreach ($value as $keys => $item): ?>
+										<option <?php 	if ($keys == 0 AND $key == 0): ?> selected <?php 	endif; ?> value="<?= $item['name'] ?>"><?= $item['name'] ?></option>
 									<?php endforeach; ?>
 								</select>
 							</div>
@@ -538,10 +543,36 @@ $('.propose_slider').not('.slick-initialized').slick({
 });  
 
     var id_product = <?= $product->id ?>;
+    var start_price_default = <?= $product->price ?> ;
     var currency = <?= $product->currency_id ?>;
+    var start_price = <?= $product->price ?> ;
 
     var products_options = <?= $option_group_json ?>;
-    var start_price = <?= $product->price ?> ;
+    console.log(products_options);
+
+    var first_selected_value = $(".product_paramth_title").eq(0).text();
+    var default_selected_value = $(".change_price").eq(0).val();
+    console.log(default_selected_value);
+
+    if (default_selected_value != undefined) {
+    var str = first_selected_value.toString();
+   str = str.trim();
+   str = str.replace('_', ' ').trim();
+
+    //console.log(products_options[str][0]);
+
+    for (i = 0; i < products_options[str].length; i++) {
+        if (products_options[str][i]['name'] == default_selected_value) {
+        		console.log(products_options[str][i]['products_options'][0]['value']);
+        		start_price_default +=  products_options[str][i]['products_options'][0]['value'];
+        		<?php 	if ($discount == false): ?>
+        				$(".product_price .translate_price").text(start_price_default);
+        				start_price = start_price_default;
+        		<?php 	endif; ?>
+        }
+    }
+}
+
    setTimeout(function() {
 if (currency == 2) {
          	start_price = start_price * global_curs;
@@ -667,7 +698,7 @@ function change_price() {
 	 console.log(total_options);
      
      console.log(start_price);
-	 new_price = start_price + new_price;
+	 new_price = new_price;
 	 console.log(new_price);
 	 $(".translate_price").text(Math.round(new_price));
 }

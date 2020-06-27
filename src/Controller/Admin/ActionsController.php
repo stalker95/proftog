@@ -207,6 +207,12 @@ debug($action);
             $target_path = $mm_dir->pwd() . DS;
             $oldfile = $target_path . $action->image;
 
+            $action_product = $this->ActionsProducts->find()->where(['action_id' => $action->id])->toArray();
+            foreach ($action_product as $key => $value) {
+               $action_product_item = $this->ActionsProducts->get($value['id']);
+               $this->ActionsProducts->delete($action_product_item);
+            }
+
             if (file_exists($oldfile)) {
                 unlink($oldfile);
              }
@@ -229,7 +235,14 @@ debug($action);
      
       foreach ($ids as  $value) {
         $action = $this->Actions->get($value);
-        $this->Actions->delete($action);      
+        $this->Actions->delete($action);  
+
+        $action_product = $this->ActionsProducts->find()->where(['action_id' => $action->id])->toArray();
+            foreach ($action_product as $key => $value) {
+               $action_product_item = $this->ActionsProducts->get($value['id']);
+               $this->ActionsProducts->delete($action_product_item);
+            }
+
          $mm_dir = new Folder(WWW_ROOT  . DS . 'actions', true, 0777);
             $target_path = $mm_dir->pwd() . DS;
             $oldfile = $target_path . $action->image;

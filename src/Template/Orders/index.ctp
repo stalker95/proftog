@@ -259,6 +259,11 @@
                   <span class="checkmark"></span>
                 </label>
 
+                <label class="orders_delivery_item">Безготівковий рахунок
+                  <input type="radio" name="type_radio" value="5" class="type_payment">
+                  <span class="checkmark"></span>
+                </label>
+
               </div>
             </div>
           </div>
@@ -834,7 +839,7 @@ $(document).ready(function() {
           $(".message_submit_quick_order").html("");
           
           
-          if ($('.type_payment:checked').val() == 3 ) {
+          if ($('.type_payment:checked').val() == 3 || $('.type_payment:checked').val() == 2 ) {
 
           liqpay_work(data);
         }

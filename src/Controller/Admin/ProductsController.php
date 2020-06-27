@@ -39,7 +39,8 @@ class ProductsController extends AppController
     public function index()
     {
         $this->paginate = [
-            'contain' => ['Categories']
+            'contain' => ['Categories','ProductsOptions.OptionsItems.Options']
+
         ];
         $products = $this->paginate($this->Products->find()->order('Products.id DESC'));
 
@@ -177,7 +178,7 @@ class ProductsController extends AppController
         $first_options = $this->Options->find()->order('rand()')->toArray();
         $products_gallery = $this->ProductsGallery->find()->where(['product_id' => $id])->order('position ASC')->toArray();
         $attributes_products = $this->AttributesProducts->find()->contain(['AttributesItems'])->where(['product_id' => $id])->toArray();        
-       $option_group = $product->getOptionsGroup($product->id);
+       $option_group = $product->getOptionsGroup($product->id, 100);
 
        $discounts = $this->Discounts->find()->where(['product_id' => $product->id])->toArray();
 
@@ -277,7 +278,7 @@ class ProductsController extends AppController
                 unlink($oldfile);
              }
         }
-            $this->Flash->success(__('The product has been deleted.'));
+            $this->Flash->admin_success(__('Товар видалено'));
         } else {
             $this->Flash->error(__('The product could not be deleted. Please, try again.'));
         }
@@ -329,7 +330,7 @@ class ProductsController extends AppController
      if ($this->request->is(['get', 'post', 'put'])) {
         $name = $this->getRequest()->getData('name');
         $name = trim($name);
-        $products = $this->Products->find()->contain(['Categories'])->where([
+        $products = $this->Products->find()->contain(['Categories','ProductsOptions.OptionsItems.Options'])->where([
                 'Products.title LIKE'=>'%'.$name.'%',          
         ])->toArray();
 

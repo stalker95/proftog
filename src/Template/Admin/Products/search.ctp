@@ -73,7 +73,11 @@
                     
                     <td><?= $product->category->name ?></td>
                     <td>
-                      <span class="translate_price_two" data-currency="<?= $product->currency_id ?>"><?= $product->price ?></span>
+                      <span class="translate_price_two" data-currency="<?= $product->currency_id ?>"><?php if (!empty($product['products_options'])): ?>
+                          <?= $product['products_options'][0]['value']; ?>
+                        <?php else: ?>
+                          <?= $product->price ?>
+                        <?php endif; ?></span>
                    грн</td>
                     <td class='table__flex'>
                       <?php

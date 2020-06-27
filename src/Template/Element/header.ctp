@@ -35,7 +35,7 @@
                 <?php if (!isset($_SESSION['compares'])): ?> 
                   <div class="empty_link">
                    <i class="fa fa-exchange"></i>
-                    Список бажань (0) 
+                    Список порівнянь (<span class="total_compares">0</span>) 
                 </div>
                 <?php   else: ?>   
                     <a class="display_list_of_compares" >

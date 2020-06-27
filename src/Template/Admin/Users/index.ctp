@@ -7,7 +7,12 @@
                 <!--  <a href="<?= $this->Url->build(['controller' => 'users','action'=>'add']) ?>" class="product_container_buttons_add btn-primary">
            <i class="fa fa-plus"></i>
          </a> -->
-
+         <a style="background: green;" href="<?= $this->Url->build(['controller' => 'users', 'action' => 'export', '_full' => true]) ?>" class="btn btn-success">
+            <i class="fa fa-download"></i>
+         </a>
+         <a style="background: blue;" href="<?= $this->Url->build(['controller' => 'users', 'action' => 'followers', '_full' => true]) ?>" class="btn btn-success">
+            <i class="fa fa-male"></i>
+         </a>
          <div class="create__new__user">
            
            <button class="btn delete_form_checked  btn-dangeres save__changes__form__playlist" data-toggle="modal" data-target="#mediaGallery" >
@@ -17,7 +22,7 @@
          
        </div>
      </div>
-     <a href="<?= $this->Url->build(['controller' => 'users', 'action' => 'export', '_full' => true]) ?>" class="btn btn-success">Скачати</a>
+     
      <div class="box">
       <div class="box-body table-responsive no-padding">
        <div class="box-header">
@@ -64,7 +69,7 @@
                     <td class='table__flex'>
                       <?php
                         echo   $this->Html->link('<i class="fa fa-pencil"></i>', ['action' => 'edit', $user->id], ['class'=>'btn change__user','escape' => false]);
-                        echo  $this->Form->postLink('<i class="fa fa-trash"></i>', ['action' => 'delete', $user->id], ['class'=>'btn  delete__user','escape' => false,'confirm' => __('Ви справді хочете видалити Користувача # {0}?', $user->id)]);  ?>
+                         echo "<button class='btn  delete__user' data-toggle='modal' data-target='#mediaGallery_".$user->id."'><i class='fa fa-trash'></i></button>"; ?>
                     </td>
                     </tr>
                 <?php endforeach; ?>
@@ -85,6 +90,35 @@
           </div>
         </div>
       </div>
+
+<?php   foreach ($users as $user): ?>
+
+  <div class="modal fade" id="mediaGallery_<?= $user->id ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabels" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="gallery-box form__inline" style="text-align: center;">
+          <h2 style="text-align: center;">Ви хочете видалити користувача <?= $user->firstname ?>  <?= $user->lastname ?>?</h2>
+          <button class="close_modal_form close__modal" >Ні</button>
+           <?= $this->Form->create('Delete',['url'   => array(
+               'controller' => 'users','action' => 'delete/'.$user->id
+           )])  ?>
+           <div class="delete_form_checked_inputs"> </div>
+           <?=  $this->Form->submit('Так ',['class'=>'btn  btn-dangeres save__changes__form__playlist','style'=>'margin-top:0px;margin-left:auto;margin-right:auto;']); ?>
+           <?=   $this->Form->end() ?>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<?php endforeach; ?>
+
 
 <div class="modal fade" id="mediaGallery" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabels" aria-hidden="true">
   <div class="modal-dialog" role="document">

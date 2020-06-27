@@ -18,36 +18,8 @@
 	<div class="orders_container">
     <div class="compares_page_top">
       <p class="title_of_compare">Порівнюємо <?= $category->title ?></p>
-      <div class="lists_if_compares">
-
-        
-      <!--  <?php foreach ($products as $key => $value): ?>
-        <div class="lists_if_compares_item">
-          <div class="lists_if_compares_item_top">
-            <img src="<?= $this->Url->build('/products/'.$value['image'], ['fullBase' => true]) ?>" alt="" class="lists_if_compares_item_top_image">
-            <a href="<?= $this->Url->build(['controller' => 'products','action'    =>  $value['slug']]) ?>"><?= $value['title']; ?></a>
-          </div>
-          <div class="lists_if_compares_item_bottom">
-            <p class="bascket_item_price lists_if_compares_item_bottom_price">
-              <span class="translate_price" data-currency="<?= $value['currency_id'] ?>"><?= $value['price'] ?></span> грн
-            </p>
-            <div class="lists_if_compares_item_bottom_buttons">
-              <button class="product_buttons_item add_product_to_bascket" data-product="<?= $value['id'] ?>">
-                <img src="<?= $this->Url->build('/img/back.svg', ['fullBase' => true]) ?>" alt="">
-              </button>
-              
-            <button class="product_buttons_item  <?= $this->element('wishlist_item', 
-            array("item" => $value['wishlists'], 
-                  'product' => $value['id'],
-                  'user' => $user)); ?>" data-product="<?= $value['id'] ?>">
-              <img src="<?= $this->Url->build('/img/favorite.svg', ['fullBase' => true]) ?>" alt="">
-            </button>
-            </div>
-          </div>
-          <?=   $this->Form->postLink('<i class="fa fa-close delete_compare"></i>', ['action' => 'delete', $value['id']], ['class'=>'btn  delete__user','escape' => false]); ?>
-        </div>
-      <?php endforeach; ?> -->
-      </div>
+      <?=   $this->Form->postLink('<span class="delete_category_slug">Очистити всі</span>', ['action' => 'delete-all-category', $category->slug], ['class'=>'btn  delete__user','escape' => false]); ?>
+</div>
       
       
       <div class="list_of_params">

@@ -37,22 +37,45 @@ class Category extends Entity
                                                                      'conditions' => [
                                                                        'Products.hit' => 1
             ]
-        ],'Products.ActionsProducts','Products.ActionsProducts.Actions','Products.Discounts','Products.Rewiev','ParentCategories'])->toArray();
+        ],'Products.ActionsProducts','Products.ActionsProducts.Actions','Products.Discounts','Products.Rewiev','ParentCategories','ParentCategories.ParentCategories'])->toArray();
 
-       // debug($products);
+      // debug($products);
         
-        $final;
+        $final = [];
+        $arr = [];
+        $i = 0;
         foreach ($products as $key => $value) {
-            if (!isset($final[$value['parent_category']['name']]) AND $value['parent_category']['parent_id'] == 0 AND !empty($value['products'])) {
-              $final[$value['parent_category']['name']]['image'] = $value['parent_category']['image'];
-              $final[$value['parent_category']['name']]['products'] =  $value['products'];
+            
+            if (!empty($value['products'])) {
+
+            if ($value['parent_category']['parent_category']['name'] != null) {
+               // debug($value['parent_category']['parent_category']['name']);
+                $final[$value['parent_category']['parent_category']['name']]['image'] = $value['parent_category']['parent_category']['image'];
+                array_push($final[$value['parent_category']['parent_category']['name']], $value['products']);
+            } 
+            elseif($value['parent_category']['name'] != null) {
+                //debug($value['parent_category']['name']);
+                $final[$value['parent_category']['name']]['image'] = $value['parent_category']['image'];
+                array_push($final[$value['parent_category']['name']], $value['products']);
+                 $i++;
+            } else {
+              //  debug($value['name']);
+                $final[$value['name']]['image'] = $value['image'];
+                $final[$value['name']]['products'] = $value['products'];
+                array_push($final[$value['name']], $value['products']);
+                 $i++;
             }
+        }
+
             
             
 
         }
+       //  var_dump($i);
        // debug($final);
 
        return $final;
     }
+
+
 }

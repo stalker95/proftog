@@ -159,4 +159,23 @@ class OptionsItemsController extends AppController
  
 
     }
+
+    public function copyElement($id = null)
+    {
+        
+            $Optionsitems = $this->OptionsItems->get($id);
+
+            $newOptionItem = $this->OptionsItems->newEntity();
+            $newOptionItem->name = $Optionsitems->name;
+            $newOptionItem->option_id = $Optionsitems->option_id;
+
+            if ($this->OptionsItems->save($newOptionItem)) {
+                //debug($newOptionItem);
+                 $this->Flash->admin_success(__('Опцію скопійовано'));
+     return $this->redirect(['action' => 'index']);
+            } else {
+               // debug($newOptionItem);
+            }
+        }
+    
 }

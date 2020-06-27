@@ -1957,3 +1957,105 @@ a.product_container_buttons_add {
   border-radius: 50%;
   background: #FCDB38;
 }
+
+/* QUICK ORDERS BEGIN */
+
+.quick_orders_top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.quick_orders_top p {
+    margin-bottom: 0px;
+}
+.quick_orders_top_item_title, .orders_container_top {
+    background: #ccc;
+    display: flex;
+    align-items: center;
+    padding: 10px 5px;
+}
+.orders_container_top p {
+    margin-bottom: 0px;
+}
+.quick_orders_top_item_title p, .orders_container_top p {
+    margin-right: 5px;
+}
+.quick_orders_top_item {
+    flex-basis: 30%;
+    border-radius: 4px;
+    -webkit-box-shadow: 2px 9px 18px -8px rgba(0,0,0,0.75);
+-moz-box-shadow: 2px 9px 18px -8px rgba(0,0,0,0.75);
+box-shadow: 3px 10px 11px -8px rgba(0,0,0,0.75);
+}
+.quick_orders_top_item_information_item {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #ccc;
+    border-left: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+    padding: 7px 5px;
+    height: 40px;
+}
+.quick_orders_top_item_information_item_icon {
+    padding: 4px 7px;
+    color: #fff;
+    margin-right: 7px;
+    background: #FCDB38;
+}
+.quick_orders_top_item_information_item_icon .fa {
+    font-size: 13px;
+}
+.orders_container {
+    margin-top: 25px;
+}
+.orders_container table {
+    width: 100%;
+}
+.orders_container_inside {
+    margin-top: 20px;
+    padding: 0px 6px;
+}
+.orders_container_inside thead, .orders_container_inside tbody {
+    border: 1px solid #ccc;
+}
+.orders_container_inside thead th {
+    border-right: 1px solid #ccc;
+    padding-left: 20px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+.orders_container_inside tbody td {
+     border-right: 1px solid #ccc;
+     border-bottom: 1px solid #ccc;
+     border-left: 1px solid #ccc;
+    padding-left: 20px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+td.b-none {
+    border: none!important;
+    border-bottom: 1px solid #ccc!important;
+}
+.quick_orders_top_item_information_item_order_status {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.quick_orders_top_item_information_item_order_status .quick_orders_top_item_information_item_title {
+    flex-basis: 40%;
+}
+.quick_orders_top_item_information_item_order_status .quick_orders_top_item_information_item_title  select{
+    width: 100%;
+}
+.quick_orders_top_item_information_item_order_status {
+    text-align: right;
+}
+/* QUICK ORDERS END*/
+
+/* ORDERS BEGIN */
+
+.products_orders_container_item table {
+    width: 100%;
+}
+
+/* ORDERS END*/

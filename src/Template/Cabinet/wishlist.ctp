@@ -26,6 +26,8 @@
 		</div>
 	</div>
 	<div class="col-md-9">
+    <form action="<?= $this->Url->build(['controller' => 'cabinet','action'    =>  'wishlist']) ?>" method="get" id="product_sort">
+
     <div class="wishlist_total" style="display: none;">
       <?php   foreach ($wishlist as $key => $value): ?>
       <span class="translate_price" data-currency="<?= $value['product']['currency_id'] ?>"> <?= $value['product']['price'] ?></span>
@@ -75,7 +77,7 @@
               <p>Список бажань пустий</p>
             <?php endif; ?>
         		<?php foreach ($wishlist as $key => $value): ?>
-        		<div href="<?php echo $this->Url->build(['controller' => 'products','action'=> $value['product']['slug']]) ?>" class="propose_slider_item <?= $this->element('action_product', array("item" => $value['product']['actions'])); ?>">
+        		<div href="<?php echo $this->Url->build(['controller' => 'products','action'=> $value['product']['slug']]) ?>" class="propose_slider_item <?= $this->element('action_product', array("item" => $value['product']['actions_products'])); ?>">
         			<div class="filter_elements_items">
         				<input id="information_<?= $key ?>" name="info" type="checkbox" value="<?= $value['product']['id'] ?>" class="delete_item">
             	<label for="information_<?= $key ?>"></label>
@@ -121,6 +123,8 @@
 			<?php endforeach; ?>
         	</div>
         </div>
+                 <?=   $this->Form->end() ?>
+
 	</div>
 	</div>
 </div>
@@ -335,6 +339,12 @@ function check_fill_checkbox() {
         }
      });
     }); 
+
+    $("#sort_by").change(function() {
+               $("#product_sort").submit();
+        });
+
+        
 
     <?php echo $this->Html->scriptEnd(); ?>
 </script>

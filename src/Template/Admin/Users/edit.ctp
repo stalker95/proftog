@@ -1,7 +1,7 @@
  <section class="content white_background products_container">
   <div class="row">
    <div class="col-xs-12">
-     <?= $this->Form->create($user,['type' => 'file'])  ?>
+     <?= $this->Form->create($_user,['type' => 'file'])  ?>
      <div class="products_container_top">
        <p class="products_container_title">Інформація  про клієнта</p>
        <div class="product_container_buttons">
@@ -51,6 +51,33 @@
                     </div>
                   </div>
                 </div>
+                        <div class="playlist__managment--item">
+            <div class="playlist__managment--item__left">
+              <p>Логотип</p>
+            </div>
+            <div class="playlist__managment--item__right">
+              <div class="playlist--item--sub" style="display: block;">
+                  
+                  <div class="choose_image_block">
+                  <?=  $this->Form->control('image',array('label' => 'First Name','type'=>'file','class'=>' form-control ','required'=>'false','style'=>'font-size: 1em;padding:0px;width:300px;opacity:0;display:none;','id'=>'fileimgMeal'));?>  
+
+
+                  <div id="fotosViewMeal" style="position: relative;flex-basis: 200px;object-fit: contain;" class="image_gallery_preview">
+                    <?php   if (!empty($_user->avatar)): ?>
+                        <img  style="object-fit: contain;" src="<?= $this->Url->build('/avatars/'.$_user->avatar, ['fullBase' => true]) ?>" alt="">
+                    <?php   else: ?>
+                       <img  style="object-fit: contain;" src="<?= $this->Url->build('/img/profile_default.png', ['fullBase' => true]) ?>" alt="">
+                    <?php   endif; ?>
+                  </div>  
+                  <div class="right_buttons">
+                    
+                 
+                   <label for="fileimgMeal"  class="choose_file_settings choose_file_pencil" style="display:block!important;"><i class="fa fa-pencil"></i></label>
+                   </div>
+                  </div>
+                </div>
+            </div>
+        </div>
        
         </div>
         <?=   $this->Form->end() ?>

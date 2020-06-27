@@ -118,15 +118,12 @@ class Product extends Entity
     }
 
 
-    public function getOptionsGroup($id_product)
+    public function getOptionsGroup($id_product, $persent_discount)
     {
         $this->ProductsOptions = TableRegistry::get('products_options');
         $this->Options = TableRegistry::get('options');
-          $options_products = $this->ProductsOptions
-                                 ->find()
-                                 ->contain(['OptionsItems','OptionsItems.Options'])
-                                 ->where(['product_id' => $id_product])
-                                 ->toArray();
+        $this->Products = TableRegistry::get('products');
+         
         
        // debug($options_products);
         
@@ -139,6 +136,28 @@ class Product extends Entity
       ])->toArray();
         
        // debug($options);
+        $product = $this->Products
+                        ->find()
+                        ->contain(['ProductsOptions.OptionsItems.Options','Discounts'])
+                        ->where(['Products.id' => $id_product])
+                        ->first();
+
+        $data = date("Y-m-d H:i:s");
+        foreach ($product['discounts'] as $key => $values): 
+         // debug($values);
+          $date_compare1= date("Y-m-d H:i:s", strtotime($data));
+            // date now
+          $date_compare2= date("Y-m-d H:i:s", strtotime($values['end_data']->i18nFormat('YYY-MM-dd')));
+          $start_data = date("Y-m-d H:i:s", strtotime($values['start_data']->i18nFormat('YYY-MM-dd')));
+
+          if ($date_compare1 < $date_compare2 AND $date_compare1 > $start_data) {
+            $products_discount = $values['price'];
+            $discount = true;
+            break;
+          }
+
+        endforeach;
+
         $group_options = [];
         $current_options = [];
         foreach ($options as $key => $value):
@@ -146,6 +165,12 @@ class Product extends Entity
             foreach ($value['options_items'] as $key => $item) {
              foreach ($item['products_options'] as $key => $product_item) {
                if ($product_item['product_id'] == $id_product) {
+                if ($persent_discount != 100) {
+                 // debug($item['products_options'][0]['value']);
+                  $item['products_options'][0]['value'] = $item['products_options'][0]['value'] - (($item['products_options'][0]['value'] / 100) * $persent_discount);
+                 // debug($item['products_options'][0]['value']);
+                }
+                //debug($item['products_options']);
                 array_push($group_options, $value['name']);
                 
                 array_push($current_options[$value['name']], $item);
@@ -210,6 +235,7 @@ class Product extends Entity
     }
     public function saveDiscounts($prices, $begin_data, $end_data, $product_id) 
     {
+     // debug($prices);
       $this->Discounts = TableRegistry::get('discounts');
       
       $discounts = $this->Discounts->find()->where(['product_id' => $product_id])->toArray();
@@ -218,9 +244,10 @@ class Product extends Entity
       foreach ($discounts as $key => $value) {
         $discount = $this->Discounts->get($value['id']);
         $this->Discounts->delete($discount);
+      }
       
       
-if (!empty($prices)) {
+      if (!empty($prices)) {
        foreach ($prices as $key => $value) {
                     $discounts = $this->Discounts->newEntity();
                     $discounts->price = $value;
@@ -231,13 +258,15 @@ if (!empty($prices)) {
                     $this->Discounts->save($discounts);
                 }
       }
+      
     }
-  }
+  
 
     public function copyElement($id = null)
     {
        $this->Products = TableRegistry::get('products');
        $this->AttributesProducts = TableRegistry::get('attributes_products');
+       $this->ProductsOptions = TableRegistry::get('products_options');
 
        $product = $this->Products->get($id);
 
@@ -264,6 +293,7 @@ if (!empty($prices)) {
        $this->Products->save($new_product);
 
        $old_attributes = $this->AttributesProducts->find()->where(['product_id' => $id])->toArray();
+       $old_options = $this->ProductsOptions->find()->where(['product_id' => $id])->toArray();
 
        foreach ($old_attributes as $key => $value) {
          $new_attribute = $this->AttributesProducts->newEntity();
@@ -271,6 +301,15 @@ if (!empty($prices)) {
          $new_attribute->attribute_id = $value['attribute_id'];
          $new_attribute->value = $value['value'];
          $this->AttributesProducts->save($new_attribute); 
+
+       }
+
+       foreach ($old_options as $key => $value) {
+         $new_option = $this->ProductsOptions->newEntity();
+         $new_option->product_id = $new_product->id;
+         $new_option->options_items_id = $value['options_items_id'];
+         $new_option->value = $value['value'];
+         $this->ProductsOptions->save($new_option); 
 
        }
        

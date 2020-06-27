@@ -7,6 +7,7 @@ use Cake\Utility\Security;
 use Cake\Mailer\Email;
 use Cake\Auth\DefaultPasswordHasher;
 use Cake\View\ViewBuilder;
+use Cake\Filesystem\Folder;
 
 /**
  * Users Controller
@@ -115,6 +116,16 @@ class UsersController extends AppController
         $this->set(compact('users'));
     }
 
+    public function followers()
+    {
+         if (!$this->user->is_abs()):
+            $this->Flash->admin_error(__('У вас не має прав'));
+             return $this->redirect(['controller'=>'dashboard','action' => 'index']);
+        endif;
+        $users = $this->Paginate($this->Users->find()->where(['Users.type_registry' => 1])->order('Users.id DESC'))->toArray();
+        $this->set(compact('users'));
+    }
+
     public function edit($id = null) 
     {
 
@@ -122,20 +133,72 @@ class UsersController extends AppController
             $this->Flash->admin_error(__('У вас не має прав'));
              return $this->redirect(['controller'=>'dashboard','action' => 'index']);
         endif;
-        $user = $this->Users->get($id, [
+        $_user = $this->Users->get($id, [
             'contain' => []
         ]);
+
+        $old_picture = $_user->avatar;
         if ($this->request->is(['patch', 'post', 'put'])) {
-            $user = $this->Users->patchEntity($user, $this->request->getData());
-            if ($this->Users->save($user)) {
+            $_user = $this->Users->patchEntity($_user, $this->request->getData());
+            if ($this->Users->save($_user)) {
+
+               if ($this->request->getData('image.error')['error'] == 0) {
+            $mm_dir = new Folder(WWW_ROOT . DS . 'avatars', true, 0777);
+            $target_path = $mm_dir->pwd() . DS;
+                    $this->Users->updateAll(['avatar' => ""], ['id' => $_user->id]);    
+                    $img = $this->request->getData('image');
+                    if ($img['name']) {
+                        $ext = pathinfo($img['name'], PATHINFO_EXTENSION);
+                        $filename = md5(microtime(true)) . '.' . $ext;
+                        move_uploaded_file($img['tmp_name'], $target_path . $filename);
+                        $_user->avatar=$filename;
+                        $this->Users->updateAll(['avatar' => $filename], ['id' => $_user->id]);
+                    }
+                }
                 $this->Flash->admin_success(__('Користувач збереженийй'));
 
                 return $this->redirect(['controller'=>'users','action' => 'index']);
             }
             $this->Flash->admin_error(__('Данні не збережено. Спробуйте пізніше'));
         }
-        $this->set(compact('program'));
+        $this->set(compact('_user'));
     }
+
+public function exportFollowers()
+{
+     if (!$this->user->is_abs()):
+            $this->Flash->admin_error(__('У вас не має прав'));
+             return $this->redirect(['controller'=>'dashboard','action' => 'index']);
+        endif;
+        
+   $data_table = "<table>
+   <thead>
+    <th>Firstname</th>
+    <th>Lastname</th>
+    <th>Email</th>
+   </thead>";
+   
+   $users = $this->Users->find()->where(['type_registry' => 1])->toArray();
+
+   foreach ($users as $key => $value) {
+       $data_table = $data_table . 
+       "<tr>
+            <td>".$value['firstname']."</td>
+            <td>".$value['lastname']."</td>
+            <td>".$value['mail']."</td>
+            <td></td>
+       </tr>";
+   }
+
+   $data_table = $data_table .  "</table>";
+
+   header('Content-Type: application/force-download');
+   header('Content-disposition: attachment; filename = report.xls ');
+   header('Pragma: ');
+   header('Cache-Control: ');
+   echo $data_table;
+   die();
+}
 
 public function export()
 {
@@ -172,5 +235,20 @@ public function export()
    echo $data_table;
    die();
 }
+
+    public function delete($id = null)
+    {
+        $this->request->allowMethod(['post', 'delete']);
+        $product = $this->Products->get($id);
+        if ($this->Products->delete($product)) {
+            $this->Flash->admin_success(__('Користувача видалено'));
+        } else {
+            $this->Flash->error(__('Користувача не видалено.'));
+        }
+
+        return $this->redirect(['action' => 'index']);
+    }
+
+
 }
 

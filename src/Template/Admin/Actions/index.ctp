@@ -57,7 +57,7 @@
                     <td class='table__flex'>
                       <?php
                         echo   $this->Html->link('<i class="fa fa-pencil"></i>', ['action' => 'edit', $action->id], ['class'=>'btn change__user','escape' => false]);
-                        echo  $this->Form->postLink('<i class="fa fa-trash"></i>', ['action' => 'delete', $action->id], ['class'=>'btn  delete__user','escape' => false,'confirm' => __('Ви справді хочете видалити акцію # {0}?', $action->title)]);  ?>
+                        echo "<button class='btn  delete__user' data-toggle='modal' data-target='#mediaGallery_".$action->id."'><i class='fa fa-trash'></i></button>"; ?>
                     </td>
                     </tr>
                 <?php endforeach; ?>
@@ -78,6 +78,34 @@
           </div>
         </div>
       </div>
+
+<?php   foreach ($actions as $action): ?>
+
+  <div class="modal fade" id="mediaGallery_<?= $action->id ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabels" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="gallery-box form__inline" style="text-align: center;">
+          <h2 style="text-align: center;">Ви хочете видалити акцію <?= $action->title ?> ?</h2>
+          <button class="close_modal_form close__modal" >Ні</button>
+           <?= $this->Form->create('Delete',['url'   => array(
+               'controller' => 'actions','action' => 'delete/'.$action->id
+           )])  ?>
+           <div class="delete_form_checked_inputs"> </div>
+           <?=  $this->Form->submit('Так ',['class'=>'btn  btn-dangeres save__changes__form__playlist','style'=>'margin-top:0px;margin-left:auto;margin-right:auto;']); ?>
+           <?=   $this->Form->end() ?>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<?php endforeach; ?>
 
 <div class="modal fade" id="mediaGallery" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabels" aria-hidden="true">
   <div class="modal-dialog" role="document">

@@ -25,7 +25,13 @@ class OrdersController extends AppController
      */
     public function index()
     {
-        $this->nav_['orders'] = true;    
+        $this->nav_['orders'] = true;   
+        $orders = $this->Paginate($this->Orders
+                        ->find()
+                        ->order('id DESC'))
+                        ->toArray();
+
+        $this->set(compact('orders'));
     }
 
     /**
@@ -38,7 +44,7 @@ class OrdersController extends AppController
     public function view($id = null)
     {
         $order = $this->Orders->get($id, [
-            'contain' => []
+            'contain' => ['OrdersItems.Products']
         ]);
 
         $this->set('order', $order);
@@ -74,16 +80,16 @@ class OrdersController extends AppController
     public function edit($id = null)
     {
         $order = $this->Orders->get($id, [
-            'contain' => []
+            'contain' => ['OrdersItems.Products']
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $order = $this->Orders->patchEntity($order, $this->request->getData());
             if ($this->Orders->save($order)) {
-                $this->Flash->success(__('The order has been saved.'));
+                $this->Flash->admin_success(__('Замовленя збережено'));
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The order could not be saved. Please, try again.'));
+            $this->Flash->admin_error(__('Замовлення не збережено'));
         }
         $this->set(compact('order'));
     }
@@ -100,9 +106,9 @@ class OrdersController extends AppController
         $this->request->allowMethod(['post', 'delete']);
         $order = $this->Orders->get($id);
         if ($this->Orders->delete($order)) {
-            $this->Flash->success(__('The order has been deleted.'));
+            $this->Flash->admin_success(__('Замовлення видалено'));
         } else {
-            $this->Flash->error(__('The order could not be deleted. Please, try again.'));
+            $this->Flash->admin_error(__('Замовлення не може бути видалено'));
         }
 
         return $this->redirect(['action' => 'index']);

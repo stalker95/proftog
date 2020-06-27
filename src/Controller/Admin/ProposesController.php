@@ -101,9 +101,9 @@ class ProposesController extends AppController
         $this->request->allowMethod(['post', 'delete']);
         $propose = $this->Proposes->get($id);
         if ($this->Proposes->delete($propose)) {
-            $this->Flash->admin_success(__('The propose has been deleted.'));
+            $this->Flash->admin_success(__('Пропозицію видалено'));
         } else {
-            $this->Flash->admin_error(__('The propose could not be deleted. Please, try again.'));
+            $this->Flash->admin_error(__('Пропозицію не видалено'));
         }
 
         return $this->redirect(['action' => 'index']);
